@@ -31,7 +31,7 @@ class World {
         this.addObjectsToMap(this.backgroundObjects);
         this.addToMap(this.character);
         this.addObjectsToMap(this.enemies);
-        // this.addObjectsToMap(this.barriers);
+        this.addObjectsToMap(this.barriers);
 
         //Draw wird immer wieder aufgerufen
         let self = this;
