@@ -8,14 +8,29 @@ class PufferFish extends MovableObject {
     amplitude = 0.5
     frequency = 1;
     phase = 1;
-    // wave = Math.sin(x);
+    IMAGES_SWIMMING = [
+        'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim2.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim3.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim4.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim5.png',
+    ];
     constructor() {
-        super().loadImage('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png')
+        super().loadImage('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png');
+        this.loadImages(this.IMAGES_SWIMMING);
         this.x = 700 + Math.random() * 500;
         this.animate();
         
     }
     animate() {
+            
+        setInterval(() => {
+            let i = this.currentImage % this.IMAGES_SWIMMING.length;
+            let path = this.IMAGES_SWIMMING[i];
+            this.img = this.imageCache[path];
+            this.currentImage++;
+        }, 100);
+    
         this.phase = Math.random();
         setInterval(() => {
             this.x -= this.xIncrement;
