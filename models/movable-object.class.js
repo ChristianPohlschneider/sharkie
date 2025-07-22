@@ -6,6 +6,11 @@ class MovableObject {
     width = 100;
     currentImage = 0;
     imageCache = {};
+    interval = 1000 / 60;
+    speed = 0.5;
+    amplitude = 0.5;
+    frequency = 1;
+    phase = 1;
 
     loadImage(path) {
         this.img = new Image(); //this.image = document.getElementById('image') <img id="image">
@@ -17,19 +22,28 @@ class MovableObject {
      * @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
      */
     loadImages(arr) {
-        arr.forEach((path) =>{
-        let img = new Image();
-        img.src = path;
-        this.imageCache[path] = img;
+        arr.forEach((path) => {
+            let img = new Image();
+            img.src = path;
+            this.imageCache[path] = img;
         })
     }
-    
+
     moveRight() {
         console.log('Moving right');
-        
+
     }
 
-    moveLeft(){
-        
+    moveLeft() {
+        this.phase = Math.random();
+        setInterval(() => {
+            this.x -= this.speed;
+            this.oscillate();
+        }, this.interval);
+    }
+
+    oscillate() {
+        this.y = this.y + this.amplitude * Math.sin(this.frequency / 100 + 100 * this.phase);
+        this.frequency++;
     }
 }
