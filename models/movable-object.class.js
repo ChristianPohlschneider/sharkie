@@ -11,6 +11,7 @@ class MovableObject {
     amplitude = 0.5;
     frequency = 1;
     phase = 1;
+    otherDirection = false;
 
     loadImage(path) {
         this.img = new Image(); //this.image = document.getElementById('image') <img id="image">
