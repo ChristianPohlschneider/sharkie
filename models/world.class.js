@@ -1,8 +1,6 @@
 class World {
     character = new Character();
-    enemies = level1.enemies;
-    barriers = level1.barriers;
-    backgroundObjects = level1.backgroundObjects;
+    level = level1;
     canvas;
     ctx;
     keyboard;
@@ -29,21 +27,21 @@ class World {
         //scroll world in opposite direction of sharkie
         this.ctx.translate(this.camera_x, 0);
         let camera_xWidthModulo = Math.floor(-this.camera_x / 720);
-        console.log(camera_xWidthModulo);
+        // console.log(camera_xWidthModulo);
         
         if (camera_xWidthModulo % 2 == 0) {
             // console.log("Frame1");
             this.gameLoopFrame2(camera_xWidthModulo);
-            this.addObjectsToMap(this.backgroundObjects);
+            this.addObjectsToMap(this.level.backgroundObjects);
         } else if ((camera_xWidthModulo + 1) % 2 == 0) {
             // console.log("Frame2");
             this.gameLoopFrame1(camera_xWidthModulo);
-             this.addObjectsToMap(this.backgroundObjects);
+             this.addObjectsToMap(this.level.backgroundObjects);
         }
 
         this.addToMap(this.character);
-        this.addObjectsToMap(this.enemies);
-        this.addObjectsToMap(this.barriers);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.barriers);
 
         this.ctx.translate(-this.camera_x, 0);
 
@@ -77,19 +75,19 @@ class World {
     //Modulo uneven
     gameLoopFrame1(camera_xWidthModulo) {
         for (let backgroundLoopIndex = 0; backgroundLoopIndex < 5; backgroundLoopIndex++) {
-            this.backgroundObjects[backgroundLoopIndex].x = 720 + camera_xWidthModulo * 720;
+            this.level.backgroundObjects[backgroundLoopIndex].x = 720 + camera_xWidthModulo * 720;
         }
-        for (let backgroundLoopIndex = 15; backgroundLoopIndex < this.backgroundObjects.length; backgroundLoopIndex++) {
-            this.backgroundObjects[backgroundLoopIndex].x = -720 + camera_xWidthModulo * 720;
+        for (let backgroundLoopIndex = 15; backgroundLoopIndex < this.level.backgroundObjects.length; backgroundLoopIndex++) {
+            this.level.backgroundObjects[backgroundLoopIndex].x = -720 + camera_xWidthModulo * 720;
         }
     }
     //Modulo even     
     gameLoopFrame2(camera_xWidthModulo) {   
         for (let backgroundLoopIndex = 5; backgroundLoopIndex < 10; backgroundLoopIndex++) {
-            this.backgroundObjects[backgroundLoopIndex].x = 720 + camera_xWidthModulo * 720;
+            this.level.backgroundObjects[backgroundLoopIndex].x = 720 + camera_xWidthModulo * 720;
         }
         for (let backgroundLoopIndex = 10; backgroundLoopIndex < 15; backgroundLoopIndex++) {
-            this.backgroundObjects[backgroundLoopIndex].x = -720 + camera_xWidthModulo * 720;
+            this.level.backgroundObjects[backgroundLoopIndex].x = -720 + camera_xWidthModulo * 720;
         }
     }
 }

@@ -47,4 +47,11 @@ class MovableObject {
         this.y = this.y + this.amplitude * Math.sin(this.frequency / 100 + 100 * this.phase);
         this.frequency++;
     }
+
+    playAnimation(images) {
+    let i = this.currentImage % images.length;
+    let path = images[i];
+    this.img = this.imageCache[path];
+    this.currentImage++;
+    }
 }
