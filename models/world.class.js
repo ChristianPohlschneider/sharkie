@@ -1,27 +1,8 @@
 class World {
     character = new Character();
-    enemies = [
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-    ];
-    barriers = [
-        new Barrier(),
-    ];
-
-    backgroundObjects = [
-        new BackgroundObject('img/3. Background/Layers/5. Water/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/2. Floor/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/5. Water/L2.png', 720),
-        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L2.png', 720),
-        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L2.png', 720),
-        new BackgroundObject('img/3. Background/Layers/2. Floor/L2.png', 720),
-        new BackgroundObject('img/3. Background/Layers/1. Light/2.png', 720),
-
-    ];
+    enemies = level1.enemies;
+    barriers = level1.barriers;
+    backgroundObjects = level1.backgroundObjects;
     canvas;
     ctx;
     keyboard;
@@ -48,12 +29,14 @@ class World {
         //scroll world in opposite direction of sharkie
         this.ctx.translate(this.camera_x, 0);
         let camera_xWidthModulo = Math.floor(-this.camera_x / 720);
+        console.log(camera_xWidthModulo);
+        
         if (camera_xWidthModulo % 2 == 0) {
-            // console.log("Frame2");
+            // console.log("Frame1");
             this.gameLoopFrame2(camera_xWidthModulo);
             this.addObjectsToMap(this.backgroundObjects);
         } else if ((camera_xWidthModulo + 1) % 2 == 0) {
-            // console.log("Frame1");
+            // console.log("Frame2");
             this.gameLoopFrame1(camera_xWidthModulo);
              this.addObjectsToMap(this.backgroundObjects);
         }
@@ -91,16 +74,22 @@ class World {
             this.ctx.restore();
         }
     }
-
+    //Modulo uneven
     gameLoopFrame1(camera_xWidthModulo) {
         for (let backgroundLoopIndex = 0; backgroundLoopIndex < 5; backgroundLoopIndex++) {
             this.backgroundObjects[backgroundLoopIndex].x = 720 + camera_xWidthModulo * 720;
         }
+        for (let backgroundLoopIndex = 15; backgroundLoopIndex < this.backgroundObjects.length; backgroundLoopIndex++) {
+            this.backgroundObjects[backgroundLoopIndex].x = -720 + camera_xWidthModulo * 720;
+        }
     }
-            
+    //Modulo even     
     gameLoopFrame2(camera_xWidthModulo) {   
-        for (let backgroundLoopIndex = 5; backgroundLoopIndex < this.backgroundObjects.length; backgroundLoopIndex++) {
+        for (let backgroundLoopIndex = 5; backgroundLoopIndex < 10; backgroundLoopIndex++) {
             this.backgroundObjects[backgroundLoopIndex].x = 720 + camera_xWidthModulo * 720;
+        }
+        for (let backgroundLoopIndex = 10; backgroundLoopIndex < 15; backgroundLoopIndex++) {
+            this.backgroundObjects[backgroundLoopIndex].x = -720 + camera_xWidthModulo * 720;
         }
     }
 }

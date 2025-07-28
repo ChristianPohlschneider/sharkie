@@ -1,5 +1,5 @@
 class Character extends MovableObject {
-    x = 0;
+    x = 100;
     y = 150;
     height = 200;
     width = 200;
@@ -32,8 +32,10 @@ class Character extends MovableObject {
                 
                 this.otherDirection = false;
             }
-            if (this.world.keyboard.ArrowLeft) {
+            if (this.world.keyboard.ArrowLeft && this.x > -50) {
                 this.x -= this.speed;
+
+                console.log("Sharkie" + this.x);
                 this.otherDirection = true;
             }
             if (this.world.keyboard.ArrowUp) {
@@ -42,7 +44,7 @@ class Character extends MovableObject {
             if (this.world.keyboard.ArrowDown) {
                 this.y += this.speed;
             }
-            this.world.camera_x = -this.x
+            this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
 
         setInterval(() => {
