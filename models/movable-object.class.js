@@ -8,10 +8,13 @@ class MovableObject {
     imageCache = {};
     interval = 1000 / 60;
     speed = 0.5;
+    speedY = 0;
+    speedX = 0;
     amplitude = 0.5;
     frequency = 1;
     phase = 1;
     otherDirection = false;
+
 
     loadImage(path) {
         this.img = new Image(); //this.image = document.getElementById('image') <img id="image">

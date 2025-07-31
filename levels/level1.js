@@ -33,7 +33,4 @@ const level1 = new Level(
         new BackgroundObject('img/3. Background/Layers/2. Floor/L1.png', 0),
         new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
     ],
-    [
-        new Bubble(),
-    ],
 );

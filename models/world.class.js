@@ -5,6 +5,7 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
+    shootableObject = [];
    
     
 
@@ -42,7 +43,7 @@ class World {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.barriers);
-        this.addObjectsToMap(this.level.shootedObjects);
+        this.addObjectsToMap(this.shootableObject);
 
         this.ctx.translate(-this.camera_x, 0);
 

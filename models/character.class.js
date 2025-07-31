@@ -116,16 +116,18 @@ class Character extends MovableObject {
 
             } else if (this.world.keyboard.Space && this.otherDirection == false) {
                 //bubble shoot rh
+                //add loop for shootableObject array [0]!
                 this.playAnimation(this.IMAGES_BUBBLE_TRAP);
-                this.world.level.shootedObjects[0].x = this.x + 160;
-                this.world.level.shootedObjects[0].y = this.y + 95;
-                this.world.level.shootedObjects[0].animate();
+                let bubble = new ShootableObject(this.x + 160, this.y + 95);
+                this.world.shootableObject.push(bubble);
+                this.world.shootableObject[0].shoot();
             } else if (this.world.keyboard.Space && this.otherDirection == true) {
                 //bubble shoot lh
                 this.playAnimation(this.IMAGES_BUBBLE_TRAP);
-                this.world.level.shootedObjects[0].x = this.x - 10;
-                this.world.level.shootedObjects[0].y = this.y + 95;
-                this.world.level.shootedObjects[0].animate();
+                let bubble = new ShootableObject(this.x + -10, this.y + 95);
+                this.world.shootableObject.push(bubble);
+                this.world.shootableObject[0].shoot();
+                this.world.shootableObject[0].shoot();
             } else {
                 this.playAnimation(this.IMAGES_IDLE);
             }
