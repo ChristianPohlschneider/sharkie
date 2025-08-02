@@ -6,6 +6,7 @@ class Endboss extends MovableObject {
     amplitude = 0;
     frequency = 1;
     phase = 1;
+    interval = 1000 / 60;
 
     IMAGES_SWIMMING = [
         'img/2.Enemy/3 Final Enemy/2.floating/1.png',
@@ -31,7 +32,7 @@ class Endboss extends MovableObject {
 
     }
     animate() {
-        this.moveLeft();
+        this.moveLeft(this.speed, this.interval);
 
         setInterval(() => {
             this.playAnimation(this.IMAGES_SWIMMING);

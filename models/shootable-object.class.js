@@ -1,4 +1,4 @@
-class ShootableObject extends MovableObject{
+class ShootableObject extends MovableObject {
     height = 50;
     width = 50;
 
@@ -9,10 +9,16 @@ class ShootableObject extends MovableObject{
         this.y = y;
     }
 
-    shoot() {
-        setInterval(() => {
-            this.x += 30;
-        }, 50); 
+    shoot(otherDirection) {
+        if (otherDirection == false) {
+            setInterval(() => {
+                this.x += 30;
+            }, 50);
+        } else if (otherDirection == true) {
+            setInterval(() => {
+                this.x -= 30;
+            }, 50);
+        }
     }
-    
+
 }

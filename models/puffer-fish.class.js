@@ -3,6 +3,7 @@ class PufferFish extends MovableObject {
     y = 180;
     height = 100;
     width = 100;
+    interval = 1000 / 60;
 
     IMAGES_SWIMMING = [
         'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png',
@@ -20,13 +21,12 @@ class PufferFish extends MovableObject {
 
     }
     animate() {
-        this.moveLeft();
-
+        this.phase = Math.random();
+        this.moveLeft(this.speed, this.interval);
+        this.oscillate(this.phase);
         setInterval(() => {
             this.playAnimation(this.IMAGES_SWIMMING);
-        }, 100);
-
-        
+        }, 100); 
     }
 
 

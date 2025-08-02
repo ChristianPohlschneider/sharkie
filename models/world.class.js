@@ -7,8 +7,6 @@ class World {
     camera_x = 0;
     shootableObject = [];
    
-    
-
     constructor(canvas, keyboard) {//hand over variables to world
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -37,7 +35,7 @@ class World {
         } else if ((camera_xWidthModulo + 1) % 2 == 0) {
             // console.log("Frame2");
             this.gameLoopFrame1(camera_xWidthModulo);
-             this.addObjectsToMap(this.level.backgroundObjects);
+            this.addObjectsToMap(this.level.backgroundObjects);
         }
 
         this.addToMap(this.character);
@@ -53,7 +51,6 @@ class World {
             self.draw();
         });
     }
-
 
     addObjectsToMap(objects) {
         objects.forEach(o => {

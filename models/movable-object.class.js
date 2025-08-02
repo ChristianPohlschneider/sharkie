@@ -33,29 +33,37 @@ class MovableObject {
         })
     }
 
-    moveRight() {
-        //Console!
-        console.log('Moving right');
-
+    moveRight(speed, interval) {
+        setInterval(() => {
+            this.x += speed;
+        }, interval);
     }
 
-    moveLeft() {
-        this.phase = Math.random();
+    moveLeft(speed, interval) {
         setInterval(() => {
-            this.x -= this.speed;
-            this.oscillate();
+            this.x -= speed;
+        }, interval);
+    }
+
+    oscillate(phase) {
+        setInterval(() => {
+            this.y = this.y + this.amplitude * Math.sin(this.frequency / 100 + 100 * phase);
+            this.frequency++;
         }, this.interval);
     }
 
-    oscillate() {
-        this.y = this.y + this.amplitude * Math.sin(this.frequency / 100 + 100 * this.phase);
-        this.frequency++;
+    createShootableObject(xCorrection) {
+        //überflüssige bubbles löschen bei x > level_end_x = 3600;
+        let bubble = new ShootableObject(this.x + xCorrection, this.y + 95);
+        this.world.shootableObject.push(bubble);
+        this.world.shootableObject[this.shootcount].shoot(this.otherDirection);
+        this.shootcount++;
     }
 
     playAnimation(images) {
-    let i = this.currentImage % images.length;
-    let path = images[i];
-    this.img = this.imageCache[path];
-    this.currentImage++;
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
     }
 }

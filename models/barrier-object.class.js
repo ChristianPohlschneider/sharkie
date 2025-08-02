@@ -8,14 +8,6 @@ class Barrier extends StaticObject {
     constructor() {
         super().loadImage('img/3. Background/Barrier/1.png');
 
-        this.animate();
-        
-
-
     }
-    animate() {
-        setInterval( () => {
-    this.x -= this.xIncrement;
-    }, this.interval)
-}
+
 }

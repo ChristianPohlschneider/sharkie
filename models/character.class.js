@@ -4,8 +4,10 @@ class Character extends MovableObject {
     height = 200;
     width = 200;
     speed = 3;
+    interval = 1000 / 60;
     speedY = 0;
     accelerationY = 0.05;
+    shootcount = 0;
     energy = 100;
     IMAGES_SWIMMING = [
         'img/1.Sharkie/3.Swim/1.png',
@@ -82,66 +84,55 @@ class Character extends MovableObject {
             if (this.world.keyboard.ArrowRight && this.x < this.world.level.level_end_x) {
                 this.x += this.speed;
                 //Console!
-                console.log("Sharkie x:" + this.x);
-
+                // console.log("Sharkie x:" + this.x)
                 this.otherDirection = false;
             }
             if (this.world.keyboard.ArrowLeft && this.x > -50) {
                 this.x -= this.speed;
                 //Console!
-                console.log("Sharkie" + this.x);
-
+                // console.log("Sharkie" + this.x);
                 this.otherDirection = true;
             }
-            if (this.world.keyboard.ArrowUp) {
+            if (this.world.keyboard.ArrowUp && this.y > -80) {
                 this.y -= this.speed;
+                console.log("Sharkie" + this.y)
             }
-            if (this.world.keyboard.ArrowDown) {
+            if (this.world.keyboard.ArrowDown && this.y < 300) {
                 this.y += this.speed;
+                console.log("Sharkie" + this.y)
             }
-            // if (this.world.keyboard.Space ) {
-            //     this.world.level.shootedObjects[0].animate();
-            // }
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
 
         setInterval(() => {
-
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
             }
             else if (this.world.keyboard.ArrowRight || this.world.keyboard.ArrowLeft || this.world.keyboard.ArrowUp || this.world.keyboard.ArrowDown) {
                 //swim animation
                 this.playAnimation(this.IMAGES_SWIMMING);
-
             } else if (this.world.keyboard.Space && this.otherDirection == false) {
                 //bubble shoot rh
-                //add loop for shootableObject array [0]!
                 this.playAnimation(this.IMAGES_BUBBLE_TRAP);
-                let bubble = new ShootableObject(this.x + 160, this.y + 95);
-                this.world.shootableObject.push(bubble);
-                this.world.shootableObject[0].shoot();
+                this.createShootableObject(160);
             } else if (this.world.keyboard.Space && this.otherDirection == true) {
                 //bubble shoot lh
                 this.playAnimation(this.IMAGES_BUBBLE_TRAP);
-                let bubble = new ShootableObject(this.x + -10, this.y + 95);
-                this.world.shootableObject.push(bubble);
-                this.world.shootableObject[0].shoot();
-                this.world.shootableObject[0].shoot();
+                this.createShootableObject(-10);
             } else {
                 this.playAnimation(this.IMAGES_IDLE);
             }
         }, 200);
     }
 
-    applyGravity() {
-        setInterval(() => {
-            if (this.isAboveWaterSurface()) {
-                this.y += this.speedY;
-                this.speedY -= this.accelerationY;
-            }
-        }, 1000 / 25);
-    }
+    // applyGravity() {
+    //     setInterval(() => {
+    //         if (this.isAboveWaterSurface()) {
+    //             this.y += this.speedY;
+    //             this.speedY -= this.accelerationY;
+    //         }
+    //     }, 1000 / 25);
+    // }
 
     isAboveWaterSurface() {
         console.log(this.y)
