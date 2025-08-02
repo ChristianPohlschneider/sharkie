@@ -1,4 +1,4 @@
-class Barrier extends StaticObject {
+class Barrier extends MovableObject {
     x = 700;
     y = 0;
     height = 480;

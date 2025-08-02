@@ -6,18 +6,29 @@ class World {
     keyboard;
     camera_x = 0;
     shootableObject = [];
-   
+
     constructor(canvas, keyboard) {//hand over variables to world
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
+        this.checkCollision();
     }
 
     //hand over world variables
     setWorld() {
         this.character.world = this;
+    }
+
+    checkCollision() {
+        setInterval(() => {
+            this.level.enemies.forEach((enemy) => {
+                if (this.character.isColliding(enemy)) {
+                    console.log('Collision with Character');
+                } 
+            })
+        }, 1000);
     }
 
     draw() {
@@ -27,7 +38,7 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         let camera_xWidthModulo = Math.floor(-this.camera_x / 720);
         // console.log(camera_xWidthModulo);
-        
+
         if (camera_xWidthModulo % 2 == 0) {
             // console.log("Frame1");
             this.gameLoopFrame2(camera_xWidthModulo);
@@ -45,6 +56,9 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
+        
+         
+
         //Draw wird immer wieder aufgerufen
         let self = this;
         requestAnimationFrame(function () {
@@ -60,17 +74,27 @@ class World {
 
     addToMap(object) {
         if (object.otherDirection) {
-            this.ctx.save();
-            this.ctx.translate(object.width, 0);
-            this.ctx.scale(-1, 1);
-            object.x = object.x * -1;
+            this.flipImage(object);
         }
-        this.ctx.drawImage(object.img, object.x, object.y, object.width, object.height);
+        object.drawImages(this.ctx);
+        object.drawFrame(this.ctx);
         if (object.otherDirection) {
-            object.x = object.x * -1;
-            this.ctx.restore();
+            this.flipImageBack(object);
         }
     }
+
+    flipImage(object) {
+        this.ctx.save();
+        this.ctx.translate(object.width, 0);
+        this.ctx.scale(-1, 1);
+        object.x = object.x * -1;
+    }
+
+    flipImageBack(object) {
+        object.x = object.x * -1;
+        this.ctx.restore();
+    }
+
     //Modulo uneven
     gameLoopFrame1(camera_xWidthModulo) {
         for (let backgroundLoopIndex = 0; backgroundLoopIndex < 5; backgroundLoopIndex++) {
@@ -81,7 +105,7 @@ class World {
         }
     }
     //Modulo even     
-    gameLoopFrame2(camera_xWidthModulo) {   
+    gameLoopFrame2(camera_xWidthModulo) {
         for (let backgroundLoopIndex = 5; backgroundLoopIndex < 10; backgroundLoopIndex++) {
             this.level.backgroundObjects[backgroundLoopIndex].x = 720 + camera_xWidthModulo * 720;
         }

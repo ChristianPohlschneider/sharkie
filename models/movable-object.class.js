@@ -33,6 +33,28 @@ class MovableObject {
         })
     }
 
+    playAnimation(images) {
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+    }
+
+    drawImages(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
+    drawFrame(ctx) {
+        if (this instanceof Character || this instanceof PufferFish || this instanceof Endboss) {
+        //draw collision rectangle
+        ctx.beginPath();
+        ctx.lineWidth = '5';
+        ctx.strokeStyle = 'blue';
+        ctx.rect(this.x, this.y, this.width, this.height);
+        ctx.stroke();
+        }
+    }
+
     moveRight(speed, interval) {
         setInterval(() => {
             this.x += speed;
@@ -60,10 +82,10 @@ class MovableObject {
         this.shootcount++;
     }
 
-    playAnimation(images) {
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
+    isColliding(object) {
+        return this.x + this.width > object.x &&
+        this.y + this.height > object.y &&
+        this.x < object.x &&
+        this.y < object.y + object.height   
     }
 }

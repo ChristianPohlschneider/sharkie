@@ -95,11 +95,13 @@ class Character extends MovableObject {
             }
             if (this.world.keyboard.ArrowUp && this.y > -80) {
                 this.y -= this.speed;
-                console.log("Sharkie" + this.y)
+                //Console!
+                // console.log("Sharkie" + this.y)
             }
             if (this.world.keyboard.ArrowDown && this.y < 300) {
                 this.y += this.speed;
-                console.log("Sharkie" + this.y)
+                // Console!
+                // console.log("Sharkie" + this.y)
             }
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
