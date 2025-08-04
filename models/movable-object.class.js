@@ -14,6 +14,14 @@ class MovableObject {
     frequency = 1;
     phase = 1;
     otherDirection = false;
+    energy = 100;
+
+    offset = {
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
+    };
 
 
     loadImage(path) {
@@ -44,13 +52,19 @@ class MovableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
-    drawFrame(ctx) {
+    drawFrame(ctx, object) {
         if (this instanceof Character || this instanceof PufferFish || this instanceof Endboss) {
         //draw collision rectangle
         ctx.beginPath();
         ctx.lineWidth = '5';
         ctx.strokeStyle = 'blue';
         ctx.rect(this.x, this.y, this.width, this.height);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.lineWidth = '5';
+        ctx.strokeStyle = 'red';
+        ctx.rect(this.x + object.offset.left, this.y + object.offset.top, this.width - object.offset.right - object.offset.left, this.height - object.offset.top - object.offset.bottom);
         ctx.stroke();
         }
     }
@@ -83,9 +97,16 @@ class MovableObject {
     }
 
     isColliding(object) {
-        return this.x + this.width > object.x &&
-        this.y + this.height > object.y &&
-        this.x < object.x &&
-        this.y < object.y + object.height   
+        return this.x + this.width - this.offset.right > object.x + object.offset.left &&
+        this.y + this.height - this.offset.bottom > object.y + object.offset.top &&
+        this.x + this.offset.left < object.x + object.width - object.offset.right &&
+        this.y + this.offset.top < object.y + object.height - object.offset.bottom  
+    }
+
+    hit() {
+        this.energy -= 5;
+        if (this.energy < 0) {
+            this.energy = 0;
+        }
     }
 }

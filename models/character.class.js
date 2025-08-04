@@ -9,6 +9,14 @@ class Character extends MovableObject {
     accelerationY = 0.05;
     shootcount = 0;
     energy = 100;
+
+    offset = {
+        top: 105,
+        left: 40,
+        right: 45,
+        bottom: 50
+    };
+
     IMAGES_SWIMMING = [
         'img/1.Sharkie/3.Swim/1.png',
         'img/1.Sharkie/3.Swim/2.png',
@@ -84,13 +92,13 @@ class Character extends MovableObject {
             if (this.world.keyboard.ArrowRight && this.x < this.world.level.level_end_x) {
                 this.x += this.speed;
                 //Console!
-                // console.log("Sharkie x:" + this.x)
+                console.log("Sharkie x:" + this.x)
                 this.otherDirection = false;
             }
             if (this.world.keyboard.ArrowLeft && this.x > -50) {
                 this.x -= this.speed;
                 //Console!
-                // console.log("Sharkie" + this.x);
+                console.log("Sharkie" + this.x);
                 this.otherDirection = true;
             }
             if (this.world.keyboard.ArrowUp && this.y > -80) {

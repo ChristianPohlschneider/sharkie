@@ -25,7 +25,9 @@ class World {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
-                    console.log('Collision with Character');
+                    this.character.hit()
+                    console.log(this.character.energy);
+                    
                 } 
             })
         }, 1000);
@@ -77,7 +79,7 @@ class World {
             this.flipImage(object);
         }
         object.drawImages(this.ctx);
-        object.drawFrame(this.ctx);
+        object.drawFrame(this.ctx, object);
         if (object.otherDirection) {
             this.flipImageBack(object);
         }
