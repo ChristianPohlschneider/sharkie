@@ -15,6 +15,7 @@ class MovableObject {
     phase = 1;
     otherDirection = false;
     energy = 100;
+    lastHit = 0;
 
     offset = {
         top: 0,
@@ -103,10 +104,18 @@ class MovableObject {
         this.y + this.offset.top < object.y + object.height - object.offset.bottom  
     }
 
-    hit() {
+    hit() {      
         this.energy -= 5;
         if (this.energy < 0) {
             this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
         }
+    }
+
+    isHurt() {
+        let timepassed = new Date().getTime() - this.lastHit; //Difference in ms
+        timepassed = timepassed / 1000; //Difference in s
+        return timepassed < 1;
     }
 }
