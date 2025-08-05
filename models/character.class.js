@@ -10,7 +10,7 @@ class Character extends MovableObject {
     shootcount = 0;
     energy = 100;
     lastShot = 0;
-    timepassed = 0;
+    
 
     offset = {
         top: 105,
@@ -98,6 +98,7 @@ class Character extends MovableObject {
     }
 
     animate() {
+        let i = 0;
 
         setInterval(() => {
             if (this.world.keyboard.ArrowRight && this.x < this.world.level.level_end_x) {
@@ -130,28 +131,36 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
-            } else if (this.isShooting()) {
-                this.playAnimation(this.IMAGES_BUBBLE_TRAP);
-                                if (this.timepassed > 0.3) {
-                    this.bubbleShot();
-                }
             } else if (this.world.keyboard.ArrowRight || this.world.keyboard.ArrowLeft || this.world.keyboard.ArrowUp || this.world.keyboard.ArrowDown) {
                 //swim animation
                 this.playAnimation(this.IMAGES_SWIMMING);
             } else if (this.world.keyboard.Space) {
                 this.lastShot = new Date().getTime();
-
-                
+                // this.playAnimation(this.IMAGES_BUBBLE_TRAP);
             } else {
                 this.playAnimation(this.IMAGES_IDLE);
             }
         }, 200);
 
+        //id: 14
         setInterval(() => {
-            if (this.isShooting()) {
-                this.playAnimation(this.IMAGES_BUBBLE_TRAP);
-            }
-        }, 100);
+                            
+                if (this.isShooting() && this.currentShootImage < 8) {
+                    
+                    this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
+                } else if (this.currentShootImage == 8) {
+                    this.bubbleShot();
+                    this.currentShootImage = 0;
+                }
+
+            //  
+        }, 50);
+    }
+
+        isShooting() {
+        let timeShotpassed = new Date().getTime() - this.lastShot; //Difference in ms
+        timeShotpassed = timeShotpassed / 1000; //Difference in s
+        return timeShotpassed < 0.4;
     }
 
     // applyGravity() {
@@ -173,20 +182,12 @@ class Character extends MovableObject {
 
         if (this.otherDirection == false) {
             //bubble shoot rh
-
             this.createShootableObject(160);
         } else if (this.otherDirection == true) {
             //bubble shoot lh
-            // this.playAnimation(this.IMAGES_BUBBLE_TRAP);
             this.createShootableObject(-10);
         }
 
-    }
-
-    isShooting() {
-        this.timepassed = new Date().getTime() - this.lastShot; //Difference in ms
-        this.timepassed = this.timepassed / 1000; //Difference in s
-        return this.timepassed < 0.5;
     }
 
     finSlap() {

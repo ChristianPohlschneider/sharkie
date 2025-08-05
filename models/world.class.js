@@ -6,6 +6,7 @@ class World {
     keyboard;
     camera_x = 0;
     shootableObject = [];
+    intervalIds = [];
 
     constructor(canvas, keyboard) {//hand over variables to world
         this.ctx = canvas.getContext('2d');
@@ -21,16 +22,30 @@ class World {
         this.character.world = this;
     }
 
+    setStoppableInterval(fn, interval) {
+        let id = setInterval(fn, interval);
+        this.intervalIds.push(id);
+    }
+
     checkCollision() {
-        setInterval(() => {
+        //id: 16
+        this.setStoppableInterval(() => {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
                     this.character.hit()
                     console.log(this.character.energy);
-                    
-                } 
+                }
             })
-        }, 200);
+        }, 200)
+
+        // setInterval(() => {
+        //     this.level.enemies.forEach((enemy) => {
+        //         if (this.character.isColliding(enemy)) {
+        //             this.character.hit()
+        //             console.log(this.character.energy);
+        //         }
+        //     })
+        // }, 200);
     }
 
     draw() {
@@ -58,8 +73,8 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
-        
-         
+
+
 
         //Draw wird immer wieder aufgerufen
         let self = this;
@@ -114,5 +129,9 @@ class World {
         for (let backgroundLoopIndex = 10; backgroundLoopIndex < 15; backgroundLoopIndex++) {
             this.level.backgroundObjects[backgroundLoopIndex].x = -720 + camera_xWidthModulo * 720;
         }
+    }
+
+    stopGame() {
+        this.intervalIds.forEach(clearInterval);
     }
 }
