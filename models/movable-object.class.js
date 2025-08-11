@@ -1,11 +1,8 @@
-class MovableObject {
+class MovableObject extends DrawableObject{
     x = 120;
     y = 250;
-    img;
     height = 100;
     width = 100;
-    currentImage = 0;
-    imageCache = {};
     interval = 1000 / 60;
     speed = 0.5;
     speedY = 0;
@@ -25,24 +22,6 @@ class MovableObject {
         bottom: 0
     };
 
-
-    loadImage(path) {
-        this.img = new Image(); //this.image = document.getElementById('image') <img id="image">
-        this.img.src = path;
-    }
-
-    /**
-     * 
-     * @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
-     */
-    loadImages(arr) {
-        arr.forEach((path) => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
-        })
-    }
-
     playAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
@@ -56,10 +35,6 @@ class MovableObject {
             this.currentShootImage++
         // let i = this.currentImage % images.length;
 
-    }
-
-    drawImages(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
     drawFrame(ctx, object) {
@@ -120,6 +95,7 @@ class MovableObject {
         } else {
             this.lastHit = new Date().getTime();
         }
+        this.world.statusbar.setPercentage(this.energy);
     }
 
     isHurt() {

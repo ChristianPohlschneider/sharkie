@@ -1,6 +1,7 @@
 class World {
     character = new Character();
     level = level1;
+    statusbar = new Statusbar();
     canvas;
     ctx;
     keyboard;
@@ -67,6 +68,7 @@ class World {
         }
 
         this.addToMap(this.character);
+        this.addToMap(this.statusbar);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.barriers);
         this.addObjectsToMap(this.shootableObject);
