@@ -1,8 +1,4 @@
-class Statusbar extends MovableObject {
-    x = 30;
-    y = 150;
-    height = 70;
-    width = 300;
+class StatusBar extends MovableObject {
     percentage = 100;
     world;
 
@@ -18,7 +14,10 @@ class Statusbar extends MovableObject {
     constructor() {
         super().loadImage('img/4. Marcadores/green/Life/100_  copia 2.png');
         this.loadImages(this.IMAGES_LIFE);
-
+        this.x = 20;
+        this.y = 0;
+        this.height = 60;
+        this.width = 200;
     }
 
     setPercentage(percentage) {

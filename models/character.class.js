@@ -98,17 +98,18 @@ class Character extends MovableObject {
     }
 
     animate() {
-        let i = 0;
 
         setInterval(() => {
             if (this.world.keyboard.ArrowRight && this.x < this.world.level.level_end_x) {
                 this.x += this.speed;
+                this.world.statusBar.x += this.speed;
                 //Console!
                 // console.log("Sharkie x:" + this.x)
                 this.otherDirection = false;
             }
             if (this.world.keyboard.ArrowLeft && this.x > -50) {
                 this.x -= this.speed;
+                this.world.statusBar.x -= this.speed;
                 //Console!
                 // console.log("Sharkie" + this.x);
                 this.otherDirection = true;

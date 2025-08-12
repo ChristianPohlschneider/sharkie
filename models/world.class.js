@@ -1,7 +1,7 @@
 class World {
     character = new Character();
     level = level1;
-    statusbar = new Statusbar();
+    statusBar = new StatusBar();
     canvas;
     ctx;
     keyboard;
@@ -33,7 +33,8 @@ class World {
         this.setStoppableInterval(() => {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
-                    this.character.hit()
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.energy);
                     console.log(this.character.energy);
                 }
             })
@@ -68,10 +69,11 @@ class World {
         }
 
         this.addToMap(this.character);
-        this.addToMap(this.statusbar);
+        
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.barriers);
         this.addObjectsToMap(this.shootableObject);
+        this.addToMap(this.statusBar);
 
         this.ctx.translate(-this.camera_x, 0);
 
