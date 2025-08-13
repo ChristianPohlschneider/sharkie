@@ -12,17 +12,20 @@ class StatusBar extends MovableObject {
     ];
 
     constructor() {
-        super().loadImage('img/4. Marcadores/green/Life/100_  copia 2.png');
-        this.loadImages(this.IMAGES_LIFE);
+        super();
         this.x = 20;
         this.y = 0;
         this.height = 60;
         this.width = 200;
+        
+        this.loadImage('img/4. Marcadores/green/Life/100_  copia 2.png');
+        this.loadImages(this.IMAGES_LIFE);
     }
+
 
     setPercentage(percentage) {
         if (percentage < 100) {
-            let absoluteEnergy = Math.floor(percentage/20);
+            let absoluteEnergy = Math.floor(percentage / 20);
             this.loadImage(this.IMAGES_LIFE[absoluteEnergy])
         } else if (percentage < 20 || percentage == 0) {
             this.loadImage(this.IMAGES_LIFE[5])

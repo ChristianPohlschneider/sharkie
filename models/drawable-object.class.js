@@ -7,9 +7,6 @@ class DrawableObject {
     imageCache = {};
     currentImage = 0;
 
-
-
-
     loadImage(path) {
         this.img = new Image(); //this.image = document.getElementById('image') <img id="image">
         this.img.src = path;
@@ -27,7 +24,7 @@ class DrawableObject {
         })
     }
 
-        drawImages(ctx) {
+    drawImages(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 

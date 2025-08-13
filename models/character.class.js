@@ -10,7 +10,7 @@ class Character extends MovableObject {
     shootcount = 0;
     energy = 100;
     lastShot = 0;
-    
+
 
     offset = {
         top: 105,
@@ -103,6 +103,8 @@ class Character extends MovableObject {
             if (this.world.keyboard.ArrowRight && this.x < this.world.level.level_end_x) {
                 this.x += this.speed;
                 this.world.statusBar.x += this.speed;
+                this.world.poisonBar.x += this.speed;
+                this.world.coinBar.x += this.speed;
                 //Console!
                 // console.log("Sharkie x:" + this.x)
                 this.otherDirection = false;
@@ -110,6 +112,8 @@ class Character extends MovableObject {
             if (this.world.keyboard.ArrowLeft && this.x > -50) {
                 this.x -= this.speed;
                 this.world.statusBar.x -= this.speed;
+                this.world.poisonBar.x -= this.speed;
+                this.world.coinBar.x -= this.speed;
                 //Console!
                 // console.log("Sharkie" + this.x);
                 this.otherDirection = true;
@@ -145,20 +149,20 @@ class Character extends MovableObject {
 
         //id: 14
         setInterval(() => {
-                            
-                if (this.isShooting() && this.currentShootImage < 8) {
-                    
-                    this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
-                } else if (this.currentShootImage == 8) {
-                    this.bubbleShot();
-                    this.currentShootImage = 0;
-                }
+
+            if (this.isShooting() && this.currentShootImage < 8) {
+
+                this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
+            } else if (this.currentShootImage == 8) {
+                this.bubbleShot();
+                this.currentShootImage = 0;
+            }
 
             //  
         }, 50);
     }
 
-        isShooting() {
+    isShooting() {
         let timeShotpassed = new Date().getTime() - this.lastShot; //Difference in ms
         timeShotpassed = timeShotpassed / 1000; //Difference in s
         return timeShotpassed < 0.4;
