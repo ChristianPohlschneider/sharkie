@@ -1,7 +1,7 @@
 class DrawableObject {
-        x = 120;
+    x = 120;
     y = 250;
-        height = 100;
+    height = 100;
     width = 100;
     img;
     imageCache = {};
@@ -29,7 +29,7 @@ class DrawableObject {
     }
 
     drawFrame(ctx, object) {
-        if (this instanceof Character || this instanceof PufferFish || this instanceof Endboss) {
+        if (this instanceof Character || this instanceof PufferFish || this instanceof Endboss || this instanceof ShootableObject) {
             //draw collision rectangle
             ctx.beginPath();
             ctx.lineWidth = '5';

@@ -10,6 +10,7 @@ class Character extends MovableObject {
     shootcount = 0;
     energy = 100;
     lastShot = 0;
+    damageFromCollision = 5;
 
 
     offset = {

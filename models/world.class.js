@@ -18,6 +18,7 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollision();
+        this.checkCollisionFromBubble();
     }
 
     //hand over world variables
@@ -35,21 +36,24 @@ class World {
         this.setStoppableInterval(() => {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
-                    this.character.hit();
+                    this.character.hit(this.character.damageFromCollision);
                     this.statusBar.setPercentage(this.character.energy);
                     console.log(this.character.energy);
                 }
             })
         }, 200)
+    }
 
-        // setInterval(() => {
-        //     this.level.enemies.forEach((enemy) => {
-        //         if (this.character.isColliding(enemy)) {
-        //             this.character.hit()
-        //             console.log(this.character.energy);
-        //         }
-        //     })
-        // }, 200);
+    checkCollisionFromBubble() {
+        //id: 
+        this.setStoppableInterval(() => {
+            this.shootableObject.forEach((bubble) => {
+                if (this.level.enemies[0].isColliding(bubble)) {
+                    this.level.enemies[0].hit(this.level.enemies[0].damageFromBubble);
+                    console.log(this.level.enemies[0].energy);
+                }
+            })
+        }, 200)
     }
 
     draw() {
