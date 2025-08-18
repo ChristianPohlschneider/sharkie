@@ -45,15 +45,16 @@ class World {
     }
 
     checkCollisionFromBubble() {
-        //id: 
         this.setStoppableInterval(() => {
             this.shootableObject.forEach((bubble) => {
-                if (this.level.enemies[0].isColliding(bubble)) {
-                    this.level.enemies[0].hit(this.level.enemies[0].damageFromBubble);
-                    console.log(this.level.enemies[0].energy);
-                }
-            })
-        }, 200)
+                this.level.enemies.forEach((enemy) => {
+                    if (enemy.isColliding(bubble)) {
+                        enemy.hit(enemy.damageFromBubble);
+                        console.log(enemy.energy);
+                    }
+                });
+            });
+        }, 200);
     }
 
     draw() {
@@ -83,7 +84,7 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.poisonBar);
         this.addToMap(this.coinBar);
-        
+
 
         this.ctx.translate(-this.camera_x, 0);
 
