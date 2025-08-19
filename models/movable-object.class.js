@@ -57,7 +57,7 @@ class MovableObject extends DrawableObject{
     }
 
     createShootableObject(xCorrection) {
-        //überflüssige bubbles löschen bei x > level_end_x = 3600;
+        //überflüssige bubbles löschen bei x > screen_x = 3600;
         let bubble = new ShootableObject(this.x + xCorrection, this.y + 95);
         this.world.shootableObject.push(bubble);
         this.world.shootableObject[this.shootcount].shoot(this.otherDirection);

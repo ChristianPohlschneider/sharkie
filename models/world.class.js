@@ -4,6 +4,7 @@ class World {
     statusBar = new StatusBar();
     poisonBar = new PoisonBar();
     coinBar = new CoinBar();
+    coins = [];
     canvas;
     ctx;
     keyboard;
@@ -80,11 +81,13 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.barriers);
         this.addObjectsToMap(this.shootableObject);
+        
 
         this.addToMap(this.statusBar);
         this.addToMap(this.poisonBar);
         this.addToMap(this.coinBar);
 
+        this.addObjectsToMap(this.level.coins);
 
         this.ctx.translate(-this.camera_x, 0);
 

@@ -18,7 +18,7 @@ class PoisonBar extends MovableObject {
         this.height = 60;
         this.width = 200;
         
-        this.loadImage('img/4. Marcadores/green/poisoned bubbles/100_ copia 3.png');
+        this.loadImage('img/4. Marcadores/green/poisoned bubbles/0_ copia 2.png');
         this.loadImages(this.IMAGES_POISONBAR);
 
     }
@@ -29,7 +29,7 @@ class PoisonBar extends MovableObject {
             let absoluteEnergy = Math.floor(percentage / 20);
             this.loadImage(this.IMAGES_POISONBAR[absoluteEnergy])
         } else if (percentage < 20 || percentage == 0) {
-            this.loadImage(this.IMAGES_POISONBAR[5])
+            this.loadImage(this.IMAGES_POISONBAR[0])
         }
     }
 }

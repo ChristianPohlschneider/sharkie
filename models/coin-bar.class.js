@@ -18,7 +18,7 @@ class CoinBar extends MovableObject {
         this.height = 60;
         this.width = 200;
         
-        this.loadImage('img/4. Marcadores/green/Coin/100_ copia 4.png');
+        this.loadImage('img/4. Marcadores/green/Coin/0_  copia 4.png');
         this.loadImages(this.IMAGES_COINBAR);
 
     }
@@ -29,7 +29,7 @@ class CoinBar extends MovableObject {
             let absoluteEnergy = Math.floor(percentage / 20);
             this.loadImage(this.IMAGES_COINBAR[absoluteEnergy])
         } else if (percentage < 20 || percentage == 0) {
-            this.loadImage(this.IMAGES_COINBAR[5])
+            this.loadImage(this.IMAGES_COINBAR[0])
         }
     }
 }
