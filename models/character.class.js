@@ -85,6 +85,7 @@ class Character extends MovableObject {
     ];
     //hand over world variables
     world;
+    level;
 
 
     constructor() {

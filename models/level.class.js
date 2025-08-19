@@ -2,7 +2,7 @@ class Level {
     enemies;
     barriers;
     backgroundObjects;
-    poisonBottles
+    poisonBottles;
     coins;
     level_end_x = 3600;
 

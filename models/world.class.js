@@ -4,7 +4,6 @@ class World {
     statusBar = new StatusBar();
     poisonBar = new PoisonBar();
     coinBar = new CoinBar();
-    coins = [];
     canvas;
     ctx;
     keyboard;

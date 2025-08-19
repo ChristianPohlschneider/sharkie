@@ -1,9 +1,9 @@
 const level1 = new Level(
     [
-    new PufferFish(),
-    new PufferFish(),
-    new PufferFish(),
-    new Endboss(),
+        new PufferFish(),
+        new PufferFish(),
+        new PufferFish(),
+        new Endboss(),
     ],
     [
         new Barrier(),
@@ -37,7 +37,7 @@ const level1 = new Level(
         new PoisonBottle('img/3. Background/Layers/5. Water/L1.png', 0),
     ],
     [
-        new Coin(100, 100),
-        new Coin(150, 100),
+        new Coin(400, 240),
+        new Coin(650, 240),
     ],
 );
