@@ -3,6 +3,7 @@ class Coin extends MovableObject {
     y = 100;
     height = 50;
     width = 50;
+    coinValue = 20;
     COIN_IMAGES = [
         'img/4. Marcadores/1. Coins/1.png',
         'img/4. Marcadores/1. Coins/2.png',
@@ -11,6 +12,13 @@ class Coin extends MovableObject {
     ];
     world;
     level;
+
+    offset = {
+        top: 4,
+        left: 4,
+        right: 5,
+        bottom: 4
+    };
 
     constructor(x, y, level) {
 
@@ -25,9 +33,10 @@ class Coin extends MovableObject {
 
     animate() {
 
-    setInterval(() => {
-        this.playAnimation(this.COIN_IMAGES);
-    }, 200);
+        setInterval(() => {
+            this.playAnimation(this.COIN_IMAGES);
+        }, 200);
 
     }
+
 }

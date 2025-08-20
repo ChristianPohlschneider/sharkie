@@ -19,6 +19,8 @@ class World {
         this.setWorld();
         this.checkCollision();
         this.checkCollisionFromBubble();
+        this.checkCollisionWithCoin();
+        this.checkCollisionWithPoisonBottle();
     }
 
     //hand over world variables
@@ -38,7 +40,8 @@ class World {
                 if (this.character.isColliding(enemy)) {
                     this.character.hit(this.character.damageFromCollision);
                     this.statusBar.setPercentage(this.character.energy);
-                    console.log(this.character.energy);
+                    // console log
+                    // console.log(this.character.energy);
                 }
             })
         }, 200)
@@ -50,9 +53,44 @@ class World {
                 this.level.enemies.forEach((enemy) => {
                     if (enemy.isColliding(bubble)) {
                         enemy.hit(enemy.damageFromBubble);
-                        console.log(enemy.energy);
+                        // console log
+                        // console.log(enemy.energy);
                     }
                 });
+            });
+        }, 200);
+    }
+
+    checkCollisionWithCoin() {
+        this.setStoppableInterval(() => {
+            this.level.coins = this.level.coins.filter((coin) => {
+                if (this.character.isColliding(coin)) {
+                    this.coinBar.coinCount(coin.coinValue);
+                    this.coinBar.setWalletAmount(this.coinBar.wallet);
+
+                    console.log(coin.coinValue);
+                    console.log(this.coinBar.wallet);
+
+                    return false; // Coin entfernen
+                }
+                return true; // Coin behalten
+            });
+        }, 200);
+    }
+
+    checkCollisionWithPoisonBottle() {
+        this.setStoppableInterval(() => {
+            this.level.poisonBottles = this.level.poisonBottles.filter((poisonBottle) => {
+                if (this.character.isColliding(poisonBottle)) {
+                    this.poisonBar.poisonCount(poisonBottle.poisonValue);
+                    this.poisonBar.setPoisonAmount(this.poisonBar.venomSac);
+
+                    console.log(poisonBottle.poisonValue);
+                    console.log(this.poisonBar.venomSac);
+
+                    return false; // poisonBottle entfernen
+                }
+                return true; // poisonBottle behalten
             });
         }, 200);
     }
@@ -80,18 +118,15 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.barriers);
         this.addObjectsToMap(this.shootableObject);
-        
 
         this.addToMap(this.statusBar);
         this.addToMap(this.poisonBar);
         this.addToMap(this.coinBar);
 
         this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.poisonBottles);
 
         this.ctx.translate(-this.camera_x, 0);
-
-
-
 
         //Draw wird immer wieder aufgerufen
         let self = this;

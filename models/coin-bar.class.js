@@ -1,5 +1,5 @@
 class CoinBar extends MovableObject {
-    percentage = 100;
+    wallet = 0;
     world;
 
     IMAGES_COINBAR = [
@@ -17,19 +17,26 @@ class CoinBar extends MovableObject {
         this.y = 100;
         this.height = 60;
         this.width = 200;
-        
+
         this.loadImage('img/4. Marcadores/green/Coin/0_  copia 4.png');
         this.loadImages(this.IMAGES_COINBAR);
 
     }
 
 
-    setPercentage(percentage) {
-        if (percentage < 100) {
-            let absoluteEnergy = Math.floor(percentage / 20);
-            this.loadImage(this.IMAGES_COINBAR[absoluteEnergy])
-        } else if (percentage < 20 || percentage == 0) {
-            this.loadImage(this.IMAGES_COINBAR[0])
+    setWalletAmount(coinsInWallet) {
+        if (coinsInWallet < 100) {
+            let absoluteCoinAmount = Math.floor(coinsInWallet / 20);
+            this.loadImage(this.IMAGES_COINBAR[absoluteCoinAmount])
+        } else if (coinsInWallet > 80 || coinsInWallet == 100) {
+            this.loadImage(this.IMAGES_COINBAR[5])
+        }
+    }
+
+    coinCount(coinValue) {
+        this.wallet += coinValue;
+        if (this.wallet < 0) {
+            this.wallet = 0;
         }
     }
 }

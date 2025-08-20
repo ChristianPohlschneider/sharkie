@@ -1,5 +1,5 @@
 class PoisonBar extends MovableObject {
-    percentage = 100;
+    venomSac = 0;
     world;
 
     IMAGES_POISONBAR = [
@@ -17,19 +17,26 @@ class PoisonBar extends MovableObject {
         this.y = 50;
         this.height = 60;
         this.width = 200;
-        
+
         this.loadImage('img/4. Marcadores/green/poisoned bubbles/0_ copia 2.png');
         this.loadImages(this.IMAGES_POISONBAR);
 
     }
 
-
-    setPercentage(percentage) {
-        if (percentage < 100) {
-            let absoluteEnergy = Math.floor(percentage / 20);
-            this.loadImage(this.IMAGES_POISONBAR[absoluteEnergy])
-        } else if (percentage < 20 || percentage == 0) {
-            this.loadImage(this.IMAGES_POISONBAR[0])
+    setPoisonAmount(poisonInVenomSac) {
+        if (poisonInVenomSac < 100) {
+            let absolutePoisonAmount = Math.floor(poisonInVenomSac / 20);
+            this.loadImage(this.IMAGES_POISONBAR[absolutePoisonAmount])
+        } else if (poisonInVenomSac > 80 || poisonInVenomSac == 100) {
+            this.loadImage(this.IMAGES_POISONBAR[5])
         }
     }
+
+    poisonCount(poisonValue) {
+        this.venomSac += poisonValue;
+        if (this.venomSac < 0) {
+            this.venomSac = 0;
+        }
+    }
+
 }

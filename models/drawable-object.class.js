@@ -29,7 +29,7 @@ class DrawableObject {
     }
 
     drawFrame(ctx, object) {
-        if (this instanceof Character || this instanceof PufferFish || this instanceof Endboss || this instanceof ShootableObject) {
+        if (this instanceof Character || this instanceof PufferFish || this instanceof Endboss || this instanceof ShootableObject || this instanceof Coin  || this instanceof PoisonBottle) {
             //draw collision rectangle
             ctx.beginPath();
             ctx.lineWidth = '5';

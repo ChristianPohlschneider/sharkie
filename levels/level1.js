@@ -34,10 +34,17 @@ const level1 = new Level(
         new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
     ],
     [
-        new PoisonBottle('img/3. Background/Layers/5. Water/L1.png', 0),
+        new PoisonBottle(525, 214),
+        new PoisonBottle(775, 214),
+        new PoisonBottle(1025, 214),
+        new PoisonBottle(1275, 214),
+        new PoisonBottle(1575, 214),
     ],
     [
         new Coin(400, 240),
         new Coin(650, 240),
+        new Coin(900, 240),
+        new Coin(1150, 240),
+        new Coin(1400, 240),
     ],
 );

@@ -186,7 +186,6 @@ class Character extends MovableObject {
 
     bubbleShot() {
 
-
         if (this.otherDirection == false) {
             //bubble shoot rh
             this.createShootableObject(160);
