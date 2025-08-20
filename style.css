@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'titanOne';
+    src: url('fonts/titanOne.ttf') format('truetype');
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -5,9 +10,44 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background-image: url('./img/');
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
+    color: white;
+    background-image: url('./img/assets/underwater7.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+
+}
+
+h1 {
+    font-size: 70px;
+    letter-spacing: 3px;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 canvas {
     background-color: black;
+    display: block;
+    margin-bottom: 170px;
+}
+
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-height: 850px) {
+    canvas {
+        margin-bottom: 0px;
+    }
+    h1 {
+        display: none;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
 }
