@@ -23,7 +23,6 @@ class CoinBar extends MovableObject {
 
     }
 
-
     setWalletAmount(coinsInWallet) {
         if (coinsInWallet < 100) {
             let absoluteCoinAmount = Math.floor(coinsInWallet / 20);

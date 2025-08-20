@@ -3,7 +3,7 @@ class Coin extends MovableObject {
     y = 100;
     height = 50;
     width = 50;
-    coinValue = 20;
+    coinValue = 1;
     COIN_IMAGES = [
         'img/4. Marcadores/1. Coins/1.png',
         'img/4. Marcadores/1. Coins/2.png',

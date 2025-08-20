@@ -68,9 +68,6 @@ class World {
                     this.coinBar.coinCount(coin.coinValue);
                     this.coinBar.setWalletAmount(this.coinBar.wallet);
 
-                    console.log(coin.coinValue);
-                    console.log(this.coinBar.wallet);
-
                     return false; // Coin entfernen
                 }
                 return true; // Coin behalten
@@ -84,9 +81,6 @@ class World {
                 if (this.character.isColliding(poisonBottle)) {
                     this.poisonBar.poisonCount(poisonBottle.poisonValue);
                     this.poisonBar.setPoisonAmount(this.poisonBar.venomSac);
-
-                    console.log(poisonBottle.poisonValue);
-                    console.log(this.poisonBar.venomSac);
 
                     return false; // poisonBottle entfernen
                 }
