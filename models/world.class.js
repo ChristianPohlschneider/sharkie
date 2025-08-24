@@ -62,22 +62,6 @@ class World {
         }, 200);
     }
 
-    // checkCollisionWithCoin() {
-    //     this.setStoppableInterval(() => {
-    //         this.level.coins = this.level.coins.filter((coin) => {
-    //             if (this.character.isColliding(coin)) {
-    //                 this.coinBar.coinCount(coin.coinValue);
-    //                 this.coinBar.setWalletAmount(this.coinBar.wallet);
-    //                 this.spinOut(coin.dom);
-    //                 // spin coin
-
-    //                 return false; // Coin entfernen
-    //             }
-    //             return true; // Coin behalten
-    //         });
-    //     }, 200);
-    // }
-
     checkCollisionWithCoin() {
         this.setStoppableInterval(() => {
             this.level.coins = this.level.coins.filter((coin) => {
@@ -92,20 +76,6 @@ class World {
             });
         }, 200);
     }
-
-    // checkCollisionWithPoisonBottle() {
-    //     this.setStoppableInterval(() => {
-    //         this.level.poisonBottles = this.level.poisonBottles.filter((poisonBottle) => {
-    //             if (this.character.isColliding(poisonBottle)) {
-    //                 this.poisonBar.poisonCount(poisonBottle.poisonValue);
-    //                 this.poisonBar.setPoisonAmount(this.poisonBar.venomSac);
-
-    //                 return false; // poisonBottle entfernen
-    //             }
-    //             return true; // poisonBottle behalten
-    //         });
-    //     }, 200);
-    // }
 
     checkCollisionWithPoisonBottle() {
         this.setStoppableInterval(() => {
@@ -150,22 +120,11 @@ class World {
         this.addToMap(this.poisonBar);
         this.addToMap(this.coinBar);
 
-        this.addRotatingObjectsToMap(this.level.coins);
+        this.addShrinkingObjectsToMap(this.level.coins);
 
-        // // 👉 shrinking Coins extra zeichnen
-        // this.level.shrinkingObjects = this.level.shrinkingObjects.filter((coin) => {
-        //     if (!coin.isCollected) {
-        //         coin.drawRotatingObjects(this.ctx); // weiterhin sichtbar während Shrink
-        //         return true; // bleibt noch sichtbar
-        //     }
-        //     return false; // Shrink fertig → endgültig entfernen
-        // });
+        this.addShrinkingObjectsToMap(this.level.poisonBottles);
 
-        this.addRotatingObjectsToMap(this.level.poisonBottles);
-
-        // this.level.shrinkingObjects = this.level.shrinkingObjects.filter(coin => !coin.isCollected);
-        // this.addRotatingObjectsToMap(this.level.shrinkingObjects);
-        this.level.shrinkingObjects = this.addRotatingObjectsToMap(this.level.shrinkingObjects);
+        this.level.shrinkingObjects = this.addShrinkingObjectsToMap(this.level.shrinkingObjects);
 
         this.ctx.translate(-this.camera_x, 0);
 
@@ -193,11 +152,11 @@ class World {
         }
     }
 
-    addRotatingObjectsToMap(objects) {
+    addShrinkingObjectsToMap(objects) {
         if (!objects) return []; // array existiert nicht -> leere Rückgabe
 
         let visibleObjects = objects.filter(o => !o.isCollected);
-        visibleObjects.forEach(o => o.drawRotatingObjects(this.ctx));
+        visibleObjects.forEach(o => o.drawShrinkingObjects(this.ctx));
         visibleObjects.forEach(o => o.drawFrame(this.ctx, o));
         return visibleObjects;
     }

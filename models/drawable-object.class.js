@@ -47,7 +47,7 @@ class DrawableObject {
     }
 
     // Zeichnen
-    drawRotatingObjects(ctx) {
+    drawShrinkingObjects(ctx) {
         if (this.isCollected) return; // überspringen, wenn eingesammelt
         ctx.save();
 
