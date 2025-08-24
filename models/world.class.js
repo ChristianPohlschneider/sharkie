@@ -11,6 +11,7 @@ class World {
     shootableObject = [];
     intervalIds = [];
 
+
     constructor(canvas, keyboard) {//hand over variables to world
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -61,19 +62,50 @@ class World {
         }, 200);
     }
 
+    // checkCollisionWithCoin() {
+    //     this.setStoppableInterval(() => {
+    //         this.level.coins = this.level.coins.filter((coin) => {
+    //             if (this.character.isColliding(coin)) {
+    //                 this.coinBar.coinCount(coin.coinValue);
+    //                 this.coinBar.setWalletAmount(this.coinBar.wallet);
+    //                 this.spinOut(coin.dom);
+    //                 // spin coin
+
+    //                 return false; // Coin entfernen
+    //             }
+    //             return true; // Coin behalten
+    //         });
+    //     }, 200);
+    // }
+
     checkCollisionWithCoin() {
         this.setStoppableInterval(() => {
             this.level.coins = this.level.coins.filter((coin) => {
                 if (this.character.isColliding(coin)) {
                     this.coinBar.coinCount(coin.coinValue);
                     this.coinBar.setWalletAmount(this.coinBar.wallet);
-
-                    return false; // Coin entfernen
+                    coin.shrinkOut(); // startet Shrink-Animation
+                    this.level.shrinkingObjects.push(coin); // 👉 hierhin verschieben
+                    return false; // 👉 Coin sofort aus dem Array entfernen
                 }
-                return true; // Coin behalten
+                return true; // Coin bleibt erhalten
             });
         }, 200);
     }
+
+    // checkCollisionWithPoisonBottle() {
+    //     this.setStoppableInterval(() => {
+    //         this.level.poisonBottles = this.level.poisonBottles.filter((poisonBottle) => {
+    //             if (this.character.isColliding(poisonBottle)) {
+    //                 this.poisonBar.poisonCount(poisonBottle.poisonValue);
+    //                 this.poisonBar.setPoisonAmount(this.poisonBar.venomSac);
+
+    //                 return false; // poisonBottle entfernen
+    //             }
+    //             return true; // poisonBottle behalten
+    //         });
+    //     }, 200);
+    // }
 
     checkCollisionWithPoisonBottle() {
         this.setStoppableInterval(() => {
@@ -81,10 +113,11 @@ class World {
                 if (this.character.isColliding(poisonBottle)) {
                     this.poisonBar.poisonCount(poisonBottle.poisonValue);
                     this.poisonBar.setPoisonAmount(this.poisonBar.venomSac);
-
-                    return false; // poisonBottle entfernen
+                    poisonBottle.shrinkOut(); // Standard-Animation stoppt, Shrink startet
+                    this.level.shrinkingObjects.push(poisonBottle); // 👉 hierhin verschieben
+                    return false;
                 }
-                return true; // poisonBottle behalten
+                return true;
             });
         }, 200);
     }
@@ -117,8 +150,22 @@ class World {
         this.addToMap(this.poisonBar);
         this.addToMap(this.coinBar);
 
-        this.addObjectsToMap(this.level.coins);
-        this.addObjectsToMap(this.level.poisonBottles);
+        this.addRotatingObjectsToMap(this.level.coins);
+
+        // // 👉 shrinking Coins extra zeichnen
+        // this.level.shrinkingObjects = this.level.shrinkingObjects.filter((coin) => {
+        //     if (!coin.isCollected) {
+        //         coin.drawRotatingObjects(this.ctx); // weiterhin sichtbar während Shrink
+        //         return true; // bleibt noch sichtbar
+        //     }
+        //     return false; // Shrink fertig → endgültig entfernen
+        // });
+
+        this.addRotatingObjectsToMap(this.level.poisonBottles);
+
+        // this.level.shrinkingObjects = this.level.shrinkingObjects.filter(coin => !coin.isCollected);
+        // this.addRotatingObjectsToMap(this.level.shrinkingObjects);
+        this.level.shrinkingObjects = this.addRotatingObjectsToMap(this.level.shrinkingObjects);
 
         this.ctx.translate(-this.camera_x, 0);
 
@@ -144,6 +191,15 @@ class World {
         if (object.otherDirection) {
             this.flipImageBack(object);
         }
+    }
+
+    addRotatingObjectsToMap(objects) {
+        if (!objects) return []; // array existiert nicht -> leere Rückgabe
+
+        let visibleObjects = objects.filter(o => !o.isCollected);
+        visibleObjects.forEach(o => o.drawRotatingObjects(this.ctx));
+        visibleObjects.forEach(o => o.drawFrame(this.ctx, o));
+        return visibleObjects;
     }
 
     flipImage(object) {

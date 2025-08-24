@@ -10,6 +10,9 @@ class Coin extends MovableObject {
         'img/4. Marcadores/1. Coins/3.png',
         'img/4. Marcadores/1. Coins/4.png',
     ];
+
+   
+    animationInterval;
     world;
     level;
 
@@ -31,12 +34,15 @@ class Coin extends MovableObject {
 
     }
 
-    animate() {
-
-        setInterval(() => {
+   animate() {
+        this.animationInterval = setInterval(() => {
             this.playAnimation(this.COIN_IMAGES);
         }, 200);
-
     }
+
+
+
+
+
 
 }

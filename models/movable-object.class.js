@@ -1,4 +1,4 @@
-class MovableObject extends DrawableObject{
+class MovableObject extends DrawableObject {
     x = 120;
     y = 250;
     height = 100;
@@ -14,6 +14,8 @@ class MovableObject extends DrawableObject{
     energy = 100;
     lastHit = 0;
     currentShootImage = 0;
+    scale = 1;
+    isShrinking = false;
 
     offset = {
         top: 0,
@@ -30,9 +32,9 @@ class MovableObject extends DrawableObject{
     }
 
     playShootAnimation(images) {
-            let path = images[this.currentShootImage];
-            this.img = this.imageCache[path];
-            this.currentShootImage++
+        let path = images[this.currentShootImage];
+        this.img = this.imageCache[path];
+        this.currentShootImage++
         // let i = this.currentImage % images.length;
 
     }
@@ -84,5 +86,26 @@ class MovableObject extends DrawableObject{
         let timepassed = new Date().getTime() - this.lastHit; //Difference in ms
         timepassed = timepassed / 1000; //Difference in s
         return timepassed < 1;
+    }
+
+    // Schrumpf-Animation bei Kollision
+    shrinkOut() {
+        if (this.isShrinking) return;
+        this.isShrinking = true;
+
+        // Standard-Animation stoppen
+        clearInterval(this.animationInterval);
+
+        let steps = 10;
+        let count = 0;
+        let interval = setInterval(() => {
+            this.scale -= 0.1; // kleiner werden
+            count++;
+
+            if (count >= steps) {
+                clearInterval(interval);
+                this.isCollected = true; // markiere Coin als entfernt
+            }
+        }, 10);
     }
 }

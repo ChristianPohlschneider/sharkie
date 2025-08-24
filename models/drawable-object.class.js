@@ -6,6 +6,7 @@ class DrawableObject {
     img;
     imageCache = {};
     currentImage = 0;
+    isCollected = false;
 
     loadImage(path) {
         this.img = new Image(); //this.image = document.getElementById('image') <img id="image">
@@ -29,7 +30,7 @@ class DrawableObject {
     }
 
     drawFrame(ctx, object) {
-        if (this instanceof Character || this instanceof PufferFish || this instanceof Endboss || this instanceof ShootableObject || this instanceof Coin  || this instanceof PoisonBottle) {
+        if (this instanceof Character || this instanceof PufferFish || this instanceof Endboss || this instanceof ShootableObject || this instanceof Coin || this instanceof PoisonBottle) {
             //draw collision rectangle
             ctx.beginPath();
             ctx.lineWidth = '5';
@@ -45,4 +46,19 @@ class DrawableObject {
         }
     }
 
+    // Zeichnen
+    drawRotatingObjects(ctx) {
+        if (this.isCollected) return; // überspringen, wenn eingesammelt
+        ctx.save();
+
+        const img = this.img || this.imageCache[this.COIN_IMAGES[0]];
+        const w = this.width * this.scale;
+        const h = this.height * this.scale;
+
+        ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+        ctx.drawImage(img, -w / 2, -h / 2, w, h);
+
+        ctx.restore();
     }
+
+}
