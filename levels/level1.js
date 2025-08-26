@@ -1,9 +1,9 @@
-const level1 = new Level(
+level1 = new Level(
     [
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new Endboss(),
+        // new PufferFish(),
+        // new PufferFish(),
+        // new PufferFish(),
+        // new Endboss(),
     ],
     [
         new Barrier(),
@@ -47,4 +47,14 @@ const level1 = new Level(
         new Coin(1150, 240),
         new Coin(1400, 240),
     ],
+
 );
+
+function setinitialEnemies() {
+    world.level.enemies = [
+    new PufferFish(),
+    new PufferFish(),
+    new PufferFish(),
+    new Endboss(),
+]
+}

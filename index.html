@@ -1,43 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sharkie</title>
     <link rel="stylesheet" href="./style.css">
-    
+
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
     <script src="models/background-object.class.js"></script>
     <script src="models/character.class.js"></script>
-   
+
     <script src="models/coin-bar.class.js"></script>
-    
+
     <script src="models/status-bar.class.js"></script>
     <script src="models/poison-bar.class.js"></script>
-    
+
     <script src="models/poison-object.class.js"></script>
-    
+
     <script src="models/puffer-fish.class.js"></script>
     <script src="./js/keyboard.class.js"></script>
     <script src="models/barrier-object.class.js"></script>
     <script src="models/world.class.js"></script>
     <script src="models/level.class.js"></script>
-    
+
     <script src="models/endboss.class.js"></script>
     <script src="models/shootable-object.class.js"></script>
-    
+
     <script src="models/coin-object.class.js"></script>
     <script src="levels/level1.js"></script>
-    
+
     <script src="./js/game.js"></script>
-    
-    
+
+
 </head>
+
 <body onload="init()">
     <h1>Sharkie</h1>
-    <div class="startScreen" id="startScreen"><img src="./img/3. Background/Mesa de trabajo 1.png" alt="Startscreen"></div>
+
     <canvas id="canvas" width="720" height="480"></canvas>
+    <div class="startScreen" id="startScreen">
+        <img id="startScreenImg" class="startScreenImg" src="./img/3. Background/Mesa de trabajo 1.png" alt="Startscreen">
+        <button onclick="startGame()" class="startButton" id="startButton">Start Game</button>
+    </div>
 
 </body>
+
 </html>

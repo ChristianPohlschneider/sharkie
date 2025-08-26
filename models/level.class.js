@@ -14,4 +14,5 @@ class Level {
         this.coins = coins;
         this.shrinkingObjects = [];
     }
+
 }
