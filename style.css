@@ -25,6 +25,10 @@ h1 {
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
 }
 
+startScreen {
+    display: flex;
+}
+
 canvas {
     background-color: black;
     display: block;
