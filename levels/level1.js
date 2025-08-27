@@ -38,7 +38,9 @@ level1 = new Level(
         new PoisonBottle(775, 214),
         new PoisonBottle(1025, 214),
         new PoisonBottle(1275, 214),
+        new PoisonBottle(1575, 114),
         new PoisonBottle(1575, 214),
+        new PoisonBottle(1575, 314),
     ],
     [
         new Coin(400, 240),

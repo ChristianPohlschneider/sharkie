@@ -16,6 +16,7 @@ class MovableObject extends DrawableObject {
     currentShootImage = 0;
     scale = 1;
     isShrinking = false;
+    world;
 
     offset = {
         top: 0,
@@ -59,12 +60,10 @@ class MovableObject extends DrawableObject {
     }
 
     createShootableObject(xCorrection) {
-        //überflüssige bubbles löschen bei x > screen_x = 3600;
-        let bubble = new ShootableObject(this.x + xCorrection, this.y + 95);
-        this.world.shootableObject.push(bubble);
-        this.world.shootableObject[this.shootcount].shoot(this.otherDirection);
-        this.shootcount++;
-    }
+    let bubble = new ShootableObject(this.x + xCorrection, this.y + 95, this.world.poisonBar);
+    this.world.shootableObject.push(bubble);
+    this.world.shootableObject[this.world.shootableObject.length - 1].shoot(this.otherDirection);
+}
 
     isColliding(object) {
         return this.x + this.width - this.offset.right > object.x + object.offset.left &&

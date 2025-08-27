@@ -25,7 +25,7 @@ class PoisonBottle extends MovableObject {
     };
 
     constructor(x, y, level) {
-
+  
         super().loadImage('img/4. Marcadores/Posión/Animada/1.png');
         this.loadImages(this.POISONBOTTLE_IMAGES);
         this.x = x;
@@ -36,7 +36,7 @@ class PoisonBottle extends MovableObject {
     }
 
     animate() {
-
+        
         setInterval(() => {
             this.playAnimation(this.POISONBOTTLE_IMAGES);
         }, 200);

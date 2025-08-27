@@ -20,6 +20,7 @@ class World {
         this.setWorld();
         this.checkCollision();
         this.checkCollisionFromBubble();
+        this.checkBubbleOutOfRange();
         this.checkCollisionWithCoin();
         this.checkCollisionWithPoisonBottle();
     }
@@ -53,7 +54,11 @@ class World {
             this.shootableObject.forEach((bubble) => {
                 this.level.enemies.forEach((enemy) => {
                     if (enemy.isColliding(bubble)) {
-                        enemy.hit(enemy.damageFromBubble);
+                        if (bubble.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Bubble%20trap/Poisoned%20Bubble%20(for%20whale).png') {
+                            enemy.hit(2 * enemy.damageFromBubble);
+                        } else {
+                            enemy.hit(enemy.damageFromBubble);
+                        }
                         // console log
                         // console.log(enemy.energy);
                     }
@@ -61,6 +66,20 @@ class World {
             });
         }, 200);
     }
+
+checkBubbleOutOfRange() {
+    this.setStoppableInterval(() => {
+        for (let i = this.shootableObject.length - 1; i >= 0; i--) {
+            const bubble = this.shootableObject[i];
+            if (bubble.x > bubble.maxRange || bubble.x < bubble.minRange) {
+                console.log(bubble.x);
+                console.log(this.character.x);
+                bubble.shrinkOut();
+                this.shootableObject.splice(i, 1);
+            }
+        }
+    }, 200);
+}
 
     checkCollisionWithCoin() {
         this.setStoppableInterval(() => {

@@ -7,7 +7,6 @@ class Character extends MovableObject {
     interval = 1000 / 60;
     speedY = 0;
     accelerationY = 0.05;
-    shootcount = 0;
     energy = 100;
     lastShot = 0;
     damageFromCollision = 5;
@@ -61,6 +60,17 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/8.png',
     ];
 
+    IMAGES_BUBBLE_TRAP_POISON = [
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/1.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/2.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/3.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/4.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/5.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/6.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
+    ];
+
     IMAGES_HURT = [
         'img/1.Sharkie/5.Hurt/1.Poisoned/1.png',
         'img/1.Sharkie/5.Hurt/1.Poisoned/2.png',
@@ -93,6 +103,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_BUBBLE_TRAP);
+        this.loadImages(this.IMAGES_BUBBLE_TRAP_POISON);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         // this.applyGravity();
@@ -153,8 +164,13 @@ class Character extends MovableObject {
         setInterval(() => {
 
             if (this.isShooting() && this.currentShootImage < 8) {
+                if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
+                    this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
+                } else {
+                    this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
+                }
 
-                this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
+
             } else if (this.currentShootImage == 8) {
                 this.bubbleShot();
                 this.currentShootImage = 0;

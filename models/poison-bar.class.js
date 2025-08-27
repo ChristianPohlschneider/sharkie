@@ -36,7 +36,12 @@ class PoisonBar extends MovableObject {
         this.venomSac += poisonValue;
         if (this.venomSac < 0) {
             this.venomSac = 0;
+        } else if (this.venomSac >= 100) {
+            this.venomSac = 100;
         }
     }
 
+    getVenomSac() {
+        return this.venomSac;
+    }
 }
