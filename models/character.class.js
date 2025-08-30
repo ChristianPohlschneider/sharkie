@@ -154,13 +154,6 @@ class Character extends MovableObject {
 
         setInterval(() => {
 
-            // // Space-Taste Event
-            // if (this.world.keyboard.Space && !this.isShooting) {
-            //     this.isShooting = true;
-            //     this.currentShootImage = 0;
-            //     this.lastShot = new Date().getTime();
-            // }
-
             if (this.world.keyboard.Space) {
                 const now = new Date().getTime();
                 if (!this.isShooting && (now - this.lastShot >= this.shootCooldown)) {
@@ -170,23 +163,16 @@ class Character extends MovableObject {
                     this.lastShot = now; // Zeitpunkt des Schusses speichern
                 }
             }
-
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
-            } else if (this.world.keyboard.ArrowRight || this.world.keyboard.ArrowLeft || this.world.keyboard.ArrowUp || this.world.keyboard.ArrowDown) {
-                //swim animation
+            } else if (this.isShooting) {
+                // Shoot-Loop übernimmt Animation, nichts hier
+            } else if (this.world.keyboard.ArrowRight || this.world.keyboard.ArrowLeft ||
+                this.world.keyboard.ArrowUp || this.world.keyboard.ArrowDown) {
                 this.playAnimation(this.IMAGES_SWIMMING);
-            }
-            else if (this.isShooting) {
-                // nichts tun, Shoot-Loop übernimmt Animation
-            }
-            // else if (this.world.keyboard.Space) {
-            //     this.lastShot = new Date().getTime();
-
-            // } 
-            else {
+            } else {
                 this.playAnimation(this.IMAGES_IDLE);
             }
         }, 200);
