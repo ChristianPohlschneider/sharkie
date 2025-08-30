@@ -10,7 +10,7 @@ class Character extends MovableObject {
     energy = 100;
     lastShot = 0;
     damageFromCollision = 5;
-
+    hadFirstContact = false;
 
     offset = {
         top: 105,
@@ -119,7 +119,11 @@ class Character extends MovableObject {
                 this.world.poisonBar.x += this.speed;
                 this.world.coinBar.x += this.speed;
                 //Console!
-                // console.log("Sharkie x:" + this.x)
+                console.log("Sharkie x:" + this.x)
+            if(this.x > Number(this.world.level.level_end_x - 500) && !this.hadFirstContact){
+                setFinalEnemie(this.world, Number(this.world.level.level_end_x - 200));
+                this.hadFirstContact = true;
+            }
                 this.otherDirection = false;
             }
             if (this.world.keyboard.ArrowLeft && this.x > -50) {

@@ -60,10 +60,10 @@ class MovableObject extends DrawableObject {
     }
 
     createShootableObject(xCorrection) {
-    let bubble = new ShootableObject(this.x + xCorrection, this.y + 95, this.world.poisonBar);
-    this.world.shootableObject.push(bubble);
-    this.world.shootableObject[this.world.shootableObject.length - 1].shoot(this.otherDirection);
-}
+        let bubble = new ShootableObject(this.x + xCorrection, this.y + 95, this.world.poisonBar);
+        this.world.shootableObject.push(bubble);
+        this.world.shootableObject[this.world.shootableObject.length - 1].shoot(this.otherDirection);
+    }
 
     isColliding(object) {
         return this.x + this.width - this.offset.right > object.x + object.offset.left &&

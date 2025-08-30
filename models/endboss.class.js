@@ -9,6 +9,7 @@ class Endboss extends MovableObject {
     interval = 1000 / 60;
     energy = 100;
     damageFromBubble = 5;
+    world;
 
     offset = {
         top: 150,
@@ -16,6 +17,17 @@ class Endboss extends MovableObject {
         right: 25,
         bottom: 60
     };
+
+    IMAGES_SPAWNING = [
+        'img/2.Enemy/3 Final Enemy/1.Introduce/1.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/2.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/3.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/4.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/5.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/6.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/7.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/8.png',
+    ];
 
     IMAGES_SWIMMING = [
         'img/2.Enemy/3 Final Enemy/2.floating/1.png',
@@ -33,14 +45,14 @@ class Endboss extends MovableObject {
         'img/2.Enemy/3 Final Enemy/2.floating/13.png',
     ];
 
-        IMAGES_HURT = [
+    IMAGES_HURT = [
         'img/2.Enemy/3 Final Enemy/Hurt/1.png',
         'img/2.Enemy/3 Final Enemy/Hurt/2.png',
         'img/2.Enemy/3 Final Enemy/Hurt/3.png',
-        'img/2.Enemy/3 Final Enemy/Hurt/4.png'
+        'img/2.Enemy/3 Final Enemy/Hurt/4.png',
     ];
 
-        IMAGES_DIE = [
+    IMAGES_DIE = [
         'img/2.Enemy/3 Final Enemy/Hurt/1.png',
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 6.png',
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 7.png',
@@ -50,12 +62,15 @@ class Endboss extends MovableObject {
 
     ];
 
-    constructor() {
-        super().loadImage(this.IMAGES_SWIMMING[0]);
+    constructor(world, bossSpawnCoordinateX) {
+        
+        super().loadImage(this.IMAGES_SPAWNING[0]);
+        this.loadImages(this.IMAGES_SPAWNING);
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_DIE);
         this.loadImages(this.IMAGES_HURT);
-        this.x = 1400;
+        this.world = world;
+        this.x = bossSpawnCoordinateX;
         this.speed = 0;
         this.animate();
 
@@ -63,22 +78,27 @@ class Endboss extends MovableObject {
 
     animate() {
         this.moveLeft(this.speed, this.interval);
-
+        let i = 0;
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DIE);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else {
+                
+                if (i < 8) {
+                    this.playAnimation(this.IMAGES_SPAWNING);
+                } else {
                 this.playAnimation(this.IMAGES_SWIMMING);
-            }
-
+                }
+                 i++
+            }      
         }, 200);
 
 
     }
 
-        isDead() {
+    isDead() {
         return this.energy == 0;
     }
 

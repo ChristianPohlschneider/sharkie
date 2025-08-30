@@ -72,8 +72,9 @@ checkBubbleOutOfRange() {
         for (let i = this.shootableObject.length - 1; i >= 0; i--) {
             const bubble = this.shootableObject[i];
             if (bubble.x > bubble.maxRange || bubble.x < bubble.minRange) {
-                console.log(bubble.x);
-                console.log(this.character.x);
+                //Console Log
+                // console.log(bubble.x);
+                // console.log(this.character.x);
                 bubble.shrinkOut();
                 this.shootableObject.splice(i, 1);
             }

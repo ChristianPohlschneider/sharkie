@@ -52,11 +52,15 @@ level1 = new Level(
 
 );
 
-function setinitialEnemies() {
+function setinitialEnemies(world) {
     world.level.enemies = [
     new PufferFish(),
     new PufferFish(),
     new PufferFish(),
-    new Endboss(),
+    
 ]
+}
+
+function setFinalEnemie(world, bossSpawnCoordinateX) {
+    world.level.enemies.push(new Endboss(world, bossSpawnCoordinateX));
 }
