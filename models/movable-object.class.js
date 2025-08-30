@@ -25,14 +25,26 @@ class MovableObject extends DrawableObject {
         bottom: 0
     };
 
-    playAnimation(images) {
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
+playAnimation(images) {
+    // Wenn neues Set gestartet wird → Index zurücksetzen
+    if (this.currentAnimation !== images) {
+        this.currentAnimation = images;
+        this.currentImage = 0;
     }
 
+    // Bild aus imageCache setzen – unverändert
+    let i = this.currentImage % images.length;
+    let path = images[i];
+    this.img = this.imageCache[path];
+
+    this.currentImage++;
+}
+
     playShootAnimation(images) {
+            if (this.currentAnimation !== images) {
+        this.currentAnimation = images;
+        this.currentShootImage = 0;
+    }
         let path = images[this.currentShootImage];
         this.img = this.imageCache[path];
         this.currentShootImage++
@@ -41,19 +53,19 @@ class MovableObject extends DrawableObject {
     }
 
     moveRight(speed, interval) {
-        setInterval(() => {
+        return setInterval(() => {
             this.x += speed;
         }, interval);
     }
 
     moveLeft(speed, interval) {
-        setInterval(() => {
+        return setInterval(() => {
             this.x -= speed;
         }, interval);
     }
 
     oscillate(phase) {
-        setInterval(() => {
+        return setInterval(() => {
             this.y = this.y + this.amplitude * Math.sin(this.frequency / 100 + 100 * phase);
             this.frequency++;
         }, this.interval);
@@ -73,6 +85,7 @@ class MovableObject extends DrawableObject {
     }
 
     hit(damageFromCollision) {
+        if (this.hasDied) return; // keine Hits mehr nach dem Tod
         this.energy -= damageFromCollision;
         if (this.energy < 0) {
             this.energy = 0;

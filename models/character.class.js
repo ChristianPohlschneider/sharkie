@@ -9,6 +9,8 @@ class Character extends MovableObject {
     accelerationY = 0.05;
     energy = 100;
     lastShot = 0;
+    shootFrameCounter = 0;
+    shootCooldown = 1200;
     damageFromCollision = 5;
     hadFirstContact = false;
 
@@ -113,17 +115,19 @@ class Character extends MovableObject {
     animate() {
 
         setInterval(() => {
+
+
             if (this.world.keyboard.ArrowRight && this.x < this.world.level.level_end_x) {
                 this.x += this.speed;
                 this.world.statusBar.x += this.speed;
                 this.world.poisonBar.x += this.speed;
                 this.world.coinBar.x += this.speed;
                 //Console!
-                console.log("Sharkie x:" + this.x)
-            if(this.x > Number(this.world.level.level_end_x - 500) && !this.hadFirstContact){
-                setFinalEnemie(this.world, Number(this.world.level.level_end_x - 200));
-                this.hadFirstContact = true;
-            }
+                // console.log("Sharkie x:" + this.x)
+                if (this.x > Number(this.world.level.level_end_x - 500) && !this.hadFirstContact) {
+                    setFinalEnemie(this.world, Number(this.world.level.level_end_x - 200));
+                    this.hadFirstContact = true;
+                }
                 this.otherDirection = false;
             }
             if (this.world.keyboard.ArrowLeft && this.x > -50) {
@@ -149,6 +153,24 @@ class Character extends MovableObject {
         }, 1000 / 60);
 
         setInterval(() => {
+
+            // // Space-Taste Event
+            // if (this.world.keyboard.Space && !this.isShooting) {
+            //     this.isShooting = true;
+            //     this.currentShootImage = 0;
+            //     this.lastShot = new Date().getTime();
+            // }
+
+            if (this.world.keyboard.Space) {
+                const now = new Date().getTime();
+                if (!this.isShooting && (now - this.lastShot >= this.shootCooldown)) {
+                    this.isShooting = true;
+                    this.currentShootImage = 0;
+                    this.shootFrameCounter = 0;
+                    this.lastShot = now; // Zeitpunkt des Schusses speichern
+                }
+            }
+
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
@@ -156,33 +178,66 @@ class Character extends MovableObject {
             } else if (this.world.keyboard.ArrowRight || this.world.keyboard.ArrowLeft || this.world.keyboard.ArrowUp || this.world.keyboard.ArrowDown) {
                 //swim animation
                 this.playAnimation(this.IMAGES_SWIMMING);
-            } else if (this.world.keyboard.Space) {
-                this.lastShot = new Date().getTime();
-                // this.playAnimation(this.IMAGES_BUBBLE_TRAP);
-            } else {
+            }
+            else if (this.isShooting) {
+                // nichts tun, Shoot-Loop übernimmt Animation
+            }
+            // else if (this.world.keyboard.Space) {
+            //     this.lastShot = new Date().getTime();
+
+            // } 
+            else {
                 this.playAnimation(this.IMAGES_IDLE);
             }
         }, 200);
 
-        //id: 14
+
+
+        //     //id: 14
+        //     setInterval(() => {
+
+        //         if (this.isShooting() && this.currentShootImage < 8) {
+        //             if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
+        //                 this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
+        //             } else {
+        //                 this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
+        //             }
+
+
+        //         } else if (this.currentShootImage == 8) {
+        //             this.bubbleShot();
+        //             this.currentShootImage = 0;
+        //         }
+
+        //         //  
+        //     }, 50);
+
+        // Shoot-Loop
         setInterval(() => {
+            if (this.isShooting) {
+                this.shootFrameCounter++;
+                if (this.shootFrameCounter % 2 === 0) { // nur jeden 2. Schritt Frame weiter
 
-            if (this.isShooting() && this.currentShootImage < 8) {
-                if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
-                    this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
-                } else {
-                    this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
+
+                    if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
+                        this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
+                    } else {
+                        this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
+                    }
+
+                    this.currentShootImage++;
                 }
-
-
-            } else if (this.currentShootImage == 8) {
-                this.bubbleShot();
-                this.currentShootImage = 0;
+                if (this.currentShootImage >= this.IMAGES_BUBBLE_TRAP.length) {
+                    this.bubbleShot();
+                    this.isShooting = false; // Animation fertig
+                    this.currentShootImage = 0;
+                    this.shootFrameCounter = 0;
+                }
             }
-
-            //  
         }, 50);
     }
+
+
 
     isShooting() {
         let timeShotpassed = new Date().getTime() - this.lastShot; //Difference in ms
@@ -221,6 +276,6 @@ class Character extends MovableObject {
     }
 
     isDead() {
-        return this.energy == 0;
+        return this.energy <= 0;
     }
 }

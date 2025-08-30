@@ -54,9 +54,9 @@ level1 = new Level(
 
 function setinitialEnemies(world) {
     world.level.enemies = [
-    new PufferFish(),
-    new PufferFish(),
-    new PufferFish(),
+    new PufferFish(world),
+    new PufferFish(world),
+    new PufferFish(world),
     
 ]
 }

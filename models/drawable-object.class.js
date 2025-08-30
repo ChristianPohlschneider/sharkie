@@ -17,16 +17,24 @@ class DrawableObject {
      * 
      * @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
      */
-    loadImages(arr) {
-        arr.forEach((path) => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
-        })
+    loadImages(array) {
+        array.forEach(path => {
+            if (!this.imageCache[path]) {
+                let img = new Image();
+                img.src = path;
+                this.imageCache[path] = img;
+            }
+        });
     }
 
     drawImages(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        try {
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        } catch (error) {
+            console.warn('Error loading image', error);
+            console.log('Could not load image, ', this.img.src);
+        }
+
     }
 
     drawFrame(ctx, object) {
