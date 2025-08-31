@@ -33,6 +33,7 @@ class World {
     setStoppableInterval(fn, interval) {
         let id = setInterval(fn, interval);
         this.intervalIds.push(id);
+        return id;
     }
 
     checkCollision() {
@@ -40,7 +41,9 @@ class World {
         this.setStoppableInterval(() => {
             
             this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
+                if (this.character.isColliding(enemy) && this.character.isSlapping) {
+                    enemy.hit(enemy.damageFromFinSlap); 
+                } else if (this.character.isColliding(enemy) && !this.character.isSlapping) {
                     this.character.hit(this.character.damageFromCollision);
                     this.statusBar.setPercentage(this.character.energy);
                     // console log
@@ -144,6 +147,8 @@ checkBubbleOutOfRange() {
         this.addShrinkingObjectsToMap(this.level.coins);
 
         this.addShrinkingObjectsToMap(this.level.poisonBottles);
+
+         this.addShrinkingObjectsToMap(this.level.enemies);
 
         this.level.shrinkingObjects = this.addShrinkingObjectsToMap(this.level.shrinkingObjects);
 

@@ -28,6 +28,7 @@ class DrawableObject {
     }
 
     drawImages(ctx) {
+        if (!this.img) return;
         try {
             ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
         } catch (error) {

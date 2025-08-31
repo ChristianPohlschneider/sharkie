@@ -6,6 +6,7 @@ class PufferFish extends MovableObject {
     interval = 1000 / 60;
     energy = 100;
     damageFromBubble = 50;
+    damageFromFinSlap = 100;
     world;
     lastHit = 0;
     hasDied = false;
@@ -29,10 +30,10 @@ class PufferFish extends MovableObject {
     ];
 
     IMAGES_DIE = [
-        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 3 (can animate by going down to the floor after the Fin Slap attack).png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 2 (can animate by going down to the floor after the Fin Slap attack).png',
-       
+        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/2.2.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/2.3.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/2.png',
+
     ];
 
     IMAGES_HURT = [
@@ -54,40 +55,6 @@ class PufferFish extends MovableObject {
         this.animate();
 
     }
-
-    // animate() {
-    //     this.phase = Math.random();
-    //     this.moveLeft(this.speed, this.interval);
-    //     this.oscillate(this.phase);
-
-    //     this.world.setStoppableInterval(() => {
-    //         this.animationID = this.world.intervalIds[this.world.intervalIds.length - 1];
-
-    //         if (this.isDead() && !this.hasDied) {
-    //             this.hasDied = true;
-    //             this.playAnimation(this.IMAGES_DIE);
-
-    //             // Bewegung stoppen
-    //             clearInterval(this.animationID);
-
-    //             // Nach der Animationsdauer entfernen
-    //             setTimeout(() => {
-    //                 let index = this.world.level.enemies.indexOf(this);
-    //                 if (index > -1) {
-    //                     this.world.level.enemies.splice(index, 1);
-    //                 }
-    //             }, this.IMAGES_DIE.length * 200); // 200ms pro Frame wie in deinem Intervall
-    //         } 
-    //         else if (!this.isDead()) {
-    //             if (this.isHurt()) {
-    //                 this.playAnimation(this.IMAGES_HURT);
-    //             } else {
-    //                 this.playAnimation(this.IMAGES_SWIMMING);
-    //             }
-    //         }
-
-    //     }, 200);
-    // }
 
     animate() {
         this.phase = Math.random();
@@ -116,21 +83,20 @@ class PufferFish extends MovableObject {
             // Nur eigene Bewegungsintervalle stoppen
             clearInterval(this.moveInterval);
             clearInterval(this.oscillateInterval);
+            setTimeout(() => {
+               
+                this.shrinkOut();
 
+            }, this.IMAGES_DIE.length * 200);
             // nach Animation entfernen
             setTimeout(() => {
                 let index = this.world.level.enemies.indexOf(this);
-                if (index > -1) {
+                if (index > -1 && this.isCollected == true) {
                     this.world.level.enemies.splice(index, 1);
+                    
                 }
-            }, this.IMAGES_DIE.length * 200);
+            }, this.IMAGES_DIE.length * 300);
         }
-    }
-
-    stopMoving() {
-        // Hilfsfunktion: stoppt NUR Bewegung
-        // z. B. wenn moveLeft/oscillate Intervalle in world.intervalIds registriert sind:
-        this.world.intervalIds.forEach(id => clearInterval(id));
     }
 
     isDead() {

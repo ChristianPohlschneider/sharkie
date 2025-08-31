@@ -9,6 +9,7 @@ class Endboss extends MovableObject {
     interval = 1000 / 60;
     energy = 100;
     damageFromBubble = 5;
+    damageFromFinSlap = 10;
     world;
 
     offset = {

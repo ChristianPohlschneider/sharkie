@@ -12,6 +12,7 @@ class Character extends MovableObject {
     shootFrameCounter = 0;
     shootCooldown = 1200;
     damageFromCollision = 5;
+    isSlapping = false;
     hadFirstContact = false;
 
     offset = {
@@ -73,6 +74,17 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
     ];
 
+    IMAGES_FINSLAP = [
+        'img/1.Sharkie/4.Attack/Fin slap/1.png',
+        'img/1.Sharkie/4.Attack/Fin slap/2.png',
+        'img/1.Sharkie/4.Attack/Fin slap/3.png',
+        'img/1.Sharkie/4.Attack/Fin slap/4.png',
+        'img/1.Sharkie/4.Attack/Fin slap/5.png',
+        'img/1.Sharkie/4.Attack/Fin slap/6.png',
+        'img/1.Sharkie/4.Attack/Fin slap/7.png',
+        'img/1.Sharkie/4.Attack/Fin slap/8.png',
+    ]
+
     IMAGES_HURT = [
         'img/1.Sharkie/5.Hurt/1.Poisoned/1.png',
         'img/1.Sharkie/5.Hurt/1.Poisoned/2.png',
@@ -106,6 +118,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_BUBBLE_TRAP);
         this.loadImages(this.IMAGES_BUBBLE_TRAP_POISON);
+        this.loadImages(this.IMAGES_FINSLAP);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         // this.applyGravity();
@@ -117,11 +130,15 @@ class Character extends MovableObject {
         setInterval(() => {
 
 
-            if (this.world.keyboard.ArrowRight && this.x < this.world.level.level_end_x) {
+            if (this.world.keyboard.ArrowRight || this.world.keyboard.KeyD && this.x < this.world.level.level_end_x) {
+                if (this.world.keyboard.ShiftLeft) {
+                    this.speed = 5;
+                }
                 this.x += this.speed;
                 this.world.statusBar.x += this.speed;
                 this.world.poisonBar.x += this.speed;
                 this.world.coinBar.x += this.speed;
+                this.speed = 3;
                 //Console!
                 // console.log("Sharkie x:" + this.x)
                 if (this.x > Number(this.world.level.level_end_x - 500) && !this.hadFirstContact) {
@@ -130,21 +147,25 @@ class Character extends MovableObject {
                 }
                 this.otherDirection = false;
             }
-            if (this.world.keyboard.ArrowLeft && this.x > -50) {
+            if (this.world.keyboard.ArrowLeft || this.world.keyboard.KeyA && this.x > -50) {
+                if (this.world.keyboard.ShiftLeft) {
+                    this.speed = 5;
+                }
                 this.x -= this.speed;
                 this.world.statusBar.x -= this.speed;
                 this.world.poisonBar.x -= this.speed;
                 this.world.coinBar.x -= this.speed;
+                this.speed = 3;
                 //Console!
                 // console.log("Sharkie" + this.x);
                 this.otherDirection = true;
             }
-            if (this.world.keyboard.ArrowUp && this.y > -80) {
+            if (this.world.keyboard.ArrowUp || this.world.keyboard.KeyW && this.y > -80) {
                 this.y -= this.speed;
                 //Console!
                 // console.log("Sharkie" + this.y)
             }
-            if (this.world.keyboard.ArrowDown && this.y < 300) {
+            if (this.world.keyboard.ArrowDown || this.world.keyboard.KeyS && this.y < 300) {
                 this.y += this.speed;
                 // Console!
                 // console.log("Sharkie" + this.y)
@@ -169,58 +190,46 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isShooting) {
                 // Shoot-Loop übernimmt Animation, nichts hier
+            } else if (this.world.keyboard.KeyC) {
+                // Fin Slap placeholder
             } else if (this.world.keyboard.ArrowRight || this.world.keyboard.ArrowLeft ||
-                this.world.keyboard.ArrowUp || this.world.keyboard.ArrowDown) {
+                this.world.keyboard.ArrowUp || this.world.keyboard.ArrowDown ||
+                this.world.keyboard.KeyW || this.world.keyboard.KeyS ||
+                this.world.keyboard.KeyA || this.world.keyboard.KeyD) {
                 this.playAnimation(this.IMAGES_SWIMMING);
             } else {
                 this.playAnimation(this.IMAGES_IDLE);
             }
         }, 200);
 
-
-
-        //     //id: 14
-        //     setInterval(() => {
-
-        //         if (this.isShooting() && this.currentShootImage < 8) {
-        //             if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
-        //                 this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
-        //             } else {
-        //                 this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
-        //             }
-
-
-        //         } else if (this.currentShootImage == 8) {
-        //             this.bubbleShot();
-        //             this.currentShootImage = 0;
-        //         }
-
-        //         //  
-        //     }, 50);
-
         // Shoot-Loop
         setInterval(() => {
             if (this.isShooting) {
                 this.shootFrameCounter++;
-                if (this.shootFrameCounter % 2 === 0) { // nur jeden 2. Schritt Frame weiter
-
-
-                    if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
-                        this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
-                    } else {
-                        this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
-                    }
-
-                    this.currentShootImage++;
+                // if (this.shootFrameCounter % 2 === 0) { // nur jeden 2. Schritt Frame weiter
+                if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
+                    this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
+                } else {
+                    this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
                 }
+                this.currentShootImage++;
+                // }
                 if (this.currentShootImage >= this.IMAGES_BUBBLE_TRAP.length) {
                     this.bubbleShot();
                     this.isShooting = false; // Animation fertig
                     this.currentShootImage = 0;
                     this.shootFrameCounter = 0;
                 }
+            } else if (this.world.keyboard.KeyC) {
+                
+                this.playAnimation(this.IMAGES_FINSLAP);
+                this.finSlap();
+            } else if (!this.world.keyboard.KeyC) {
+                this.offset.right = 45;
+                this.offset.left = 40;
+                this.isSlapping = false;
             }
-        }, 50);
+        }, 100);
     }
 
 
@@ -258,7 +267,16 @@ class Character extends MovableObject {
     }
 
     finSlap() {
-
+        if (this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/5.png' ||
+            this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/6.png' ||
+            this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/7.png') {
+                this.isSlapping = true;                
+            if (this.otherDirection == false) {
+                this.offset.right = 0;
+            } else if (this.otherDirection == true) {
+                this.offset.left = 0;
+            }
+        }
     }
 
     isDead() {

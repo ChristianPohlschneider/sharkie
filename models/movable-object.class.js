@@ -107,7 +107,7 @@ playAnimation(images) {
 
         // Standard-Animation stoppen
         clearInterval(this.animationInterval);
-
+        
         let steps = 10;
         let count = 0;
         let interval = setInterval(() => {
@@ -115,8 +115,10 @@ playAnimation(images) {
             count++;
 
             if (count >= steps) {
+                
                 clearInterval(interval);
-                this.isCollected = true; // markiere Coin als entfernt
+                this.isCollected = true; // markiere Gegenstand als entfernt
+
             }
         }, 10);
     }
