@@ -58,11 +58,14 @@ class DrawableObject {
     // Zeichnen
     drawShrinkingObjects(ctx) {
         if (this.isCollected) return; // überspringen, wenn eingesammelt
-        ctx.save();
 
         const img = this.img || this.imageCache[this.COIN_IMAGES[0]];
         const w = this.width * this.scale;
         const h = this.height * this.scale;
+
+        ctx.clearRect(this.x, this.y, this.size, this.size);
+
+        ctx.save();
 
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
         ctx.drawImage(img, -w / 2, -h / 2, w, h);

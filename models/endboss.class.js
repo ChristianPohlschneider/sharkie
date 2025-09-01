@@ -10,6 +10,8 @@ class Endboss extends MovableObject {
     energy = 100;
     damageFromBubble = 5;
     damageFromFinSlap = 10;
+    isSwimming = false;
+    randomMoveID = 0;
     world;
 
     offset = {
@@ -74,12 +76,12 @@ class Endboss extends MovableObject {
         this.x = bossSpawnCoordinateX;
         this.speed = 0;
         this.animate();
-
+        
     }
 
     animate() {
         this.moveLeft(this.speed, this.interval);
-        let i = 0;
+        let spawnID = 0;
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DIE);
@@ -87,15 +89,32 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.IMAGES_HURT);
             } else {
                 
-                if (i < 8) {
+                if (spawnID < 8) {
                     this.playAnimation(this.IMAGES_SPAWNING);
                 } else {
                 this.playAnimation(this.IMAGES_SWIMMING);
+                this.isSwimming = true;
                 }
-                 i++
+                 spawnID++
             }      
         }, 200);
 
+        this.world.setStoppableInterval(() => {
+        if (this.isSwimming) {
+            this.randomMoveID = Math.floor(Math.random() * 4);
+            this.randomAttack(this.randomMoveID);
+        }
+         }, 10000);
+    }
+
+    randomAttack(randomMoveID) {
+        if (randomMoveID == 1) {
+            console.log("randomID = 1: " + randomMoveID);
+        } else if (randomMoveID == 2) {
+            console.log("randomID = 2: " + randomMoveID);
+        } else if (randomMoveID == 3) {
+            console.log("randomID = 3: " + randomMoveID);
+        }
 
     }
 

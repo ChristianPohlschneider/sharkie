@@ -83,26 +83,26 @@ class PufferFish extends MovableObject {
             // Nur eigene Bewegungsintervalle stoppen
             clearInterval(this.moveInterval);
             clearInterval(this.oscillateInterval);
-            setTimeout(() => {
-               
-                this.shrinkOut();
 
-            }, this.IMAGES_DIE.length * 200);
             // nach Animation entfernen
             setTimeout(() => {
                 let index = this.world.level.enemies.indexOf(this);
-                if (index > -1 && this.isCollected == true) {
+                // if (index > -1 && this.isCollected == true) {
+                if (index > -1) {
                     this.world.level.enemies.splice(index, 1);
-                    
+
                 }
-            }, this.IMAGES_DIE.length * 300);
+
+                // 2. In shrinkingObjects einfügen
+                this.world.level.shrinkingObjects.push(this);
+
+                // 3. Shrink-Out starten
+                this.shrinkOut();
+            }, this.IMAGES_DIE.length * 200);
         }
     }
 
     isDead() {
         return this.energy <= 0;
     }
-
-
-
 }

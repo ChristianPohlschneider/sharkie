@@ -140,9 +140,10 @@ class Character extends MovableObject {
                 this.world.coinBar.x += this.speed;
                 this.speed = 3;
                 //Console!
-                // console.log("Sharkie x:" + this.x)
-                if (this.x > Number(this.world.level.level_end_x - 500) && !this.hadFirstContact) {
-                    setFinalEnemie(this.world, Number(this.world.level.level_end_x - 200));
+                console.log("Sharkie x:" + this.x)
+                if (this.x > Number(this.world.level.level_end_x - 2500) && !this.hadFirstContact) {
+                    // setFinalEnemie(this.world, Number(this.world.level.level_end_x - 200));
+                    setFinalEnemie(this.world, Number(this.world.level.level_end_x - 2200));
                     this.hadFirstContact = true;
                 }
                 this.otherDirection = false;

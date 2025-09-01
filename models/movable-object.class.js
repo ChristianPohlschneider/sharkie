@@ -25,26 +25,26 @@ class MovableObject extends DrawableObject {
         bottom: 0
     };
 
-playAnimation(images) {
-    // Wenn neues Set gestartet wird → Index zurücksetzen
-    if (this.currentAnimation !== images) {
-        this.currentAnimation = images;
-        this.currentImage = 0;
+    playAnimation(images) {
+        // Wenn neues Set gestartet wird → Index zurücksetzen
+        if (this.currentAnimation !== images) {
+            this.currentAnimation = images;
+            this.currentImage = 0;
+        }
+
+        // Bild aus imageCache setzen – unverändert
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+
+        this.currentImage++;
     }
-
-    // Bild aus imageCache setzen – unverändert
-    let i = this.currentImage % images.length;
-    let path = images[i];
-    this.img = this.imageCache[path];
-
-    this.currentImage++;
-}
 
     playShootAnimation(images) {
-            if (this.currentAnimation !== images) {
-        this.currentAnimation = images;
-        this.currentShootImage = 0;
-    }
+        if (this.currentAnimation !== images) {
+            this.currentAnimation = images;
+            this.currentShootImage = 0;
+        }
         let path = images[this.currentShootImage];
         this.img = this.imageCache[path];
         this.currentShootImage++
@@ -107,7 +107,7 @@ playAnimation(images) {
 
         // Standard-Animation stoppen
         clearInterval(this.animationInterval);
-        
+
         let steps = 10;
         let count = 0;
         let interval = setInterval(() => {
@@ -115,7 +115,7 @@ playAnimation(images) {
             count++;
 
             if (count >= steps) {
-                
+
                 clearInterval(interval);
                 this.isCollected = true; // markiere Gegenstand als entfernt
 

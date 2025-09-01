@@ -148,7 +148,7 @@ checkBubbleOutOfRange() {
 
         this.addShrinkingObjectsToMap(this.level.poisonBottles);
 
-         this.addShrinkingObjectsToMap(this.level.enemies);
+        // this.addShrinkingObjectsToMap(this.level.enemies);
 
         this.level.shrinkingObjects = this.addShrinkingObjectsToMap(this.level.shrinkingObjects);
 
