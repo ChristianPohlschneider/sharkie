@@ -90,7 +90,7 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        
+
         this.world.setStoppableInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DIE);
@@ -103,7 +103,7 @@ class Endboss extends MovableObject {
                 } else {
                     this.playAnimation(this.IMAGES_HURT);
                 }
-                
+
             } else {
 
                 if (this.spawnID < 8) {
@@ -118,36 +118,37 @@ class Endboss extends MovableObject {
 
         this.world.setStoppableInterval(() => {
             if (this.isSwimming && this.isAttacking == false && !this.isDead()) {
-                this.randomMoveID = Math.floor(Math.random() * 4);
+                this.randomMoveID = Math.floor(Math.random() * 5);
                 this.randomAttack(this.randomMoveID);
             }
         }, 3000);
     }
 
     randomAttack(randomMoveID) {
-        randomMoveID = 2;
-        if (randomMoveID == 1) {
-            console.log("randomID = 1: " + randomMoveID);
-
-
+        // randomMoveID = 2;
+        console.log("randomID: " + randomMoveID);
+        if (randomMoveID == 0) {
+            // console.log("randomID = 0: " + randomMoveID);
             //enemy attackes and moves fast forward, this.x - 400 and then back
             this.attackMove();
-             this.verticalMoveUp();
-
-        } else if (randomMoveID == 2) {
-            console.log("randomID = 2: " + randomMoveID);
+            this.verticalMoveUp();
+        } else if (randomMoveID == 1) {
+            // console.log("randomID = 1: " + randomMoveID);
             this.attackMove();
-
             //enemy moves this.y down -400 and then back
             this.verticalMoveDown();
-
-        } else if (randomMoveID == 3) {
-            console.log("randomID = 3: " + randomMoveID);
-
-
+        } else if (randomMoveID == 2) {
+            // console.log("randomID = 2: " + randomMoveID);
             //enemy moves this.y down -400 and then back
             this.verticalMoveUp();
-
+        } else if (randomMoveID == 3) {
+            // console.log("randomID = 3: " + randomMoveID);
+            //enemy moves this.y down -400 and then back
+            this.attackMove();
+        } else if (randomMoveID == 4) {
+            // console.log("randomID = 4: " + randomMoveID);
+            //enemy moves this.y down -400 and then back
+            this.verticalMoveDown();
         }
 
     }
@@ -165,15 +166,15 @@ class Endboss extends MovableObject {
             if (forward) {
                 this.x -= speed;
                 this.moved -= speed;
-               
+
                 // Animation nur während forward
                 if (this.biteCounter % 3 == 0 && !this.isHurt()) {
                     this.playAnimation(this.IMAGES_ATTACK);
                 }
                 this.biteCounter++
-                console.log(this.biteCounter);
+                // console.log(this.biteCounter);
                 // console.log(this.moved);
-                console.log(this.img.src);
+                // console.log(this.img.src);
 
 
                 if (this.moved <= distance) {
