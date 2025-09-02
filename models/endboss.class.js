@@ -6,12 +6,15 @@ class Endboss extends MovableObject {
     amplitude = 0;
     frequency = 1;
     phase = 1;
-    interval = 1000 / 60;
     energy = 100;
     damageFromBubble = 5;
     damageFromFinSlap = 10;
+    spawnID = 0;
     isSwimming = false;
+    isAttacking = false;
     randomMoveID = 0;
+    moved = 0;
+    biteCounter = 0;
     world;
 
     offset = {
@@ -87,45 +90,53 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        this.moveLeft(this.speed, this.interval);
-        let spawnID = 0;
-        setInterval(() => {
+        
+        this.world.setStoppableInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DIE);
-            } else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
+                if (this.img.src == 'http://127.0.0.1:5500/img/2.Enemy/3%20Final%20Enemy/Dead/Mesa%20de%20trabajo%202%20copia%2010.png') {
+                    this.world.stopGame();
+                }
+            } else if (this.isHurt() && !this.isDead()) {
+                if (this.spawnID < 8) {
+                    // nichts tun bei spawn und hurt
+                } else {
+                    this.playAnimation(this.IMAGES_HURT);
+                }
+                
             } else {
 
-                if (spawnID < 8) {
+                if (this.spawnID < 8) {
                     this.playAnimation(this.IMAGES_SPAWNING);
-                } else {
+                } else if (this.isAttacking == false) {
                     this.playAnimation(this.IMAGES_SWIMMING);
                     this.isSwimming = true;
                 }
-                spawnID++
+                this.spawnID++
             }
         }, 200);
 
         this.world.setStoppableInterval(() => {
-            if (this.isSwimming) {
+            if (this.isSwimming && this.isAttacking == false && !this.isDead()) {
                 this.randomMoveID = Math.floor(Math.random() * 4);
                 this.randomAttack(this.randomMoveID);
             }
-        }, 4000);
+        }, 3000);
     }
 
     randomAttack(randomMoveID) {
-        randomMoveID = 1
+        randomMoveID = 2;
         if (randomMoveID == 1) {
             console.log("randomID = 1: " + randomMoveID);
 
 
             //enemy attackes and moves fast forward, this.x - 400 and then back
             this.attackMove();
+             this.verticalMoveUp();
 
         } else if (randomMoveID == 2) {
             console.log("randomID = 2: " + randomMoveID);
-
+            this.attackMove();
 
             //enemy moves this.y down -400 and then back
             this.verticalMoveDown();
@@ -142,43 +153,53 @@ class Endboss extends MovableObject {
     }
 
     // Bewegung 1: Angriff vorwärts und zurück
-attackMove() {
-    const distance = -400;
-    const speed = 15; // Geschwindigkeit
-    let moved = 0;
-    let forward = true;
+    attackMove() {
+        this.isAttacking = true;
+        const distance = -370;
+        const speed = 23; // Geschwindigkeit
 
-    const interval = setInterval(() => {
-        if (forward) {
-            this.x -= speed;
-            moved -= speed;
+        let forward = true;
+        this.biteCounter = 0;
 
-            // Animation nur während forward
-            this.playAnimation(this.IMAGES_ATTACK);
+        const interval = setInterval(() => {
+            if (forward) {
+                this.x -= speed;
+                this.moved -= speed;
+               
+                // Animation nur während forward
+                if (this.biteCounter % 3 == 0 && !this.isHurt()) {
+                    this.playAnimation(this.IMAGES_ATTACK);
+                }
+                this.biteCounter++
+                console.log(this.biteCounter);
+                // console.log(this.moved);
+                console.log(this.img.src);
 
-            if (moved <= distance) {
-                forward = false; // Richtung umkehren
+
+                if (this.moved <= distance) {
+                    forward = false; // Richtung umkehren
+                }
+            } else {
+                // Rückwärtsbewegung ohne Animation
+                this.x += speed;
+                this.moved += speed;
+
+                if (this.moved >= 0) {
+                    clearInterval(interval); // Bewegung abgeschlossen
+                    this.isAttacking = false;
+                }
             }
-        } else {
-            // Rückwärtsbewegung ohne Animation
-            this.x += speed;
-            moved += speed;
+        }, 50);
 
-            if (moved >= 0) {
-                clearInterval(interval); // Bewegung abgeschlossen
-            }
-        }
-    }, 50);
-    
-}
+    }
 
     // Bewegung 2: nach unten und zurück
     verticalMoveDown() {
-        this.playAnimation(this.IMAGES_SWIMMING);
+        // this.playAnimation(this.IMAGES_SWIMMING);
 
         const startY = this.y;
-        const distance = 200;
-        const speed = 20;
+        const distance = 150;
+        const speed = 9;
         let moved = 0;
         let down = true;
 
@@ -197,11 +218,13 @@ attackMove() {
 
     // Bewegung 3: nach oben und zurück
     verticalMoveUp() {
-        this.playAnimation(this.IMAGES_SWIMMING);
+        // this.playAnimation(this.IMAGES_SWIMMING);
 
         const startY = this.y;
+        // const distance = 200;
         const distance = 200;
-        const speed = 20;
+        // const speed = 20;
+        const speed = 12;
         let moved = 0;
         let up = true;
 

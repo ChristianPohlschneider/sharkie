@@ -8,6 +8,7 @@ class PufferFish extends MovableObject {
     damageFromBubble = 50;
     damageFromFinSlap = 100;
     world;
+    spawnID = 8;
     lastHit = 0;
     hasDied = false;
     moveInterval = null;

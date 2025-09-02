@@ -112,7 +112,7 @@ class Character extends MovableObject {
     level;
 
 
-    constructor() {
+    constructor(world) {
         super().loadImage('img/1.Sharkie/3.Swim/1.png');
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_IDLE);
@@ -121,13 +121,15 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_FINSLAP);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
+        this.world = world;
         // this.applyGravity();
         this.animate();
+
     }
 
     animate() {
 
-        setInterval(() => {
+        this.world.setStoppableInterval(() => {
 
 
             if (this.world.keyboard.ArrowRight || this.world.keyboard.KeyD && this.x < this.world.level.level_end_x) {
@@ -140,10 +142,10 @@ class Character extends MovableObject {
                 this.world.coinBar.x += this.speed;
                 this.speed = 3;
                 //Console!
-                console.log("Sharkie x:" + this.x)
-                if (this.x > Number(this.world.level.level_end_x - 2500) && !this.hadFirstContact) {
+                // console.log("Sharkie x:" + this.x)
+                if (this.x > Number(this.world.level.level_end_x - 2000) && !this.hadFirstContact) {
                     // setFinalEnemie(this.world, Number(this.world.level.level_end_x - 200));
-                    setFinalEnemie(this.world, Number(this.world.level.level_end_x - 2200));
+                    setFinalEnemie(this.world, Number(this.world.level.level_end_x - 1600));
                     this.hadFirstContact = true;
                 }
                 this.otherDirection = false;
@@ -174,7 +176,7 @@ class Character extends MovableObject {
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
 
-        setInterval(() => {
+        this.world.setStoppableInterval(() => {
 
             if (this.world.keyboard.Space) {
                 const now = new Date().getTime();
@@ -187,6 +189,10 @@ class Character extends MovableObject {
             }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
+                if (this.img.src == 'http://127.0.0.1:5500/img/1.Sharkie/6.dead/1.Poisoned/12.png') {
+                    this.world.stopGame();
+                    clearInterval(this.animationInterval);
+                }
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isShooting) {
@@ -204,7 +210,7 @@ class Character extends MovableObject {
         }, 200);
 
         // Shoot-Loop
-        setInterval(() => {
+        this.world.setStoppableInterval(() => {
             if (this.isShooting) {
                 this.shootFrameCounter++;
                 // if (this.shootFrameCounter % 2 === 0) { // nur jeden 2. Schritt Frame weiter
@@ -222,7 +228,7 @@ class Character extends MovableObject {
                     this.shootFrameCounter = 0;
                 }
             } else if (this.world.keyboard.KeyC) {
-                
+
                 this.playAnimation(this.IMAGES_FINSLAP);
                 this.finSlap();
             } else if (!this.world.keyboard.KeyC) {
@@ -271,7 +277,7 @@ class Character extends MovableObject {
         if (this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/5.png' ||
             this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/6.png' ||
             this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/7.png') {
-                this.isSlapping = true;                
+            this.isSlapping = true;
             if (this.otherDirection == false) {
                 this.offset.right = 0;
             } else if (this.otherDirection == true) {

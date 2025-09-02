@@ -1,5 +1,5 @@
 class World {
-    character = new Character();
+    character;
     level = level1;
     statusBar = new StatusBar();
     poisonBar = new PoisonBar();
@@ -16,6 +16,9 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+
+        this.character = new Character(this);
+
         this.draw();
         this.setWorld();
         this.checkCollision();
@@ -28,6 +31,8 @@ class World {
     //hand over world variables
     setWorld() {
         this.character.world = this;
+        this.level.coins.forEach(coin => coin.setWorld(this));
+        this.level.poisonBottles.forEach(bottle => bottle.setWorld(this));
     }
 
     setStoppableInterval(fn, interval) {
@@ -43,7 +48,7 @@ class World {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy) && this.character.isSlapping) {
                     enemy.hit(enemy.damageFromFinSlap); 
-                } else if (this.character.isColliding(enemy) && !this.character.isSlapping) {
+                } else if (this.character.isColliding(enemy) && !this.character.isSlapping && enemy.spawnID >= 8) {
                     this.character.hit(this.character.damageFromCollision);
                     this.statusBar.setPercentage(this.character.energy);
                     // console log
@@ -57,14 +62,14 @@ class World {
         this.setStoppableInterval(() => {
             this.shootableObject.forEach((bubble) => {
                 this.level.enemies.forEach((enemy) => {
-                    if (enemy.isColliding(bubble)) {
+                    if (enemy.isColliding(bubble) && enemy.spawnID >= 8) {
                         if (bubble.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Bubble%20trap/Poisoned%20Bubble%20(for%20whale).png') {
                             enemy.hit(2 * enemy.damageFromBubble);
                         } else {
                             enemy.hit(enemy.damageFromBubble);
                         }
                         // console log
-                        // console.log(enemy.energy);
+                        console.log(enemy.energy);
                     }
                 });
             });

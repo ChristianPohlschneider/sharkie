@@ -53,19 +53,19 @@ class MovableObject extends DrawableObject {
     }
 
     moveRight(speed, interval) {
-        return setInterval(() => {
+        return this.world.setStoppableInterval(() => {
             this.x += speed;
         }, interval);
     }
 
     moveLeft(speed, interval) {
-        return setInterval(() => {
+        return this.world.setStoppableInterval(() => {
             this.x -= speed;
         }, interval);
     }
 
     oscillate(phase) {
-        return setInterval(() => {
+        return this.world.setStoppableInterval(() => {
             this.y = this.y + this.amplitude * Math.sin(this.frequency / 100 + 100 * phase);
             this.frequency++;
         }, this.interval);

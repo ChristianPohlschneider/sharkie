@@ -31,13 +31,17 @@ class PoisonBottle extends MovableObject {
         this.x = x;
         this.y = y;
         this.level = level;
-        this.animate();
+        // this.animate();
 
+    }
+    setWorld(world) {
+        this.world = world;
+        this.animate();
     }
 
     animate() {
         
-        setInterval(() => {
+        this.world.setStoppableInterval(() => {
             this.playAnimation(this.POISONBOTTLE_IMAGES);
         }, 200);
 
