@@ -154,7 +154,6 @@ attackMove() {
             moved -= speed;
 
             // Animation nur während forward
-            
             this.playAnimation(this.IMAGES_ATTACK);
 
             if (moved <= distance) {
