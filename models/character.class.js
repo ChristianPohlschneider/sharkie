@@ -123,12 +123,15 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.world = world;
         // this.applyGravity();
-        this.animate();
+
 
         this.oldX = this.x;
         this.oldY = this.y;
 
+        this.animate();
     }
+
+
 
     animate() {
 
