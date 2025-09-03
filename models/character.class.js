@@ -125,6 +125,9 @@ class Character extends MovableObject {
         // this.applyGravity();
         this.animate();
 
+        this.oldX = this.x;
+        this.oldY = this.y;
+
     }
 
     animate() {
@@ -211,7 +214,7 @@ class Character extends MovableObject {
 
         // Shoot-Loop
         this.world.setStoppableInterval(() => {
-            if (this.isShooting) {
+            if (this.isShooting && !this.isHurt()) {
                 this.shootFrameCounter++;
                 // if (this.shootFrameCounter % 2 === 0) { // nur jeden 2. Schritt Frame weiter
                 if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
@@ -283,6 +286,16 @@ class Character extends MovableObject {
             } else if (this.otherDirection == true) {
                 this.offset.left = 0;
             }
+        }
+    }
+
+    resolveBarrierCollision(barrier) {
+        if (this.x + this.width > barrier.x && this.x < barrier.x) {
+            this.x = barrier.x - this.width;
+        }
+
+        if (this.x < barrier.x + barrier.width && this.x > barrier.x) {
+            this.x = barrier.x + barrier.width;
         }
     }
 

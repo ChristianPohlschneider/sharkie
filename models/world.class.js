@@ -26,6 +26,7 @@ class World {
         this.checkBubbleOutOfRange();
         this.checkCollisionWithCoin();
         this.checkCollisionWithPoisonBottle();
+        this.checkCollisionWithBarrier();
     }
 
     //hand over world variables
@@ -44,10 +45,10 @@ class World {
     checkCollision() {
         //id: 16
         this.setStoppableInterval(() => {
-            
+
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy) && this.character.isSlapping) {
-                    enemy.hit(enemy.damageFromFinSlap); 
+                    enemy.hit(enemy.damageFromFinSlap);
                 } else if (this.character.isColliding(enemy) && !this.character.isSlapping && enemy.spawnID >= 8) {
                     this.character.hit(this.character.damageFromCollision);
                     this.statusBar.setPercentage(this.character.energy);
@@ -69,27 +70,27 @@ class World {
                             enemy.hit(enemy.damageFromBubble);
                         }
                         // console log
-                        console.log(enemy.energy);
+                        // console.log(enemy.energy);
                     }
                 });
             });
         }, 200);
     }
 
-checkBubbleOutOfRange() {
-    this.setStoppableInterval(() => {
-        for (let i = this.shootableObject.length - 1; i >= 0; i--) {
-            const bubble = this.shootableObject[i];
-            if (bubble.x > bubble.maxRange || bubble.x < bubble.minRange) {
-                //Console Log
-                // console.log(bubble.x);
-                // console.log(this.character.x);
-                bubble.shrinkOut();
-                this.shootableObject.splice(i, 1);
+    checkBubbleOutOfRange() {
+        this.setStoppableInterval(() => {
+            for (let i = this.shootableObject.length - 1; i >= 0; i--) {
+                const bubble = this.shootableObject[i];
+                if (bubble.x > bubble.maxRange || bubble.x < bubble.minRange) {
+                    //Console Log
+                    // console.log(bubble.x);
+                    // console.log(this.character.x);
+                    bubble.shrinkOut();
+                    this.shootableObject.splice(i, 1);
+                }
             }
-        }
-    }, 200);
-}
+        }, 200);
+    }
 
     checkCollisionWithCoin() {
         this.setStoppableInterval(() => {
@@ -120,6 +121,16 @@ checkBubbleOutOfRange() {
             });
         }, 200);
     }
+
+checkCollisionWithBarrier() {
+    this.setStoppableInterval(() => {
+        this.level.barriers.forEach((barrier) => {
+            if (this.character.isColliding(barrier)) {
+                this.character.resolveBarrierCollision(barrier);
+            }
+        });
+    }, 16); // lieber 60 FPS statt 200ms Takt
+}
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

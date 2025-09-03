@@ -126,7 +126,7 @@ class Endboss extends MovableObject {
 
     randomAttack(randomMoveID) {
         // randomMoveID = 2;
-        console.log("randomID: " + randomMoveID);
+        // console.log("randomID: " + randomMoveID);
         if (randomMoveID == 0) {
             // console.log("randomID = 0: " + randomMoveID);
             //enemy attackes and moves fast forward, this.x - 400 and then back
