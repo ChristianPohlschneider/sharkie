@@ -12,7 +12,7 @@ class Barrier extends MovableObject {
         bottom: 0
     };
 
-    constructor(x, y, img, height, width, offsetTop, offsetBottom) {
+    constructor(x, y, height, width, img, offsetTop, offsetBottom, offsetLeft, offsetRight) {
         super().loadImage(img);
         this.x = x;
         this.y = y;
@@ -20,6 +20,8 @@ class Barrier extends MovableObject {
         this.width = width;
         this.offset.top = offsetTop;
         this.offset.bottom = offsetBottom;
+        this.offset.left = offsetLeft;
+        this.offset.right = offsetRight
     }
 
 

@@ -6,8 +6,8 @@ level1 = new Level(
         // new Endboss(),
     ],
     [
-        new Barrier(700, 0, 'img/assets/img/upper Barrier.png', 200, 700, 0, 50),
-        new Barrier(700, 280, 'img/assets/img/lower Barrier.png', 200, 700, 50, 0),
+        new Barrier(700, 0, 200, 700, 'img/assets/img/upper Barrier.png', 0, 50, 20, 20),
+        new Barrier(700, 280, 200, 700, 'img/assets/img/lower Barrier.png', 50, 0, 20, 20),
     ],
     [
         new BackgroundObject('img/3. Background/Layers/5. Water/L1.png', 0),
