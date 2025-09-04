@@ -77,12 +77,13 @@ class MovableObject extends DrawableObject {
         this.world.shootableObject[this.world.shootableObject.length - 1].shoot(this.otherDirection);
     }
 
-    isColliding(object) {
-        return this.x + this.width - this.offset.right > object.x + object.offset.left &&
-            this.y + this.height - this.offset.bottom > object.y + object.offset.top &&
-            this.x + this.offset.left < object.x + object.width - object.offset.right &&
-            this.y + this.offset.top < object.y + object.height - object.offset.bottom
-    }
+isColliding(object, x = this.x, y = this.y) {
+    return x + this.width - this.offset.right > object.x + object.offset.left &&
+           y + this.height - this.offset.bottom > object.y + object.offset.top &&
+           x + this.offset.left < object.x + object.width - object.offset.right &&
+           y + this.offset.top < object.y + object.height - object.offset.bottom;
+}
+
 
     hit(damageFromCollision) {
         if (this.hasDied) return; // keine Hits mehr nach dem Tod

@@ -17,21 +17,6 @@ class Barrier extends MovableObject {
 
     }
 
-    resolveBarrierCollision(barrier) {
-        // Prüfen, von welcher Seite der Character kommt
-        if (this.character.x + this.character.width > barrier.x &&
-            this.character.x < barrier.x) {
-            // Von links gegen die Barrier gelaufen
-            this.character.x = barrier.x - this.character.width;
-        }
 
-        if (this.character.x < barrier.x + barrier.width &&
-            this.character.x > barrier.x) {
-            // Von rechts gegen die Barrier gelaufen
-            this.character.x = barrier.x + barrier.width;
-        }
-
-        // (Optional auch für oben/unten erweitern, falls du Y-Kollision brauchst)
-    }
 
 }

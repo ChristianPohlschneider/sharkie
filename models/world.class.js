@@ -10,6 +10,7 @@ class World {
     camera_x = 0;
     shootableObject = [];
     intervalIds = [];
+    isCollidingBarrier = false;
 
 
     constructor(canvas, keyboard) {//hand over variables to world
@@ -122,14 +123,23 @@ class World {
         }, 200);
     }
 
+// checkCollisionWithBarrier() {
+
+//         this.level.barriers.forEach((barrier) => {
+//             if (this.character.isColliding(barrier)) {
+
+//                 return this.isCollidingBarrier = true;
+//             } else {
+//                 return this.isCollidingBarrier = false;
+//             }
+//         });
+
+// }
+
 checkCollisionWithBarrier() {
-    this.setStoppableInterval(() => {
-        this.level.barriers.forEach((barrier) => {
-            if (this.character.isColliding(barrier)) {
-                this.character.resolveBarrierCollision(barrier);
-            }
-        });
-    }, 16); // lieber 60 FPS statt 200ms Takt
+    this.isCollidingBarrier = this.level.barriers.some(barrier =>
+        this.character.isColliding(barrier)
+    );
 }
 
     draw() {

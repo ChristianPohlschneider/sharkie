@@ -137,8 +137,11 @@ class Character extends MovableObject {
 
         this.world.setStoppableInterval(() => {
 
+            this.world.checkCollisionWithBarrier();
 
-            if (this.world.keyboard.ArrowRight || this.world.keyboard.KeyD && this.x < this.world.level.level_end_x) {
+            if ((this.world.keyboard.ArrowRight || this.world.keyboard.KeyD)
+                && this.x < this.world.level.level_end_x
+                && (!this.world.isCollidingBarrier || this.otherDirection)) {
                 if (this.world.keyboard.ShiftLeft) {
                     this.speed = 5;
                 }
@@ -156,7 +159,9 @@ class Character extends MovableObject {
                 }
                 this.otherDirection = false;
             }
-            if (this.world.keyboard.ArrowLeft || this.world.keyboard.KeyA && this.x > -50) {
+            if ((this.world.keyboard.ArrowLeft || this.world.keyboard.KeyA)
+                && this.x > -50
+                && (!this.world.isCollidingBarrier || !this.otherDirection)) {
                 if (this.world.keyboard.ShiftLeft) {
                     this.speed = 5;
                 }
@@ -169,15 +174,19 @@ class Character extends MovableObject {
                 // console.log("Sharkie" + this.x);
                 this.otherDirection = true;
             }
-            if (this.world.keyboard.ArrowUp || this.world.keyboard.KeyW && this.y > -80) {
+            if ((this.world.keyboard.ArrowUp || this.world.keyboard.KeyW)
+                && this.y > -80
+                && !this.world.level.barriers.some(barrier =>
+                    this.isColliding(barrier, this.x, this.y - this.speed))) {
+
                 this.y -= this.speed;
-                //Console!
-                // console.log("Sharkie" + this.y)
             }
-            if (this.world.keyboard.ArrowDown || this.world.keyboard.KeyS && this.y < 300) {
+            if ((this.world.keyboard.ArrowDown || this.world.keyboard.KeyS)
+                && this.y < 300
+                && !this.world.level.barriers.some(barrier =>
+                    this.isColliding(barrier, this.x, this.y + this.speed))) {
+
                 this.y += this.speed;
-                // Console!
-                // console.log("Sharkie" + this.y)
             }
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
@@ -292,15 +301,18 @@ class Character extends MovableObject {
         }
     }
 
-    resolveBarrierCollision(barrier) {
-        if (this.x + this.width > barrier.x && this.x < barrier.x) {
-            this.x = barrier.x - this.width;
-        }
+    // resolveBarrierCollision(barrier) {
+    //     if (this.x + this.width > barrier.x && this.x < barrier.x) {
+    //         return
+    //     }
 
-        if (this.x < barrier.x + barrier.width && this.x > barrier.x) {
-            this.x = barrier.x + barrier.width;
-        }
-    }
+    //     if (this.x < barrier.x + barrier.width && this.x > barrier.x) {
+    //         this.x = barrier.x + barrier.width;
+    //     }
+    // }
+
+
+    // (Optional auch für oben/unten erweitern, falls du Y-Kollision brauchst)
 
     isDead() {
         return this.energy <= 0;
