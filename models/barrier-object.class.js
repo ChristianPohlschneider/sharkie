@@ -6,15 +6,20 @@ class Barrier extends MovableObject {
     interval = 1000 / 60;
     xIncrement = 1;
     offset = {
-        top: 200,
+        top: 0,
         left: 5,
         right: 10,
-        bottom: 200
+        bottom: 0
     };
 
-    constructor() {
-        super().loadImage('img/3. Background/Barrier/1.png');
-
+    constructor(x, y, img, height, width, offsetTop, offsetBottom) {
+        super().loadImage(img);
+        this.x = x;
+        this.y = y;
+        this.height = height;
+        this.width = width;
+        this.offset.top = offsetTop;
+        this.offset.bottom = offsetBottom;
     }
 
 
