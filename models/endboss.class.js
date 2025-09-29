@@ -113,6 +113,8 @@ class Endboss extends MovableObject {
                     this.isSwimming = true;
                 }
                 this.spawnID++
+                // console.log(this.spawnID);
+                
             }
         }, 200);
 

@@ -5,9 +5,14 @@ level1 = new Level(
         // new PufferFish(),
         // new Endboss(),
     ],
-    [
+    [   //(x, y, height, width, img, offsetTop, offsetBottom, offsetLeft, offsetRight)
         new Barrier(700, 0, 200, 700, 'img/assets/img/upper Barrier.png', 0, 50, 20, 20),
         new Barrier(700, 280, 200, 700, 'img/assets/img/lower Barrier.png', 50, 0, 20, 20),
+        
+        new Barrier(1400, 280, 200, 400, 'img/3. Background/Barrier/2.png', 50, 0, 20, 20),
+        new Barrier(300, 280, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
+        
+
     ],
     [
         new BackgroundObject('img/3. Background/Layers/5. Water/L1.png', 0),

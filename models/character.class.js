@@ -14,6 +14,8 @@ class Character extends MovableObject {
     damageFromCollision = 5;
     isSlapping = false;
     hadFirstContact = false;
+    cameraFrozen = false;
+
 
     offset = {
         top: 105,
@@ -124,7 +126,6 @@ class Character extends MovableObject {
         this.world = world;
         // this.applyGravity();
 
-
         this.oldX = this.x;
         this.oldY = this.y;
 
@@ -134,6 +135,9 @@ class Character extends MovableObject {
 
 
     animate() {
+
+        const freezePoint = this.world.level.level_end_x - 3000;
+        const leftScreenLimit = (this.x < freezePoint);
 
         this.world.setStoppableInterval(() => {
 
@@ -146,9 +150,16 @@ class Character extends MovableObject {
                     this.speed = 5;
                 }
                 this.x += this.speed;
-                this.world.statusBar.x += this.speed;
-                this.world.poisonBar.x += this.speed;
-                this.world.coinBar.x += this.speed;
+
+                if (!this.cameraFrozen && this.x >= freezePoint) {
+                    // Kamera einfrieren
+                    this.world.camera_x = -freezePoint + 100;
+                    this.cameraFrozen = true;
+                } else if (!this.cameraFrozen) {
+                    // Kamera folgt Spieler
+                    this.world.camera_x = -this.x + 100;
+                }
+
                 this.speed = 3;
                 //Console!
                 // console.log("Sharkie x:" + this.x)
@@ -160,15 +171,21 @@ class Character extends MovableObject {
                 this.otherDirection = false;
             }
             if ((this.world.keyboard.ArrowLeft || this.world.keyboard.KeyA)
-                && this.x > -50
+                // && this.x > -50
+                && this.x > leftScreenLimit
                 && (!this.world.isCollidingBarrier || !this.otherDirection)) {
                 if (this.world.keyboard.ShiftLeft) {
                     this.speed = 5;
                 }
                 this.x -= this.speed;
-                this.world.statusBar.x -= this.speed;
-                this.world.poisonBar.x -= this.speed;
-                this.world.coinBar.x -= this.speed;
+
+                // Kamera-Logik bleibt unverändert, wenn eingefroren
+                if (!this.cameraFrozen && this.x < freezePoint) {
+                    this.world.camera_x = -this.x + 100;
+                } else if (!this.cameraFrozen) {
+                    this.world.camera_x = -this.x + 100;
+                } // sonst Kamera bleibt eingefroren
+
                 this.speed = 3;
                 //Console!
                 // console.log("Sharkie" + this.x);
@@ -188,7 +205,7 @@ class Character extends MovableObject {
 
                 this.y += this.speed;
             }
-            this.world.camera_x = -this.x + 100;
+            // this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
 
         this.world.setStoppableInterval(() => {

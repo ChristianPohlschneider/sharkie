@@ -123,24 +123,24 @@ class World {
         }, 200);
     }
 
-// checkCollisionWithBarrier() {
+    // checkCollisionWithBarrier() {
 
-//         this.level.barriers.forEach((barrier) => {
-//             if (this.character.isColliding(barrier)) {
+    //         this.level.barriers.forEach((barrier) => {
+    //             if (this.character.isColliding(barrier)) {
 
-//                 return this.isCollidingBarrier = true;
-//             } else {
-//                 return this.isCollidingBarrier = false;
-//             }
-//         });
+    //                 return this.isCollidingBarrier = true;
+    //             } else {
+    //                 return this.isCollidingBarrier = false;
+    //             }
+    //         });
 
-// }
+    // }
 
-checkCollisionWithBarrier() {
-    this.isCollidingBarrier = this.level.barriers.some(barrier =>
-        this.character.isColliding(barrier)
-    );
-}
+    checkCollisionWithBarrier() {
+        this.isCollidingBarrier = this.level.barriers.some(barrier =>
+            this.character.isColliding(barrier)
+        );
+    }
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -166,10 +166,6 @@ checkCollisionWithBarrier() {
         this.addObjectsToMap(this.level.barriers);
         this.addObjectsToMap(this.shootableObject);
 
-        this.addToMap(this.statusBar);
-        this.addToMap(this.poisonBar);
-        this.addToMap(this.coinBar);
-
         this.addShrinkingObjectsToMap(this.level.coins);
 
         this.addShrinkingObjectsToMap(this.level.poisonBottles);
@@ -179,6 +175,10 @@ checkCollisionWithBarrier() {
         this.level.shrinkingObjects = this.addShrinkingObjectsToMap(this.level.shrinkingObjects);
 
         this.ctx.translate(-this.camera_x, 0);
+
+        this.addToMap(this.statusBar);
+        this.addToMap(this.poisonBar);
+        this.addToMap(this.coinBar);
 
         //Draw wird immer wieder aufgerufen
         let self = this;
