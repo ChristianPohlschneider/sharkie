@@ -212,7 +212,7 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isShooting) {
                 // Shoot-Loop übernimmt Animation, nichts hier
-            } else if (this.world.keyboard.KeyC) {
+            } else if (this.world.keyboard.KeyC && !this.isHurt()) {
                 // Fin Slap placeholder
             } else if (this.world.keyboard.ArrowRight || this.world.keyboard.ArrowLeft ||
                 this.world.keyboard.ArrowUp || this.world.keyboard.ArrowDown ||
@@ -242,7 +242,7 @@ class Character extends MovableObject {
                     this.currentShootImage = 0;
                     this.shootFrameCounter = 0;
                 }
-            } else if (this.world.keyboard.KeyC) {
+            } else if (this.world.keyboard.KeyC && !this.isHurt()) {
 
                 this.playAnimation(this.IMAGES_FINSLAP);
                 this.finSlap();
