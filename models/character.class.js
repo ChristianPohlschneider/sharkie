@@ -137,11 +137,13 @@ class Character extends MovableObject {
     animate() {
 
         const freezePoint = this.world.level.level_end_x - 3000;
-        const leftScreenLimit = (this.x < freezePoint);
-
+        
         this.world.setStoppableInterval(() => {
 
             this.world.checkCollisionWithBarrier();
+
+            const leftScreenLimit = this.cameraFrozen ? freezePoint : -50;
+
 
             if ((this.world.keyboard.ArrowRight || this.world.keyboard.KeyD)
                 && this.x < this.world.level.level_end_x
