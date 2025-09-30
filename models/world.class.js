@@ -61,21 +61,46 @@ class World {
         }, 200)
     }
 
-    checkCollisionBubbleBarrier() {
-    this.setStoppableInterval(() => {
-        this.shootableObject = this.shootableObject.filter((bubble) => {
-            let hit = false;
+//     checkCollisionBubbleBarrier() {
+//     this.setStoppableInterval(() => {
+//         this.shootableObject = this.shootableObject.filter((bubble) => {
+//             let hit = false;
 
+//             this.level.barriers.forEach((barrier) => {
+//                 if (barrier.isColliding(bubble)) {
+//                     hit = true; // Bubble soll gelöscht werden
+//                 }
+//             });
+
+//             return !hit; // nur Bubbles behalten, die NICHT getroffen haben
+//         });
+//     }, 200);
+// }
+
+checkCollisionBubbleBarrier() {
+    this.setStoppableInterval(() => {
+        for (let i = this.shootableObject.length - 1; i >= 0; i--) {
+            const bubble = this.shootableObject[i];
+
+            let collided = false;
             this.level.barriers.forEach((barrier) => {
                 if (barrier.isColliding(bubble)) {
-                    hit = true; // Bubble soll gelöscht werden
+                    collided = true;
                 }
             });
 
-            return !hit; // nur Bubbles behalten, die NICHT getroffen haben
-        });
-    }, 200);
+            if (collided && !bubble.isShrinking) {
+                bubble.shrinkOut(); // Animation starten
+            }
+
+            // Bubble erst entfernen, wenn Animation fertig ist
+            if (bubble.isCollected) {
+                this.shootableObject.splice(i, 1);
+            }
+        }
+    }, 50); // kleineres Intervall für flüssigere Animation
 }
+
 
     checkCollisionFromBubble() {
     this.setStoppableInterval(() => {
@@ -99,20 +124,38 @@ class World {
 }
 
 
+    // checkBubbleOutOfRange() {
+    //     this.setStoppableInterval(() => {
+    //         for (let i = this.shootableObject.length - 1; i >= 0; i--) {
+    //             const bubble = this.shootableObject[i];
+    //             if (bubble.x > bubble.maxRange || bubble.x < bubble.minRange) {
+    //                 //Console Log
+    //                 // console.log(bubble.x);
+    //                 // console.log(this.character.x);
+    //                 bubble.shrinkOut();
+    //                 this.shootableObject.splice(i, 1);
+    //             }
+    //         }
+    //     }, 200);
+    // }
+
     checkBubbleOutOfRange() {
-        this.setStoppableInterval(() => {
-            for (let i = this.shootableObject.length - 1; i >= 0; i--) {
-                const bubble = this.shootableObject[i];
-                if (bubble.x > bubble.maxRange || bubble.x < bubble.minRange) {
-                    //Console Log
-                    // console.log(bubble.x);
-                    // console.log(this.character.x);
-                    bubble.shrinkOut();
-                    // this.shootableObject.splice(i, 1);
-                }
+    this.setStoppableInterval(() => {
+        for (let i = this.shootableObject.length - 1; i >= 0; i--) {
+            const bubble = this.shootableObject[i];
+
+            if ((bubble.x > bubble.maxRange || bubble.x < bubble.minRange) && !bubble.isShrinking) {
+                bubble.shrinkOut(); // Animation starten
             }
-        }, 200);
-    }
+
+            // Bubble erst entfernen, wenn Animation fertig ist
+            if (bubble.isCollected) {
+                this.shootableObject.splice(i, 1);
+            }
+        }
+    }, 50); // Intervall kürzer, damit Animation flüssiger sichtbar ist
+}
+
 
     checkCollisionWithCoin() {
         this.setStoppableInterval(() => {
