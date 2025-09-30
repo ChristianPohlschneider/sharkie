@@ -136,17 +136,18 @@ class Character extends MovableObject {
 
     animate() {
 
-        const freezePoint = this.world.level.level_end_x - 3000;
+        const freezePoint = this.world.level.level_end_x -450;
+        
         
         this.world.setStoppableInterval(() => {
 
             this.world.checkCollisionWithBarrier();
 
-            const leftScreenLimit = this.cameraFrozen ? freezePoint : -50;
-
+            const leftScreenLimit = this.cameraFrozen ? freezePoint -130 : -50;
+            const rightScreenLimit = this.cameraFrozen ? freezePoint + 450 : this.world.level.level_end_x;
 
             if ((this.world.keyboard.ArrowRight || this.world.keyboard.KeyD)
-                && this.x < this.world.level.level_end_x
+                && this.x < rightScreenLimit
                 && (!this.world.isCollidingBarrier || this.otherDirection)) {
                 if (this.world.keyboard.ShiftLeft) {
                     this.speed = 5;
@@ -164,16 +165,15 @@ class Character extends MovableObject {
 
                 this.speed = 3;
                 //Console!
-                // console.log("Sharkie x:" + this.x)
-                if (this.x > Number(this.world.level.level_end_x - 2000) && !this.hadFirstContact) {
-                    // setFinalEnemie(this.world, Number(this.world.level.level_end_x - 200));
-                    setFinalEnemie(this.world, Number(this.world.level.level_end_x - 1600));
+                console.log("Sharkie x:" + this.x)
+                console.log(freezePoint)
+                if (this.x > Number(this.world.level.level_end_x - 450) && !this.hadFirstContact) {
+                    setFinalEnemie(this.world, Number(this.world.level.level_end_x - 150));
                     this.hadFirstContact = true;
                 }
                 this.otherDirection = false;
             }
             if ((this.world.keyboard.ArrowLeft || this.world.keyboard.KeyA)
-                // && this.x > -50
                 && this.x > leftScreenLimit
                 && (!this.world.isCollidingBarrier || !this.otherDirection)) {
                 if (this.world.keyboard.ShiftLeft) {
@@ -190,7 +190,7 @@ class Character extends MovableObject {
 
                 this.speed = 3;
                 //Console!
-                // console.log("Sharkie" + this.x);
+                //console.log("Sharkie" + this.x);
                 this.otherDirection = true;
             }
             if ((this.world.keyboard.ArrowUp || this.world.keyboard.KeyW)

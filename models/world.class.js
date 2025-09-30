@@ -23,6 +23,7 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollision();
+        this.checkCollisionBubbleBarrier();
         this.checkCollisionFromBubble();
         this.checkBubbleOutOfRange();
         this.checkCollisionWithCoin();
@@ -60,23 +61,43 @@ class World {
         }, 200)
     }
 
-    checkCollisionFromBubble() {
-        this.setStoppableInterval(() => {
-            this.shootableObject.forEach((bubble) => {
-                this.level.enemies.forEach((enemy) => {
-                    if (enemy.isColliding(bubble) && enemy.spawnID >= 8) {
-                        if (bubble.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Bubble%20trap/Poisoned%20Bubble%20(for%20whale).png') {
-                            enemy.hit(2 * enemy.damageFromBubble);
-                        } else {
-                            enemy.hit(enemy.damageFromBubble);
-                        }
-                        // console log
-                        // console.log(enemy.energy);
-                    }
-                });
+    checkCollisionBubbleBarrier() {
+    this.setStoppableInterval(() => {
+        this.shootableObject = this.shootableObject.filter((bubble) => {
+            let hit = false;
+
+            this.level.barriers.forEach((barrier) => {
+                if (barrier.isColliding(bubble)) {
+                    hit = true; // Bubble soll gelöscht werden
+                }
             });
-        }, 200);
-    }
+
+            return !hit; // nur Bubbles behalten, die NICHT getroffen haben
+        });
+    }, 200);
+}
+
+    checkCollisionFromBubble() {
+    this.setStoppableInterval(() => {
+        this.shootableObject = this.shootableObject.filter((bubble) => {
+            let hit = false;
+
+            this.level.enemies.forEach((enemy) => {
+                if (enemy.isColliding(bubble) && enemy.spawnID >= 8) {
+                    if (bubble.img.currentSrc === 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Bubble%20trap/Poisoned%20Bubble%20(for%20whale).png') {
+                        enemy.hit(2 * enemy.damageFromBubble);
+                    } else {
+                        enemy.hit(enemy.damageFromBubble);
+                    }
+                    hit = true; // Bubble soll gelöscht werden
+                }
+            });
+
+            return !hit; // nur Bubbles behalten, die NICHT getroffen haben
+        });
+    }, 200);
+}
+
 
     checkBubbleOutOfRange() {
         this.setStoppableInterval(() => {
