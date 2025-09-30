@@ -108,7 +108,7 @@ class World {
                     // console.log(bubble.x);
                     // console.log(this.character.x);
                     bubble.shrinkOut();
-                    this.shootableObject.splice(i, 1);
+                    // this.shootableObject.splice(i, 1);
                 }
             }
         }, 200);
@@ -190,6 +190,8 @@ class World {
         this.addShrinkingObjectsToMap(this.level.coins);
 
         this.addShrinkingObjectsToMap(this.level.poisonBottles);
+
+        // this.addShrinkingObjectsToMap(this.shootableObject);
 
         // this.addShrinkingObjectsToMap(this.level.enemies);
 

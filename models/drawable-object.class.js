@@ -27,16 +27,43 @@ class DrawableObject {
         });
     }
 
-    drawImages(ctx) {
-        if (!this.img) return;
-        try {
-            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-        } catch (error) {
-            console.warn('Error loading image', error);
-            console.log('Could not load image, ', this.img.src);
-        }
+    // drawImages(ctx) {
+    //     if (!this.img) return;
+    //     try {
+    //         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    //     } catch (error) {
+    //         console.warn('Error loading image', error);
+    //         console.log('Could not load image, ', this.img.src);
+    //     }
 
+    // }
+
+    drawImages(ctx) {
+    if (!this.img) return;
+
+    try {
+        ctx.save();
+
+        // Mittelpunkt berechnen
+        const centerX = this.x + this.width / 2;
+        const centerY = this.y + this.height / 2;
+
+        // zum Mittelpunkt verschieben und skalieren
+        ctx.translate(centerX, centerY);
+        ctx.scale(this.scale || 1, this.scale || 1);
+
+        // Bild so zeichnen, dass es um den Mittelpunkt skaliert
+        ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height);
+
+        ctx.restore();
+    } catch (error) {
+        console.warn('Error loading image', error);
+        if (this.img && this.img.src) {
+            console.log('Could not load image:', this.img.src);
+        }
     }
+}
+
 
     drawFrame(ctx, object) {
         if (this instanceof Character || this instanceof Barrier) {

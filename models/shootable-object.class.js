@@ -23,11 +23,11 @@ class ShootableObject extends MovableObject {
         }
         if (otherDirection == false) {
             setInterval(() => {
-                this.x += 30;
+                this.x += 20;
             }, 50);
         } else if (otherDirection == true) {
             setInterval(() => {
-                this.x -= 30;
+                this.x -= 20;
             }, 50);
         }
     }
