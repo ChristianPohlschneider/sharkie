@@ -45,23 +45,33 @@ class PufferFish extends MovableObject {
         'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim5.png',
     ];
 
-    constructor(world) {
+    constructor(world, x, y, phase, speed) {
         super().loadImage('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png');
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_DIE);
         this.loadImages(this.IMAGES_HURT);
         this.world = world;
-        this.x = 700 + Math.random() * 500;
-        this.speed = 0.5 + Math.random() * 0.5;
-        this.animate();
+        // this.x = 700 + Math.random() * 500;
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.animate(phase, x);
 
     }
 
-    animate() {
-        this.phase = Math.random();
+    animate(phase, x) {
+        this.phase = phase;
 
-        // eigene Bewegungsintervalle speichern
         this.moveInterval = this.moveLeft(this.speed, this.interval);
+        this.world.setStoppableInterval(() => {
+        // eigene Bewegungsintervalle speichern
+        
+        if (this.x < -250) {
+            this.x = this.world.level.level_end_x + 400
+
+        } 
+        }, 200);
+
         this.oscillateInterval = this.oscillate(this.phase);
 
         // Animationsloop (nicht stoppen, solange Fisch lebt)

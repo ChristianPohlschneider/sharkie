@@ -227,12 +227,14 @@ checkCollisionBubbleBarrier() {
         this.addToMap(this.character);
 
         this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.level.barriers);
+        
         this.addObjectsToMap(this.shootableObject);
 
         this.addShrinkingObjectsToMap(this.level.coins);
 
         this.addShrinkingObjectsToMap(this.level.poisonBottles);
+
+        this.addObjectsToMap(this.level.barriers);
 
         // this.addShrinkingObjectsToMap(this.shootableObject);
 

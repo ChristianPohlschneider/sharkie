@@ -66,7 +66,7 @@ class MovableObject extends DrawableObject {
 
     oscillate(phase) {
         return this.world.setStoppableInterval(() => {
-            this.y = this.y + this.amplitude * Math.sin(this.frequency / 100 + 100 * phase);
+            this.y = this.y + this.amplitude * Math.sin(this.frequency / 100 * phase);
             this.frequency++;
         }, this.interval);
     }
@@ -77,12 +77,12 @@ class MovableObject extends DrawableObject {
         this.world.shootableObject[this.world.shootableObject.length - 1].shoot(this.otherDirection);
     }
 
-isColliding(object, x = this.x, y = this.y) {
-    return x + this.width - this.offset.right > object.x + object.offset.left &&
-           y + this.height - this.offset.bottom > object.y + object.offset.top &&
-           x + this.offset.left < object.x + object.width - object.offset.right &&
-           y + this.offset.top < object.y + object.height - object.offset.bottom;
-}
+    isColliding(object, x = this.x, y = this.y) {
+        return x + this.width - this.offset.right > object.x + object.offset.left &&
+            y + this.height - this.offset.bottom > object.y + object.offset.top &&
+            x + this.offset.left < object.x + object.width - object.offset.right &&
+            y + this.offset.top < object.y + object.height - object.offset.bottom;
+    }
 
 
     hit(damageFromCollision) {

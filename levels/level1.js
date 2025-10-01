@@ -10,7 +10,7 @@ level1 = new Level(
         new Barrier(3300, 330, 150, 500, 'img/assets/img/lower Barrier.png', 50, 0, 20, 20),
         
         new Barrier(1400, 350, 130, 300, 'img/3. Background/Barrier/2.png', 50, 0, 20, 20),
-        new Barrier(300, 280, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
+        new Barrier(600, 280, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
         
 
     ],
@@ -60,10 +60,29 @@ level1 = new Level(
 
 function setinitialEnemies(world) {
     world.level.enemies = [
-    new PufferFish(world),
-    new PufferFish(world),
-    new PufferFish(world),
+        //world, x, y, phase, speed
+    new PufferFish(world, 800, 80, 1, 1),
+
+    new PufferFish(world, 1200, 50, 1, 1),
+
+    new PufferFish(world, 1500, 20, 1, 1),
+    new PufferFish(world, 1500, 150, 1, 1),
+    new PufferFish(world, 1500, 280, 1, 1),
+
+    new PufferFish(world, 2500, 80, 10, 2),
+    new PufferFish(world, 2500, 280, 10, 2),
     
+    new PufferFish(world, 2500, 20, 10, 1),
+    new PufferFish(world, 2500, 150, 10, 1),
+    new PufferFish(world, 2500, 280, 10, 1),
+
+    new PufferFish(world, 3500, 20, 1, 1),
+    new PufferFish(world, 3600, 150, 1, 1),
+    new PufferFish(world, 3700, 280, 1, 1),
+
+    new PufferFish(world, 4600, 20, 10, 2),
+    new PufferFish(world, 4700, 150, 10, 2),
+    new PufferFish(world, 4800, 280, 10, 2),
 ]
 }
 
