@@ -165,10 +165,11 @@ class Character extends MovableObject {
 
                 this.speed = 3;
                 //Console!
-                // console.log("Sharkie x:" + this.x)
+                console.log("Sharkie x:" + this.x)
                 // console.log(freezePoint)
                 if (this.x > Number(this.world.level.level_end_x - 450) && !this.hadFirstContact) {
                     setFinalEnemie(this.world, Number(this.world.level.level_end_x - 150));
+                    deleteOtherEnemies(this.world, Number(this.world.level.level_end_x - 720));
                     this.hadFirstContact = true;
                 }
                 this.otherDirection = false;

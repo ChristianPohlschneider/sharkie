@@ -65,6 +65,8 @@ function setinitialEnemies(world) {
 
     new PufferFish(world, 1200, 50, 1, 1),
 
+    new JellyFish(world, 1000, 150, 10, 1),
+
     new PufferFish(world, 1500, 20, 1, 1),
     new PufferFish(world, 1500, 150, 1, 1),
     new PufferFish(world, 1500, 280, 1, 1),
@@ -88,4 +90,12 @@ function setinitialEnemies(world) {
 
 function setFinalEnemie(world, bossSpawnCoordinateX) {
     world.level.enemies.push(new Endboss(world, bossSpawnCoordinateX));
+}
+
+function deleteOtherEnemies(world, enemyDeleteCoordinateX) {
+    this.world.setStoppableInterval(() => {
+        world.level.enemies = world.level.enemies.filter(
+            enemy => enemy.x >= enemyDeleteCoordinateX
+        );
+    }, 200);
 }
