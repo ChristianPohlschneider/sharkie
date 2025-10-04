@@ -3,7 +3,7 @@ class PoisonBottle extends MovableObject {
     y = 100;
     height = 75;
     width = 75;
-    poisonValue = 20;
+    poisonValue = 10;
     POISONBOTTLE_IMAGES = [
         'img/4. Marcadores/Posión/Animada/1.png',
         'img/4. Marcadores/Posión/Animada/2.png',

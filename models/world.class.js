@@ -238,10 +238,6 @@ checkCollisionBubbleBarrier() {
 
         this.addObjectsToMap(this.level.barriers);
 
-        // this.addShrinkingObjectsToMap(this.shootableObject);
-
-        // this.addShrinkingObjectsToMap(this.level.enemies);
-
         this.level.shrinkingObjects = this.addShrinkingObjectsToMap(this.level.shrinkingObjects);
 
         this.ctx.translate(-this.camera_x, 0);

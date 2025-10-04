@@ -233,7 +233,7 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isShooting) {
                 // Shoot-Loop übernimmt Animation, nichts hier
-            } else if (this.world.keyboard.KeyC && !this.isHurt()) {
+            } else if (this.world.keyboard.KeyC && !this.isHurt() && !this.isDead()) {
                 // Fin Slap placeholder
             } else if (this.world.keyboard.ArrowRight || this.world.keyboard.ArrowLeft ||
                 this.world.keyboard.ArrowUp || this.world.keyboard.ArrowDown ||
@@ -247,7 +247,7 @@ class Character extends MovableObject {
 
         // Shoot-Loop
         this.world.setStoppableInterval(() => {
-            if (this.isShooting && !this.isHurt()) {
+            if (this.isShooting && !this.isHurt() && !this.isDead()) {
                 this.shootFrameCounter++;
                 // if (this.shootFrameCounter % 2 === 0) { // nur jeden 2. Schritt Frame weiter
                 if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
@@ -263,7 +263,7 @@ class Character extends MovableObject {
                     this.currentShootImage = 0;
                     this.shootFrameCounter = 0;
                 }
-            } else if (this.world.keyboard.KeyC && !this.isHurt()) {
+            } else if (this.world.keyboard.KeyC && !this.isHurt()&& !this.isDead()) {
 
                 this.playAnimation(this.IMAGES_FINSLAP);
                 this.finSlap();
