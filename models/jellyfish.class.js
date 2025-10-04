@@ -5,8 +5,9 @@ class JellyFish extends MovableObject {
     width = 100;
     interval = 1000 / 60;
     energy = 100;
-    damageFromBubble = 50;
-    damageFromFinSlap = 100;
+    damageFromBubble = 25;
+    damageFromFinSlap = 0;
+    damageDueToCollision = 20;
     world;
     spawnID = 8;
     isDeadID = 0;
@@ -19,8 +20,8 @@ class JellyFish extends MovableObject {
     offset = {
         top: 10,
         left: 5,
-        right: 10,
-        bottom: 30
+        right: 5,
+        bottom: 5
     };
 
     IMAGES_SWIMMING = [

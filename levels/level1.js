@@ -5,14 +5,28 @@ level1 = new Level(
         // new PufferFish(),
         // new Endboss(),
     ],
-    [   //(x, y, height, width, img, offsetTop, offsetBottom, offsetLeft, offsetRight)
+    [   //(x, y, height, width, img, offsetTop, offsetBottom, offsetLeft, offsetRight)s
+
+        //Stange
+        new Barrier(600, 280, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
+        new Barrier(900, 0, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
+
+        //Wolke unten
+        new Barrier(1400, 350, 130, 300, 'img/3. Background/Barrier/2.png', 50, 0, 20, 20),
+        //Wolke oben
+        new Barrier(1400, 0, 130, 300, 'img/assets/img/upper Barrier2.png', 0, 50, 20, 20),
+
+        //Stange
+        new Barrier(2100, 0, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
+        new Barrier(2100, 280, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
+
+        //Stange
+        new Barrier(2500, 0, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
+        new Barrier(2700, 280, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
+        new Barrier(2900, 0, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
+
         new Barrier(3300, 0, 150, 500, 'img/assets/img/upper Barrier.png', 0, 50, 20, 20),
         new Barrier(3300, 330, 150, 500, 'img/assets/img/lower Barrier.png', 50, 0, 20, 20),
-        
-        new Barrier(1400, 350, 130, 300, 'img/3. Background/Barrier/2.png', 50, 0, 20, 20),
-        new Barrier(600, 280, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),
-        
-
     ],
     [
         new BackgroundObject('img/3. Background/Layers/5. Water/L1.png', 0),
@@ -61,31 +75,33 @@ level1 = new Level(
 function setinitialEnemies(world) {
     world.level.enemies = [
         //world, x, y, phase, speed
-    new PufferFish(world, 800, 80, 1, 1),
+        new PufferFish(world, 800, 150, 1, 1),
 
-    new PufferFish(world, 1200, 50, 1, 1),
+        new PufferFish(world, 1200, 250, 1, 1),
 
-    new JellyFish(world, 1000, 150, 10, 1),
 
-    new PufferFish(world, 1500, 20, 1, 1),
-    new PufferFish(world, 1500, 150, 1, 1),
-    new PufferFish(world, 1500, 280, 1, 1),
 
-    new PufferFish(world, 2500, 80, 10, 2),
-    new PufferFish(world, 2500, 280, 10, 2),
-    
-    new PufferFish(world, 2500, 20, 10, 1),
-    new PufferFish(world, 2500, 150, 10, 1),
-    new PufferFish(world, 2500, 280, 10, 1),
+        new PufferFish(world, 1800, 20, 1, 1),
+        new PufferFish(world, 1800, 150, 1, 1),
+        new PufferFish(world, 1800, 280, 1, 1),
 
-    new PufferFish(world, 3500, 20, 1, 1),
-    new PufferFish(world, 3600, 150, 1, 1),
-    new PufferFish(world, 3700, 280, 1, 1),
+        new JellyFish(world, 2500, 180, 10, 1),
 
-    new PufferFish(world, 4600, 20, 10, 2),
-    new PufferFish(world, 4700, 150, 10, 2),
-    new PufferFish(world, 4800, 280, 10, 2),
-]
+        new PufferFish(world, 3000, 100, 10, 1),
+        new PufferFish(world, 3000, 300, 10, 1),
+
+        new PufferFish(world, 3700, 50, 10, 1),
+        new PufferFish(world, 3700, 180, 10, 1),
+        new PufferFish(world, 3700, 310, 10, 1),
+
+        new JellyFish(world, 4100, 20, 1, 1),
+        new JellyFish(world, 4200, 150, 1, 1),
+        new JellyFish(world, 4300, 280, 1, 1),
+
+        new PufferFish(world, 4600, 20, 10, 1),
+        new PufferFish(world, 4700, 150, 10, 1),
+        new PufferFish(world, 4800, 280, 10, 1),
+    ]
 }
 
 function setFinalEnemie(world, bossSpawnCoordinateX) {

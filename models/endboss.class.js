@@ -9,6 +9,7 @@ class Endboss extends MovableObject {
     energy = 100;
     damageFromBubble = 5;
     damageFromFinSlap = 10;
+    damageDueToCollision = 25;
     spawnID = 0;
     isSwimming = false;
     isAttacking = false;

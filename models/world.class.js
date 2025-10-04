@@ -49,10 +49,12 @@ class World {
         this.setStoppableInterval(() => {
 
             this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy) && this.character.isSlapping) {
+                if (this.character.isColliding(enemy) && this.character.isSlapping && enemy.damageFromFinSlap != 0) {
                     enemy.hit(enemy.damageFromFinSlap);
-                } else if (this.character.isColliding(enemy) && !this.character.isSlapping && enemy.spawnID >= 8) {
-                    this.character.hit(this.character.damageFromCollision);
+                } else if ((this.character.isColliding(enemy) && !this.character.isSlapping && enemy.spawnID >= 8) || (this.character.isColliding(enemy) && enemy.damageFromFinSlap == 0)) {
+                    // this.character.hit(this.character.damageFromCollision);
+                    this.character.hit(enemy.damageDueToCollision);
+
                     this.statusBar.setPercentage(this.character.energy);
                     // console log
                     // console.log(this.character.energy);
