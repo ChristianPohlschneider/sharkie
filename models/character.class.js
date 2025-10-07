@@ -8,6 +8,7 @@ class Character extends MovableObject {
     speedY = 0;
     accelerationY = 0.05;
     energy = 100;
+    isShooting = false;
     lastShot = 0;
     shootFrameCounter = 0;
     shootCooldown = 1200;
