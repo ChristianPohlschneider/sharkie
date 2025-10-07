@@ -15,6 +15,8 @@ class Character extends MovableObject {
     isSlapping = false;
     hadFirstContact = false;
     cameraFrozen = false;
+    audioBubble = new Audio('img/assets/audio/bubble.wav');
+    audioPoisonBubble = new Audio('img/assets/audio/poisonBubble.wav');
 
 
     offset = {
@@ -136,14 +138,14 @@ class Character extends MovableObject {
 
     animate() {
 
-        const freezePoint = this.world.level.level_end_x -450;
-        
-        
+        const freezePoint = this.world.level.level_end_x - 450;
+
+
         this.world.setStoppableInterval(() => {
 
             this.world.checkCollisionWithBarrier();
 
-            const leftScreenLimit = this.cameraFrozen ? freezePoint -130 : -50;
+            const leftScreenLimit = this.cameraFrozen ? freezePoint - 130 : -50;
             const rightScreenLimit = this.cameraFrozen ? freezePoint + 450 : this.world.level.level_end_x;
 
             if ((this.world.keyboard.ArrowRight || this.world.keyboard.KeyD)
@@ -250,9 +252,20 @@ class Character extends MovableObject {
             if (this.isShooting && !this.isHurt() && !this.isDead()) {
                 this.shootFrameCounter++;
                 // if (this.shootFrameCounter % 2 === 0) { // nur jeden 2. Schritt Frame weiter
-                if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
+                // if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
+                if (this.world.poisonBar.venomSac > 0) {
+                    // this.audioPoisonBubble.pause();
+                    // this.audioPoisonBubble.currentTime = 0;
+                    setTimeout(() => {
+                        this.audioPoisonBubble.play();
+                    }, 200); // 200 Millisekunden Verzögerung
                     this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
-                } else {
+                } else if (this.world.poisonBar.venomSac <= 0){
+                    // this.audioBubble.pause();
+                    // this.audioBubble.currentTime = 0;
+                    setTimeout(() => {
+                    this.audioBubble.play();
+                    }, 200); // 200 Millisekunden Verzögerung
                     this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
                 }
                 this.currentShootImage++;
@@ -263,7 +276,7 @@ class Character extends MovableObject {
                     this.currentShootImage = 0;
                     this.shootFrameCounter = 0;
                 }
-            } else if (this.world.keyboard.KeyC && !this.isHurt()&& !this.isDead()) {
+            } else if (this.world.keyboard.KeyC && !this.isHurt() && !this.isDead()) {
 
                 this.playAnimation(this.IMAGES_FINSLAP);
                 this.finSlap();

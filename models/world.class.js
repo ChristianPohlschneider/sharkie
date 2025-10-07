@@ -11,6 +11,10 @@ class World {
     shootableObject = [];
     intervalIds = [];
     isCollidingBarrier = false;
+    audioCoin = new Audio('img/assets/audio/coin.wav');
+    audioBubble = new Audio('img/assets/audio/bubble.wav');
+    audioHit = new Audio('img/assets/audio/hit.wav');
+    audioAcid = new Audio('img/assets/audio/acid.wav');
 
 
     constructor(canvas, keyboard) {//hand over variables to world
@@ -63,67 +67,75 @@ class World {
         }, 200)
     }
 
-//     checkCollisionBubbleBarrier() {
-//     this.setStoppableInterval(() => {
-//         this.shootableObject = this.shootableObject.filter((bubble) => {
-//             let hit = false;
+    //     checkCollisionBubbleBarrier() {
+    //     this.setStoppableInterval(() => {
+    //         this.shootableObject = this.shootableObject.filter((bubble) => {
+    //             let hit = false;
 
-//             this.level.barriers.forEach((barrier) => {
-//                 if (barrier.isColliding(bubble)) {
-//                     hit = true; // Bubble soll gelöscht werden
-//                 }
-//             });
+    //             this.level.barriers.forEach((barrier) => {
+    //                 if (barrier.isColliding(bubble)) {
+    //                     hit = true; // Bubble soll gelöscht werden
+    //                 }
+    //             });
 
-//             return !hit; // nur Bubbles behalten, die NICHT getroffen haben
-//         });
-//     }, 200);
-// }
+    //             return !hit; // nur Bubbles behalten, die NICHT getroffen haben
+    //         });
+    //     }, 200);
+    // }
 
-checkCollisionBubbleBarrier() {
-    this.setStoppableInterval(() => {
-        for (let i = this.shootableObject.length - 1; i >= 0; i--) {
-            const bubble = this.shootableObject[i];
+    checkCollisionBubbleBarrier() {
+        this.setStoppableInterval(() => {
+            for (let i = this.shootableObject.length - 1; i >= 0; i--) {
+                const bubble = this.shootableObject[i];
 
-            let collided = false;
-            this.level.barriers.forEach((barrier) => {
-                if (barrier.isColliding(bubble)) {
-                    collided = true;
+                let collided = false;
+                this.level.barriers.forEach((barrier) => {
+                    if (barrier.isColliding(bubble)) {
+                        collided = true;
+                    }
+                });
+
+                if (collided && !bubble.isShrinking) {
+                    bubble.shrinkOut(); // Animation starten
                 }
-            });
 
-            if (collided && !bubble.isShrinking) {
-                bubble.shrinkOut(); // Animation starten
+                // Bubble erst entfernen, wenn Animation fertig ist
+                if (bubble.isCollected) {
+                    this.shootableObject.splice(i, 1);
+                }
             }
-
-            // Bubble erst entfernen, wenn Animation fertig ist
-            if (bubble.isCollected) {
-                this.shootableObject.splice(i, 1);
-            }
-        }
-    }, 50); // kleineres Intervall für flüssigere Animation
-}
+        }, 50); // kleineres Intervall für flüssigere Animation
+    }
 
 
     checkCollisionFromBubble() {
-    this.setStoppableInterval(() => {
-        this.shootableObject = this.shootableObject.filter((bubble) => {
-            let hit = false;
+        this.setStoppableInterval(() => {
+            this.shootableObject = this.shootableObject.filter((bubble) => {
+                let hit = false;
 
-            this.level.enemies.forEach((enemy) => {
-                if (enemy.isColliding(bubble) && enemy.spawnID >= 8) {
-                    if (bubble.img.currentSrc === 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Bubble%20trap/Poisoned%20Bubble%20(for%20whale).png') {
-                        enemy.hit(2 * enemy.damageFromBubble);
-                    } else {
-                        enemy.hit(enemy.damageFromBubble);
+                this.level.enemies.forEach((enemy) => {
+                    if (enemy.isColliding(bubble) && enemy.spawnID >= 8) {
+                        if (bubble.img.currentSrc === 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Bubble%20trap/Poisoned%20Bubble%20(for%20whale).png') {
+                            enemy.hit(2 * enemy.damageFromBubble);
+                            this.audioHit.pause();
+                            this.audioHit.currentTime = 0;
+                            this.audioHit.play();
+
+                        } else {
+                            enemy.hit(enemy.damageFromBubble);
+                            this.audioHit.pause();
+                            this.audioHit.currentTime = 0;
+                            this.audioHit.play();
+
+                        }
+                        hit = true; // Bubble soll gelöscht werden
                     }
-                    hit = true; // Bubble soll gelöscht werden
-                }
-            });
+                });
 
-            return !hit; // nur Bubbles behalten, die NICHT getroffen haben
-        });
-    }, 200);
-}
+                return !hit; // nur Bubbles behalten, die NICHT getroffen haben
+            });
+        }, 200);
+    }
 
 
     // checkBubbleOutOfRange() {
@@ -142,21 +154,21 @@ checkCollisionBubbleBarrier() {
     // }
 
     checkBubbleOutOfRange() {
-    this.setStoppableInterval(() => {
-        for (let i = this.shootableObject.length - 1; i >= 0; i--) {
-            const bubble = this.shootableObject[i];
+        this.setStoppableInterval(() => {
+            for (let i = this.shootableObject.length - 1; i >= 0; i--) {
+                const bubble = this.shootableObject[i];
 
-            if ((bubble.x > bubble.maxRange || bubble.x < bubble.minRange) && !bubble.isShrinking) {
-                bubble.shrinkOut(); // Animation starten
-            }
+                if ((bubble.x > bubble.maxRange || bubble.x < bubble.minRange) && !bubble.isShrinking) {
+                    bubble.shrinkOut(); // Animation starten
+                }
 
-            // Bubble erst entfernen, wenn Animation fertig ist
-            if (bubble.isCollected) {
-                this.shootableObject.splice(i, 1);
+                // Bubble erst entfernen, wenn Animation fertig ist
+                if (bubble.isCollected) {
+                    this.shootableObject.splice(i, 1);
+                }
             }
-        }
-    }, 50); // Intervall kürzer, damit Animation flüssiger sichtbar ist
-}
+        }, 50); // Intervall kürzer, damit Animation flüssiger sichtbar ist
+    }
 
 
     checkCollisionWithCoin() {
@@ -165,6 +177,12 @@ checkCollisionBubbleBarrier() {
                 if (this.character.isColliding(coin)) {
                     this.coinBar.coinCount(coin.coinValue);
                     this.coinBar.setWalletAmount(this.coinBar.wallet);
+
+                    // 🔊 Audio immer neu starten
+                    this.audioCoin.pause();
+                    this.audioCoin.currentTime = 0;
+                    this.audioCoin.play();
+
                     coin.shrinkOut(); // startet Shrink-Animation
                     this.level.shrinkingObjects.push(coin); // 👉 hierhin verschieben
                     return false; // 👉 Coin sofort aus dem Array entfernen
@@ -180,6 +198,11 @@ checkCollisionBubbleBarrier() {
                 if (this.character.isColliding(poisonBottle)) {
                     this.poisonBar.poisonCount(poisonBottle.poisonValue);
                     this.poisonBar.setPoisonAmount(this.poisonBar.venomSac);
+
+                    this.audioAcid.pause();
+                    this.audioAcid.currentTime = 0;
+                    this.audioAcid.play();
+
                     poisonBottle.shrinkOut(); // Standard-Animation stoppt, Shrink startet
                     this.level.shrinkingObjects.push(poisonBottle); // 👉 hierhin verschieben
                     return false;
@@ -229,7 +252,7 @@ checkCollisionBubbleBarrier() {
         this.addToMap(this.character);
 
         this.addObjectsToMap(this.level.enemies);
-        
+
         this.addObjectsToMap(this.shootableObject);
 
         this.addShrinkingObjectsToMap(this.level.coins);
