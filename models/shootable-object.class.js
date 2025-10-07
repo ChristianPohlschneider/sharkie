@@ -16,7 +16,7 @@ class ShootableObject extends MovableObject {
     shoot(otherDirection) {
         if (this.poisonBar.getVenomSac() > 0) {
             this.loadImage('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
-            this.poisonBar.poisonCount(-20);
+            this.poisonBar.poisonCount(-10);
             this.poisonBar.setPoisonAmount(this.poisonBar.venomSac);
         } else {
             this.loadImage('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png')

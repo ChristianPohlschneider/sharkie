@@ -54,12 +54,12 @@ level1 = new Level(
         new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
     ],
     [
-        new PoisonBottle(770, 50),
-        new PoisonBottle(775, 320),
+        new PoisonBottle(1010, 50),
+        new PoisonBottle(720, 320),
 
         new PoisonBottle(1500, 195),
         
-        new PoisonBottle(1860, 195),
+        new PoisonBottle(1862, 195),
 
         new PoisonBottle(2315, 50),
         new PoisonBottle(2315, 320),
@@ -89,6 +89,16 @@ level1 = new Level(
         new Coin(1975, 320),
         new Coin(1775, 320),
         new Coin(2025, 220),
+
+
+        new Coin(2325, 215),
+        new Coin(2422, 290),
+        new Coin(2524, 350),
+        new Coin(2626, 290),
+        new Coin(2723, 215),
+        new Coin(2810, 165),
+        new Coin(2927, 215),
+        new Coin(3029, 290),
     ],
 
 );
