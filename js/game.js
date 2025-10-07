@@ -4,12 +4,13 @@ let keyboard = new Keyboard();
 
 function init() {
     canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
-    this.world = world;
+
 }
 
 function startGame() {
     document.getElementById('startScreen').style.display = "none";
+    world = new World(canvas, keyboard);
+    this.world = world;
     setinitialEnemies(world);
 }
 
