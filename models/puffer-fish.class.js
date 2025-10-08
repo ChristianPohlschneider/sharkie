@@ -15,6 +15,7 @@ class PufferFish extends MovableObject {
     moveInterval = null;
     oscillateInterval = null;
     animationInterval = null;
+    audioEnemyDie = new Audio('img/assets/audio/enemyDie.wav');
 
     offset = {
         top: 10,
@@ -65,12 +66,12 @@ class PufferFish extends MovableObject {
 
         this.moveInterval = this.moveLeft(this.speed, this.interval);
         this.world.setStoppableInterval(() => {
-        // eigene Bewegungsintervalle speichern
-        
-        if (this.x < -250) {
-            this.x = this.world.level.level_end_x + 400
+            // eigene Bewegungsintervalle speichern
 
-        } 
+            if (this.x < -250) {
+                this.x = this.world.level.level_end_x + 400
+
+            }
         }, 200);
 
         this.oscillateInterval = this.oscillate(this.phase);
@@ -90,6 +91,9 @@ class PufferFish extends MovableObject {
     handleDeath() {
         if (!this.hasDied) {
             this.hasDied = true;
+            setTimeout(() => {
+            this.audioEnemyDie.play();
+            }, 600);
             this.playAnimation(this.IMAGES_DIE);
 
             // Nur eigene Bewegungsintervalle stoppen

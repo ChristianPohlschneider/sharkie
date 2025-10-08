@@ -16,6 +16,7 @@ class JellyFish extends MovableObject {
     moveInterval = null;
     oscillateInterval = null;
     animationInterval = null;
+    audioEnemyDie = new Audio('img/assets/audio/enemyDie.wav');
 
     offset = {
         top: 10,
@@ -66,12 +67,12 @@ class JellyFish extends MovableObject {
 
         this.moveInterval = this.moveLeft(this.speed, this.interval);
         this.world.setStoppableInterval(() => {
-        // eigene Bewegungsintervalle speichern
-        
-        if (this.x < -250) {
-            this.x = this.world.level.level_end_x + 400
+            // eigene Bewegungsintervalle speichern
 
-        } 
+            if (this.x < -250) {
+                this.x = this.world.level.level_end_x + 400
+
+            }
         }, 200);
 
         this.oscillateInterval = this.oscillate(this.phase);
@@ -86,30 +87,33 @@ class JellyFish extends MovableObject {
             } else {
                 this.playAnimation(this.IMAGES_SWIMMING);
             }
-            
+
         }, 200);
     }
 
     handleDeath() {
-    if (!this.hasDied) {
-        this.hasDied = true;
-        clearInterval(this.moveInterval);
-        clearInterval(this.oscillateInterval);
-        clearInterval(this.animationInterval);
+        if (!this.hasDied) {
+            this.hasDied = true;
+            setTimeout(() => {
+                this.audioEnemyDie.play();
+            }, 400);
+            clearInterval(this.moveInterval);
+            clearInterval(this.oscillateInterval);
+            clearInterval(this.animationInterval);
 
-        this.isDeadID = 0;
-        const dieInterval = setInterval(() => {
-            this.loadImage(this.IMAGES_DIE[this.isDeadID]);
-            this.isDeadID++;
-            if (this.isDeadID >= this.IMAGES_DIE.length) {
-                clearInterval(dieInterval);
-                this.world.level.enemies.splice(this.world.level.enemies.indexOf(this), 1);
-                this.world.level.shrinkingObjects.push(this);
-                this.shrinkOut();
-            }
-        }, 200);
+            this.isDeadID = 0;
+            const dieInterval = setInterval(() => {
+                this.loadImage(this.IMAGES_DIE[this.isDeadID]);
+                this.isDeadID++;
+                if (this.isDeadID >= this.IMAGES_DIE.length) {
+                    clearInterval(dieInterval);
+                    this.world.level.enemies.splice(this.world.level.enemies.indexOf(this), 1);
+                    this.world.level.shrinkingObjects.push(this);
+                    this.shrinkOut();
+                }
+            }, 200);
+        }
     }
-}
 
     isDead() {
         return this.energy <= 0;

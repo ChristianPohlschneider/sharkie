@@ -16,9 +16,11 @@ class Character extends MovableObject {
     isSlapping = false;
     hadFirstContact = false;
     cameraFrozen = false;
+    deathSoundPlayed = false;
     audioBubble = new Audio('img/assets/audio/bubble.wav');
     audioPoisonBubble = new Audio('img/assets/audio/poisonBubble.wav');
-
+    audioSlap = new Audio('img/assets/audio/slap.m4a');
+    audioSharkyDies = new Audio('img/assets/audio/sharkyDies.mp3');
 
     offset = {
         top: 105,
@@ -168,7 +170,7 @@ class Character extends MovableObject {
 
                 this.speed = 3;
                 //Console!
-                console.log("Sharkie x:" + this.x)
+                // console.log("Sharkie x:" + this.x)
                 // console.log(freezePoint)
                 if (this.x > Number(this.world.level.level_end_x - 450) && !this.hadFirstContact) {
                     setFinalEnemie(this.world, Number(this.world.level.level_end_x - 150));
@@ -194,7 +196,7 @@ class Character extends MovableObject {
 
                 this.speed = 3;
                 //Console!
-                console.log("Sharkie" + this.x);
+                // console.log("Sharkie" + this.x);
 
                 this.otherDirection = true;
             }
@@ -227,6 +229,13 @@ class Character extends MovableObject {
                 }
             }
             if (this.isDead()) {
+
+                if (!this.deathSoundPlayed) {
+                    this.audioSharkyDies.currentTime = 0; // optional: von Anfang abspielen
+                    this.audioSharkyDies.play();
+                    this.deathSoundPlayed = true; // verhindert weiteres Abspielen
+                }
+
                 this.playAnimation(this.IMAGES_DEAD);
                 if (this.img.src == 'http://127.0.0.1:5500/img/1.Sharkie/6.dead/1.Poisoned/12.png') {
                     this.world.stopGame();
@@ -261,11 +270,11 @@ class Character extends MovableObject {
                         this.audioPoisonBubble.play();
                     }, 200); // 200 Millisekunden Verzögerung
                     this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
-                } else if (this.world.poisonBar.venomSac <= 0){
+                } else if (this.world.poisonBar.venomSac <= 0) {
                     // this.audioBubble.pause();
                     // this.audioBubble.currentTime = 0;
                     setTimeout(() => {
-                    this.audioBubble.play();
+                        this.audioBubble.play();
                     }, 200); // 200 Millisekunden Verzögerung
                     this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
                 }
@@ -278,6 +287,13 @@ class Character extends MovableObject {
                     this.shootFrameCounter = 0;
                 }
             } else if (this.world.keyboard.KeyC && !this.isHurt() && !this.isDead()) {
+
+                if (this.audioSlap.paused) { // Nur abspielen, wenn es gerade nicht läuft
+                    setTimeout(() => {
+                        // this.audioSlap.currentTime = 0; // Startet den Sound von vorn
+                        this.audioSlap.play();
+                    }, 200);
+                }
 
                 this.playAnimation(this.IMAGES_FINSLAP);
                 this.finSlap();

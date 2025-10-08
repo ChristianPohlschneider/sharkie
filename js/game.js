@@ -12,6 +12,9 @@ function startGame() {
     world = new World(canvas, keyboard);
     this.world = world;
     setinitialEnemies(world);
+
+    // bei Neustart wieder auf false setzen:
+    // this.deathSoundPlayed = false;
 }
 
 window.addEventListener('keydown', (event) => {
