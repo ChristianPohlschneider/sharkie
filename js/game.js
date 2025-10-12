@@ -19,7 +19,8 @@ async function startAudio(src) {
     }
 
     soundManager.playTheme();
-    console.log('AudioContext gestartet, Opening Theme läuft');
+    //console log
+    // console.log('AudioContext gestartet, Opening Theme läuft');
 }
 
 

@@ -11,9 +11,15 @@ class SoundManager {
         this.themeBuffer = await this.audioCtx.decodeAudioData(arrayBuffer);
     }
 
-    playTheme() {
+    async playTheme() {
         if (!this.themeBuffer) return;
-        this.stopTheme(); // Falls schon was läuft
+
+        // AudioContext ggf. resume
+        if (this.audioCtx.state === 'suspended') {
+            await this.audioCtx.resume();
+        }
+
+        this.stopTheme(); // Vorherige Musik stoppen
 
         this.source = this.audioCtx.createBufferSource();
         this.source.buffer = this.themeBuffer;

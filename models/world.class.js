@@ -68,6 +68,8 @@ class World {
                 } else if ((this.character.isColliding(enemy) && !this.character.isSlapping && enemy.spawnID >= 8) || (this.character.isColliding(enemy) && enemy.damageFromFinSlap == 0)) {
                     // this.character.hit(this.character.damageFromCollision);
                     if (!this.character.isDead()) {
+                        this.audioHurtSharky.pause();
+                        this.audioHurtSharky.currentTime = 0;
                         this.audioHurtSharky.play();
                     }
 

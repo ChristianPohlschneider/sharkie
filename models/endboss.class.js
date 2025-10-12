@@ -128,20 +128,20 @@ class Endboss extends MovableObject {
     }
 
     async handleDeath() {
-    // 400 ms warten
-    setTimeout(async () => {
-        soundManager.stopTheme();
-        await soundManager.loadTheme('img/assets/audio/winScreen.mp3');
-        soundManager.playTheme();
-    }, 800);
+        // 400 ms warten
+        setTimeout(async () => {
+            if (soundManager) soundManager.stopTheme();
+            await soundManager.loadTheme('img/assets/audio/winScreen.mp3');
+            soundManager.playTheme();
+        }, 800);
 
-    this.world.stopGame();
+        this.world.stopGame();
     }
 
     async checkBossSpawn() {
         if (this.spawnID < 8) {
             if (!this.audioBossThemePlayed) {
-                soundManager.stopTheme();
+                if (soundManager) soundManager.stopTheme();
 
                 await soundManager.loadTheme('img/assets/audio/bossTheme.wav');
                 soundManager.playTheme();
@@ -164,10 +164,14 @@ class Endboss extends MovableObject {
         if (randomMoveID == 0) {
             // console.log("randomID = 0: " + randomMoveID);
             //enemy attackes and moves fast forward, this.x - 400 and then back
+            this.audioBossBite.pause();
+            this.audioBossBite.currentTime = 0;
             this.audioBossBite.play();
             this.attackMove();
             this.verticalMoveUp();
         } else if (randomMoveID == 1) {
+            this.audioBossBite.pause();
+            this.audioBossBite.currentTime = 0;
             this.audioBossBite.play();
             // console.log("randomID = 1: " + randomMoveID);
             this.attackMove();
@@ -178,6 +182,8 @@ class Endboss extends MovableObject {
             //enemy moves this.y down -400 and then back
             this.verticalMoveUp();
         } else if (randomMoveID == 3) {
+            this.audioBossBite.pause();
+            this.audioBossBite.currentTime = 0;
             this.audioBossBite.play();
             // console.log("randomID = 3: " + randomMoveID);
             //enemy moves this.y down -400 and then back

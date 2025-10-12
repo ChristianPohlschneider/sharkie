@@ -267,6 +267,8 @@ class Character extends MovableObject {
                     // this.audioPoisonBubble.pause();
                     // this.audioPoisonBubble.currentTime = 0;
                     setTimeout(() => {
+                        this.audioPoisonBubble.pause();
+                        this.audioPoisonBubble.currentTime = 0;
                         this.audioPoisonBubble.play();
                     }, 200); // 200 Millisekunden Verzögerung
                     this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
@@ -274,6 +276,8 @@ class Character extends MovableObject {
                     // this.audioBubble.pause();
                     // this.audioBubble.currentTime = 0;
                     setTimeout(() => {
+                        this.audioBubble.pause();
+                        this.audioBubble.currentTime = 0;
                         this.audioBubble.play();
                     }, 200); // 200 Millisekunden Verzögerung
                     this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
