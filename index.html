@@ -19,13 +19,16 @@
     <script src="models/jellyfish.class.js"></script>
     <script src="./js/keyboard.class.js"></script>
     <script src="models/barrier-object.class.js"></script>
-    <script src="models/world.class.js"></script>
+    <script src="models/soundmanager.js"></script>
+    <script src="./js/game.js"></script>
     <script src="models/level.class.js"></script>
     <script src="models/endboss.class.js"></script>
     <script src="models/shootable-object.class.js"></script>
     <script src="models/coin-object.class.js"></script>
     <script src="levels/level1.js"></script>
-    <script src="./js/game.js"></script>
+    <script src="models/world.class.js"></script>
+
+
 
 
 </head>
@@ -35,8 +38,11 @@
 
     <canvas id="canvas" width="720" height="480"></canvas>
     <div class="startScreen" id="startScreen">
-        <img id="startScreenImg" class="startScreenImg" src="./img/3. Background/Mesa de trabajo 1.png" alt="Startscreen">
+        <img id="startScreenImg" class="startScreenImg" src="./img/3. Background/Mesa de trabajo 1.png"
+            alt="Startscreen">
         <button onclick="startGame()" class="startButton" id="startButton">Start Game</button>
+        <button onclick="startAudio('img/assets/audio/openingTheme.wav')" class="audioButton"
+            id="audioButton">Audio</button>
     </div>
 
 </body>

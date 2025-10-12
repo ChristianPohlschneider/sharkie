@@ -103,10 +103,9 @@ class Endboss extends MovableObject {
                 }, 200);
                 this.playAnimation(this.IMAGES_DIE);
                 if (this.img.src == 'http://127.0.0.1:5500/img/2.Enemy/3%20Final%20Enemy/Dead/Mesa%20de%20trabajo%202%20copia%2010.png') {
-                    this.audioBossTheme.pause();
-                    this.audioBossTheme.currentTime = 0;
-                    this.audioBossTheme.loop = false;
-                    this.world.stopGame();
+                    // this.world.stopGame();
+                    this.handleDeath();
+
                 }
             } else if (this.isHurt() && !this.isDead()) {
                 if (this.spawnID < 8) {
@@ -116,23 +115,7 @@ class Endboss extends MovableObject {
                 }
 
             } else {
-
-                if (this.spawnID < 8) {
-                    if (!this.audioBossThemePlayed) {
-                                            this.audioBossTheme.loop = true;
-                    this.audioBossTheme.currentTime = 0;
-                    this.audioBossTheme.play();
-                    this.audioBossThemePlayed = true
-                    }
-
-                    this.playAnimation(this.IMAGES_SPAWNING);
-                } else if (this.isAttacking == false) {
-                    this.playAnimation(this.IMAGES_SWIMMING);
-                    this.isSwimming = true;
-                }
-                this.spawnID++
-                // console.log(this.spawnID);
-
+                this.checkBossSpawn();
             }
         }, 200);
 
@@ -142,6 +125,37 @@ class Endboss extends MovableObject {
                 this.randomAttack(this.randomMoveID);
             }
         }, 3000);
+    }
+
+    async handleDeath() {
+    // 400 ms warten
+    setTimeout(async () => {
+        soundManager.stopTheme();
+        await soundManager.loadTheme('img/assets/audio/winScreen.mp3');
+        soundManager.playTheme();
+    }, 800);
+
+    this.world.stopGame();
+    }
+
+    async checkBossSpawn() {
+        if (this.spawnID < 8) {
+            if (!this.audioBossThemePlayed) {
+                soundManager.stopTheme();
+
+                await soundManager.loadTheme('img/assets/audio/bossTheme.wav');
+                soundManager.playTheme();
+
+                this.audioBossThemePlayed = true
+            }
+
+            this.playAnimation(this.IMAGES_SPAWNING);
+        } else if (this.isAttacking == false) {
+            this.playAnimation(this.IMAGES_SWIMMING);
+            this.isSwimming = true;
+        }
+        this.spawnID++
+        // console.log(this.spawnID);
     }
 
     randomAttack(randomMoveID) {

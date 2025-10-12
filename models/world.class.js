@@ -16,7 +16,7 @@ class World {
     audioHit = new Audio('img/assets/audio/hit.wav');
     audioAcid = new Audio('img/assets/audio/acid.wav');
     audioHurtSharky = new Audio('img/assets/audio/hurtSharky.wav');
-
+    audioGameTheme = new Audio('img/assets/audio/gameTheme.wav');
 
 
     constructor(canvas, keyboard) {//hand over variables to world
@@ -42,6 +42,13 @@ class World {
         this.character.world = this;
         this.level.coins.forEach(coin => coin.setWorld(this));
         this.level.poisonBottles.forEach(bottle => bottle.setWorld(this));
+        // this.audioGameTheme.loop = true;
+        // this.audioGameTheme.currentTime = 0;
+        // this.audioGameTheme.play();
+
+        // soundManager.stopTheme();
+        // await soundManager.loadTheme('img/assets/audio/gameTheme.wav');
+        // soundManager.playTheme();
     }
 
     setStoppableInterval(fn, interval) {
@@ -56,7 +63,7 @@ class World {
 
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy) && this.character.isSlapping && enemy.damageFromFinSlap != 0) {
-                    
+
                     enemy.hit(enemy.damageFromFinSlap);
                 } else if ((this.character.isColliding(enemy) && !this.character.isSlapping && enemy.spawnID >= 8) || (this.character.isColliding(enemy) && enemy.damageFromFinSlap == 0)) {
                     // this.character.hit(this.character.damageFromCollision);

@@ -42,28 +42,48 @@ h1 {
 }
 
 .startButton {
-  display: inline-block;
-  right: 20%;
-  position: absolute;
-  padding: 15px 25px;
-  font-size: 24px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  outline: none;
-  color: #fff;
-  background-color: rgb(239,199,46);
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0px 0px 9px 9px rgba(239,199,46, 0.1);
+    display: inline-block;
+    right: 20%;
+    position: absolute;
+    padding: 15px 25px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgb(239, 199, 46);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
 }
 
-.startButton:hover {background-color: rgb(220, 190, 70)}
+.audioButton {
+    display: inline-block;
+    top: 1%;
+    right: 1%;
+    position: absolute;
+    padding: 15px 25px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgb(239, 199, 46);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+}
+
+.startButton:hover {
+    background-color: rgb(220, 190, 70)
+}
 
 .startButton:active {
-  background-color: rgb(64, 73, 166);
-  box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
-  transform: translateY(4px);
+    background-color: rgb(64, 73, 166);
+    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
+    transform: translateY(4px);
 }
 
 canvas {
@@ -78,14 +98,15 @@ canvas {
     }
 
     .startScreen {
-    width: 100%;
-    height: calc(100vw * 0.68);
-}
-.startScreenImg {
-    top: 50%;
-    width: 100%;
-    height: calc(100vw * 0.68);
-}
+        width: 100%;
+        height: calc(100vw * 0.68);
+    }
+
+    .startScreenImg {
+        top: 50%;
+        width: 100%;
+        height: calc(100vw * 0.68);
+    }
 }
 
 @media only screen and (max-height: 850px) {
