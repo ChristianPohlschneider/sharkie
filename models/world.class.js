@@ -194,14 +194,14 @@ class World {
                     this.coinBar.coinCount(coin.coinValue);
                     this.coinBar.setWalletAmount(this.coinBar.wallet);
 
-                    // 🔊 Audio immer neu starten
-                    this.audioCoin.pause();
-                    this.audioCoin.currentTime = 0;
-                    this.audioCoin.play();
+                    const coinSound = new Audio('img/assets/audio/coin.wav');
+                    coinSound.play().catch(e => {
+                        if (e.name !== "AbortError") console.warn(e);
+                    });
 
-                    coin.shrinkOut(); // startet Shrink-Animation
-                    this.level.shrinkingObjects.push(coin); // 👉 hierhin verschieben
-                    return false; // 👉 Coin sofort aus dem Array entfernen
+                    coin.shrinkOut();
+                    this.level.shrinkingObjects.push(coin);
+                    return false;
                 }
                 return true; // Coin bleibt erhalten
             });

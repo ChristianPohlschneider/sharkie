@@ -17,6 +17,7 @@ class Character extends MovableObject {
     hadFirstContact = false;
     cameraFrozen = false;
     deathSoundPlayed = false;
+    hasPlayedBubbleSound = false;
     audioBubble = new Audio('img/assets/audio/bubble.wav');
     audioPoisonBubble = new Audio('img/assets/audio/poisonBubble.wav');
     audioSlap = new Audio('img/assets/audio/slap.m4a');
@@ -261,44 +262,50 @@ class Character extends MovableObject {
         this.world.setStoppableInterval(() => {
             if (this.isShooting && !this.isHurt() && !this.isDead()) {
                 this.shootFrameCounter++;
-                // if (this.shootFrameCounter % 2 === 0) { // nur jeden 2. Schritt Frame weiter
-                // if (this.world.poisonBar.img.currentSrc == 'http://127.0.0.1:5500/img/4.%20Marcadores/green/poisoned%20bubbles/20_%20copia%203.png') {
+
+                // Bubble Sound nur einmal pro Schuss abspielen
+                if (!this.hasPlayedBubbleSound) {
+                    if (this.world.poisonBar.venomSac > 0) {
+                        const bubbleSound = new Audio('img/assets/audio/poisonBubble.wav');
+                        bubbleSound.play().catch(e => {
+                            if (e.name !== "AbortError") console.warn(e);
+                        });
+                    } else {
+                        const bubbleSound = new Audio('img/assets/audio/bubble.wav');
+                        bubbleSound.play().catch(e => {
+                            if (e.name !== "AbortError") console.warn(e);
+                        });
+                    }
+                    this.hasPlayedBubbleSound = true; // Flag setzen
+                }
+
+                // Animation abspielen
                 if (this.world.poisonBar.venomSac > 0) {
-                    // this.audioPoisonBubble.pause();
-                    // this.audioPoisonBubble.currentTime = 0;
-                    setTimeout(() => {
-                        this.audioPoisonBubble.pause();
-                        this.audioPoisonBubble.currentTime = 0;
-                        this.audioPoisonBubble.play();
-                    }, 200); // 200 Millisekunden Verzögerung
                     this.playShootAnimation(this.IMAGES_BUBBLE_TRAP_POISON);
-                } else if (this.world.poisonBar.venomSac <= 0) {
-                    // this.audioBubble.pause();
-                    // this.audioBubble.currentTime = 0;
-                    setTimeout(() => {
-                        this.audioBubble.pause();
-                        this.audioBubble.currentTime = 0;
-                        this.audioBubble.play();
-                    }, 200); // 200 Millisekunden Verzögerung
+                } else {
                     this.playShootAnimation(this.IMAGES_BUBBLE_TRAP);
                 }
+
                 this.currentShootImage++;
-                // }
+
+                // Wenn Animation fertig, Schuss zurücksetzen
                 if (this.currentShootImage >= this.IMAGES_BUBBLE_TRAP.length) {
                     this.bubbleShot();
-                    this.isShooting = false; // Animation fertig
+                    this.isShooting = false;       // Animation fertig
                     this.currentShootImage = 0;
                     this.shootFrameCounter = 0;
+                    this.hasPlayedBubbleSound = false; // Flag für nächsten Schuss zurücksetzen
                 }
-            } else if (this.world.keyboard.KeyC && !this.isHurt() && !this.isDead()) {
+            }
 
-                if (this.audioSlap.paused) { // Nur abspielen, wenn es gerade nicht läuft
-                    setTimeout(() => {
-                        // this.audioSlap.currentTime = 0; // Startet den Sound von vorn
-                        this.audioSlap.play();
-                    }, 200);
+            // Fin Slap
+            else if (this.world.keyboard.KeyC && !this.isHurt() && !this.isDead()) {
+                if (this.audioSlap.paused) {
+                    this.audioSlap.currentTime = 0;
+                    this.audioSlap.play().catch(e => {
+                        if (e.name !== "AbortError") console.warn(e);
+                    });
                 }
-
                 this.playAnimation(this.IMAGES_FINSLAP);
                 this.finSlap();
             } else if (!this.world.keyboard.KeyC) {
@@ -306,7 +313,7 @@ class Character extends MovableObject {
                 this.offset.left = 40;
                 this.isSlapping = false;
             }
-        }, 100);
+        }, 80);
     }
 
 
