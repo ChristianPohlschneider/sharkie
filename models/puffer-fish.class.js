@@ -15,7 +15,7 @@ class PufferFish extends MovableObject {
     moveInterval = null;
     oscillateInterval = null;
     animationInterval = null;
-    audioEnemyDie = new Audio('img/assets/audio/enemyDie.wav');
+    // audioEnemyDie = new Audio('img/assets/audio/enemyDie.wav');
 
     offset = {
         top: 10,
@@ -91,9 +91,13 @@ class PufferFish extends MovableObject {
     handleDeath() {
         if (!this.hasDied) {
             this.hasDied = true;
-            setTimeout(() => {
-            this.audioEnemyDie.play();
-            }, 600);
+
+            // Sound über SoundManager mit 600ms Verzögerung
+            if (soundManager) {
+                soundManager.playEffect('img/assets/audio/enemyDie.wav', 600);
+            }
+
+            // Animation abspielen
             this.playAnimation(this.IMAGES_DIE);
 
             // Nur eigene Bewegungsintervalle stoppen
@@ -102,19 +106,17 @@ class PufferFish extends MovableObject {
 
             // nach Animation entfernen
             setTimeout(() => {
-                let index = this.world.level.enemies.indexOf(this);
-                // if (index > -1 && this.isCollected == true) {
+                const index = this.world.level.enemies.indexOf(this);
                 if (index > -1) {
                     this.world.level.enemies.splice(index, 1);
-
                 }
 
-                // 2. In shrinkingObjects einfügen
+                // In shrinkingObjects einfügen
                 this.world.level.shrinkingObjects.push(this);
 
-                // 3. Shrink-Out starten
+                // Shrink-Out starten
                 this.shrinkOut();
-            }, this.IMAGES_DIE.length * 200);
+            }, this.IMAGES_DIE.length * 200); // Gesamtdauer der Animation
         }
     }
 

@@ -18,8 +18,8 @@ class Endboss extends MovableObject {
     biteCounter = 0;
     world;
     audioBossThemePlayed = false;
-    audioBossDies = new Audio('img/assets/audio/bossDies.wav');
-    audioBossTheme = new Audio('img/assets/audio/bossTheme.wav');
+    // audioBossDies = new Audio('img/assets/audio/bossDies.wav');
+    // audioBossTheme = new Audio('img/assets/audio/bossTheme.wav');
     audioBossBite = new Audio('img/assets/audio/bossBite.flac');
 
     offset = {
@@ -98,22 +98,25 @@ class Endboss extends MovableObject {
 
         this.world.setStoppableInterval(() => {
             if (this.isDead()) {
-                setTimeout(() => {
-                    this.audioBossDies.play();
-                }, 200);
-                this.playAnimation(this.IMAGES_DIE);
-                if (this.img.src == 'http://127.0.0.1:5500/img/2.Enemy/3%20Final%20Enemy/Dead/Mesa%20de%20trabajo%202%20copia%2010.png') {
-                    // this.world.stopGame();
-                    this.handleDeath();
-
+                // Sound als Effekt über SoundManager mit 200ms Verzögerung
+                if (soundManager) {
+                    soundManager.playEffect('img/assets/audio/bossDies.wav', 200);
                 }
+
+                // Tod-Animation abspielen
+                this.playAnimation(this.IMAGES_DIE);
+
+                // Wenn das letzte Bild erreicht ist, handle Death aufrufen
+                const deadImageSrc = 'http://127.0.0.1:5500/img/2.Enemy/3%20Final%20Enemy/Dead/Mesa%20de%20trabajo%202%20copia%2010.png';
+                if (this.img.src === deadImageSrc) {
+                    this.handleDeath();
+                }
+
             } else if (this.isHurt() && !this.isDead()) {
-                if (this.spawnID < 8) {
-                    // nichts tun bei spawn und hurt
-                } else {
+                if (this.spawnID >= 8) {
                     this.playAnimation(this.IMAGES_HURT);
                 }
-
+                // Bei spawnID < 8 nichts tun
             } else {
                 this.checkBossSpawn();
             }
@@ -128,33 +131,44 @@ class Endboss extends MovableObject {
     }
 
     async handleDeath() {
-        // 400 ms warten
+        // 800 ms warten, bevor der Win-Screen Sound startet
         setTimeout(async () => {
-            if (soundManager) soundManager.stopTheme();
-            await soundManager.loadTheme('img/assets/audio/winScreen.mp3');
-            soundManager.playTheme();
+            if (soundManager) {
+                // Aktuelle Musik stoppen
+                soundManager.stopTheme();
+
+                // Win-Screen Musik laden und starten
+                await soundManager.loadTheme('img/assets/audio/winScreen.mp3');
+                soundManager.playTheme();
+            }
         }, 800);
 
+        // Spiel stoppen
         this.world.stopGame();
     }
 
     async checkBossSpawn() {
         if (this.spawnID < 8) {
-            if (!this.audioBossThemePlayed) {
-                if (soundManager) soundManager.stopTheme();
+            // Boss-Theme nur einmal abspielen
+            if (!this.audioBossThemePlayed && soundManager) {
+                soundManager.stopTheme(); // aktuelle Musik stoppen
 
                 await soundManager.loadTheme('img/assets/audio/bossTheme.wav');
                 soundManager.playTheme();
 
-                this.audioBossThemePlayed = true
+                this.audioBossThemePlayed = true;
             }
 
+            // Spawn-Animation abspielen
             this.playAnimation(this.IMAGES_SPAWNING);
-        } else if (this.isAttacking == false) {
+
+        } else if (!this.isAttacking) {
+            // Schwimm-Animation, wenn nicht angreifend
             this.playAnimation(this.IMAGES_SWIMMING);
             this.isSwimming = true;
         }
-        this.spawnID++
+
+        this.spawnID++;
         // console.log(this.spawnID);
     }
 
@@ -164,15 +178,11 @@ class Endboss extends MovableObject {
         if (randomMoveID == 0) {
             // console.log("randomID = 0: " + randomMoveID);
             //enemy attackes and moves fast forward, this.x - 400 and then back
-            this.audioBossBite.pause();
-            this.audioBossBite.currentTime = 0;
-            this.audioBossBite.play();
+            if (soundManager) soundManager.playEffect('img/assets/audio/bossBite.flac', 0);
             this.attackMove();
             this.verticalMoveUp();
         } else if (randomMoveID == 1) {
-            this.audioBossBite.pause();
-            this.audioBossBite.currentTime = 0;
-            this.audioBossBite.play();
+            if (soundManager) soundManager.playEffect('img/assets/audio/bossBite.flac', 0);
             // console.log("randomID = 1: " + randomMoveID);
             this.attackMove();
             //enemy moves this.y down -400 and then back
@@ -182,9 +192,7 @@ class Endboss extends MovableObject {
             //enemy moves this.y down -400 and then back
             this.verticalMoveUp();
         } else if (randomMoveID == 3) {
-            this.audioBossBite.pause();
-            this.audioBossBite.currentTime = 0;
-            this.audioBossBite.play();
+            if (soundManager) soundManager.playEffect('img/assets/audio/bossBite.flac', 0);
             // console.log("randomID = 3: " + randomMoveID);
             //enemy moves this.y down -400 and then back
             this.attackMove();

@@ -16,7 +16,7 @@ class JellyFish extends MovableObject {
     moveInterval = null;
     oscillateInterval = null;
     animationInterval = null;
-    audioEnemyDie = new Audio('img/assets/audio/enemyDie.wav');
+    // audioEnemyDie = new Audio('img/assets/audio/enemyDie.wav');
 
     offset = {
         top: 10,
@@ -94,9 +94,12 @@ class JellyFish extends MovableObject {
     handleDeath() {
         if (!this.hasDied) {
             this.hasDied = true;
-            setTimeout(() => {
-                this.audioEnemyDie.play();
-            }, 400);
+
+            // Sound über SoundManager mit 400ms Verzögerung
+            if (soundManager) {
+                soundManager.playEffect('img/assets/audio/enemyDie.wav', 400);
+            }
+
             clearInterval(this.moveInterval);
             clearInterval(this.oscillateInterval);
             clearInterval(this.animationInterval);

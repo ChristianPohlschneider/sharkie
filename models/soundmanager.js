@@ -3,6 +3,8 @@ class SoundManager {
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.themeBuffer = null;
         this.source = null;
+        this.gainNode = null;
+        this.enabled = false; // Audio standardmäßig AUS
     }
 
     async loadTheme(url) {
@@ -12,19 +14,26 @@ class SoundManager {
     }
 
     async playTheme() {
-        if (!this.themeBuffer) return;
+        if (!this.themeBuffer || !this.enabled) return;
 
-        // AudioContext ggf. resume
+        // AudioContext ggf. wieder aktivieren
         if (this.audioCtx.state === 'suspended') {
             await this.audioCtx.resume();
         }
 
-        this.stopTheme(); // Vorherige Musik stoppen
+        this.stopTheme(); // alte Musik stoppen
 
         this.source = this.audioCtx.createBufferSource();
         this.source.buffer = this.themeBuffer;
         this.source.loop = true;
-        this.source.connect(this.audioCtx.destination);
+
+        // Lautstärkeregler (GainNode)
+        this.gainNode = this.audioCtx.createGain();
+        this.gainNode.gain.value = this.enabled ? 1 : 0;
+
+        this.source.connect(this.gainNode);
+        this.gainNode.connect(this.audioCtx.destination);
+
         this.source.start(0);
     }
 
@@ -33,6 +42,40 @@ class SoundManager {
             this.source.stop(0);
             this.source.disconnect();
             this.source = null;
+        }
+    }
+
+    toggleSound() {
+        this.enabled = !this.enabled;
+
+        // Falls AudioContext pausiert ist, aktivieren
+        if (this.audioCtx.state === "suspended" && this.enabled) {
+            this.audioCtx.resume();
+        }
+
+        // Lautstärke anpassen, wenn Musik läuft
+        if (this.gainNode) {
+            this.gainNode.gain.value = this.enabled ? 1 : 0;
+        }
+
+        return this.enabled;
+    }
+
+    async playEffect(url, delay = 0) {
+        if (!this.enabled) return; // 🔇 Effekt abbrechen, wenn Audio deaktiviert
+
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        const buffer = await this.audioCtx.decodeAudioData(arrayBuffer);
+
+        const source = this.audioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(this.audioCtx.destination);
+
+        if (delay > 0) {
+            source.start(this.audioCtx.currentTime + delay / 1000); // Delay in Sekunden
+        } else {
+            source.start(0);
         }
     }
 }

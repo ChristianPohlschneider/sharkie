@@ -11,12 +11,12 @@ class World {
     shootableObject = [];
     intervalIds = [];
     isCollidingBarrier = false;
-    audioCoin = new Audio('img/assets/audio/coin.wav');
-    audioBubble = new Audio('img/assets/audio/bubble.wav');
-    audioHit = new Audio('img/assets/audio/hit.wav');
-    audioAcid = new Audio('img/assets/audio/acid.wav');
-    audioHurtSharky = new Audio('img/assets/audio/hurtSharky.wav');
-    audioGameTheme = new Audio('img/assets/audio/gameTheme.wav');
+    // audioCoin = new Audio('img/assets/audio/coin.wav');
+    // audioBubble = new Audio('img/assets/audio/bubble.wav');
+    // audioHit = new Audio('img/assets/audio/hit.wav');
+    // audioAcid = new Audio('img/assets/audio/acid.wav');
+    // audioHurtSharky = new Audio('img/assets/audio/hurtSharky.wav');
+    // audioGameTheme = new Audio('img/assets/audio/gameTheme.wav');
 
 
     constructor(canvas, keyboard) {//hand over variables to world
@@ -58,29 +58,22 @@ class World {
     }
 
     checkCollision() {
-        //id: 16
+        // id: 16
         this.setStoppableInterval(() => {
-
             this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy) && this.character.isSlapping && enemy.damageFromFinSlap != 0) {
-
-                    enemy.hit(enemy.damageFromFinSlap);
-                } else if ((this.character.isColliding(enemy) && !this.character.isSlapping && enemy.spawnID >= 8) || (this.character.isColliding(enemy) && enemy.damageFromFinSlap == 0)) {
-                    // this.character.hit(this.character.damageFromCollision);
-                    if (!this.character.isDead()) {
-                        this.audioHurtSharky.pause();
-                        this.audioHurtSharky.currentTime = 0;
-                        this.audioHurtSharky.play();
+                if (this.character.isColliding(enemy)) {
+                    if (this.character.isSlapping && enemy.damageFromFinSlap != 0) {
+                        enemy.hit(enemy.damageFromFinSlap);
+                    } else if (!this.character.isSlapping) {
+                        if (!this.character.isDead()) {
+                            soundManager.playEffect('img/assets/audio/hurtSharky.wav', 0);
+                        }
+                        this.character.hit(enemy.damageDueToCollision);
+                        this.statusBar.setPercentage(this.character.energy);
                     }
-
-                    this.character.hit(enemy.damageDueToCollision);
-
-                    this.statusBar.setPercentage(this.character.energy);
-                    // console log
-                    // console.log(this.character.energy);
                 }
-            })
-        }, 200)
+            });
+        }, 200);
     }
 
     //     checkCollisionBubbleBarrier() {
@@ -131,19 +124,24 @@ class World {
 
                 this.level.enemies.forEach((enemy) => {
                     if (enemy.isColliding(bubble) && enemy.spawnID >= 8) {
-                        if (bubble.img.currentSrc === 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Bubble%20trap/Poisoned%20Bubble%20(for%20whale).png') {
-                            enemy.hit(2 * enemy.damageFromBubble);
-                            this.audioHit.pause();
-                            this.audioHit.currentTime = 0;
-                            this.audioHit.play();
 
-                        } else {
-                            enemy.hit(enemy.damageFromBubble);
-                            this.audioHit.pause();
-                            this.audioHit.currentTime = 0;
-                            this.audioHit.play();
+                        // Nur den Dateinamen extrahieren, nicht den kompletten URL-Pfad
+                        const filename = bubble.img.src.split('/').pop();
+                        // URL-Decoding für Sonderzeichen
+                        const decodedFilename = decodeURIComponent(filename);
+                        const isPoisoned = decodedFilename.includes('Poisoned Bubble');
 
+                        // Schaden berechnen
+                        const damage = isPoisoned ? 2 * enemy.damageFromBubble : enemy.damageFromBubble;
+                        enemy.hit(damage);
+
+                        console.log(decodedFilename, damage);
+
+                        // Sound
+                        if (soundManager) {
+                            soundManager.playEffect('img/assets/audio/hit.wav', 0);
                         }
+
                         hit = true; // Bubble soll gelöscht werden
                     }
                 });
@@ -152,6 +150,8 @@ class World {
             });
         }, 200);
     }
+
+
 
 
     // checkBubbleOutOfRange() {
@@ -194,14 +194,14 @@ class World {
                     this.coinBar.coinCount(coin.coinValue);
                     this.coinBar.setWalletAmount(this.coinBar.wallet);
 
-                    const coinSound = new Audio('img/assets/audio/coin.wav');
-                    coinSound.play().catch(e => {
-                        if (e.name !== "AbortError") console.warn(e);
-                    });
+                    // Sound über SoundManager abspielen
+                    if (soundManager) {
+                        soundManager.playEffect('img/assets/audio/coin.wav', 0); // optional: Delay in ms
+                    }
 
                     coin.shrinkOut();
                     this.level.shrinkingObjects.push(coin);
-                    return false;
+                    return false; // Coin wurde eingesammelt
                 }
                 return true; // Coin bleibt erhalten
             });
@@ -215,15 +215,16 @@ class World {
                     this.poisonBar.poisonCount(poisonBottle.poisonValue);
                     this.poisonBar.setPoisonAmount(this.poisonBar.venomSac);
 
-                    this.audioAcid.pause();
-                    this.audioAcid.currentTime = 0;
-                    this.audioAcid.play();
+                    // Sound über SoundManager abspielen
+                    if (soundManager) {
+                        soundManager.playEffect('img/assets/audio/acid.wav', 0); // optional: Delay in ms
+                    }
 
-                    poisonBottle.shrinkOut(); // Standard-Animation stoppt, Shrink startet
-                    this.level.shrinkingObjects.push(poisonBottle); // 👉 hierhin verschieben
-                    return false;
+                    poisonBottle.shrinkOut(); // Shrink-Animation starten
+                    this.level.shrinkingObjects.push(poisonBottle); // Objekt merken
+                    return false; // PoisonBottle wurde eingesammelt
                 }
-                return true;
+                return true; // PoisonBottle bleibt erhalten
             });
         }, 200);
     }

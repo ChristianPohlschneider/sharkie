@@ -3,9 +3,42 @@ let world;
 let keyboard = new Keyboard();
 let soundManager; // global, damit überall verfügbar
 
+window.addEventListener("DOMContentLoaded", () => {
+    const audioBtn = document.getElementById("audioButton");
+
+    // pointerdown deckt Maus + Touch + Pen ab
+    audioBtn.addEventListener("pointerdown", async (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        await toggleGameSound();
+    });
+});
+
 function init() {
     canvas = document.getElementById('canvas');
 }
+
+async function toggleGameSound() {
+    if (!soundManager) {
+        soundManager = new SoundManager();
+        await soundManager.loadTheme('img/assets/audio/openingTheme.wav');
+    }
+
+    if (soundManager.audioCtx.state === "suspended") {
+        await soundManager.audioCtx.resume();
+    }
+
+    const enabled = soundManager.toggleSound();
+    const btn = document.getElementById("audioButton");
+    btn.textContent = enabled ? "🔊" : "🔇";
+
+    if (enabled) {
+        soundManager.playTheme();
+    } else {
+        soundManager.stopTheme();
+    }
+}
+
 // Funktion zum Starten der Opening-Musik
 async function startAudio(src) {
     if (!soundManager) {
