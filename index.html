@@ -35,16 +35,18 @@
 </head>
 
 <body onload="init()">
-    <h1>Sharkie</h1>
 
-    <canvas id="canvas" width="720" height="480"></canvas>
-    <div class="startScreen" id="startScreen">
-        <img id="startScreenImg" class="startScreenImg" src="./img/3. Background/Mesa de trabajo 1.png"
-            alt="Startscreen">
-        <button type="button" onclick="startGame()" class="startButton" id="startButton">Start Game</button>
-        
+    <div id="fullscreen" class="startScreen" onclick="fullscreen()">
+        <h1>Sharkie</h1>
+        <canvas id="canvas" width="720" height="480"></canvas>
+        <div class="startScreen" id="startScreen">
+            <img id="startScreenImg" class="startScreenImg" src="./img/3. Background/Mesa de trabajo 1.png"
+                alt="Startscreen">
+            <button type="button" onclick="startGame()" class="startButton" id="startButton">Start Game</button>
+            <button class="fullscreenButton" id="fullscreenButton">⛶</button>
+        </div>
+        <button type="button" class="audioButton" id="audioButton">🔇</button>
     </div>
-    <button type="button" class="audioButton" id="audioButton">🔇</button>
 </body>
 
 </html>

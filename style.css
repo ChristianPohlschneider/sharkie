@@ -16,7 +16,6 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
-
 }
 
 h1 {
@@ -38,7 +37,6 @@ h1 {
 .startScreenImg {
     width: 720px;
     height: 484px;
-    /* display: none; */
 }
 
 .startButton {
@@ -73,6 +71,25 @@ h1 {
     background-color: rgb(239, 199, 46);
     border: none;
     border-radius: 15px;
+    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+}
+
+.fullscreenButton {
+    display: inline-block;
+    /* top: 25%; */
+    bottom: 5%;
+    right: 1%;
+    position: absolute;
+    padding: 3px 5px;
+    /* font-size: 24px; */
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgb(239, 199, 46);
+    border: none;
+    border-radius: 5px;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
 }
 
@@ -121,6 +138,14 @@ canvas {
 
 @media only screen and (max-height: 480px) {
     canvas {
+        height: 100vh;
+    }
+
+    .startScreenImg {
+        height: 100vh;
+    }
+
+    .startScreen {
         height: 100vh;
     }
 }

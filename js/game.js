@@ -2,6 +2,7 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let soundManager; // global, damit überall verfügbar
+let fullscreenIsSet = false;
 
 window.addEventListener("DOMContentLoaded", () => {
     const audioBtn = document.getElementById("audioButton");
@@ -98,3 +99,35 @@ window.addEventListener('keydown', (event) => {
 window.addEventListener('keyup', (event) => {
     keyboard[event.code] = false;
 });
+
+function fullscreen() {
+    let fullscreen = document.getElementById('fullscreen');
+    if (fullscreenIsSet == false) {
+        enterFullscreen(fullscreen);
+        document.getElementById('fullscreenButton').innerHTML = '✕';
+        fullscreenIsSet = true;
+    } else if (fullscreenIsSet == true) {
+        exitFullscreen(fullscreen);
+        document.getElementById('fullscreenButton').innerHTML = '⛶';
+        fullscreenIsSet = false;
+    }
+    
+}
+
+function enterFullscreen(element) {
+  if(element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if(element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
+    element.msRequestFullscreen();
+  } else if(element.webkitRequestFullscreen) {  // iOS Safari
+    element.webkitRequestFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if(document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if(document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  }
+}
