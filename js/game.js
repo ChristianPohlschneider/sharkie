@@ -101,33 +101,88 @@ window.addEventListener('keyup', (event) => {
 });
 
 function fullscreen() {
-    let fullscreen = document.getElementById('fullscreen');
-    if (fullscreenIsSet == false) {
+    const fullscreen = document.getElementById('fullscreen');
+    const fullscreenButton = document.getElementById('fullscreenButton');
+
+    if (!fullscreenIsSet) {
         enterFullscreen(fullscreen);
-        document.getElementById('fullscreenButton').innerHTML = '✕';
+        fullscreenButton.innerHTML = '✕';
         fullscreenIsSet = true;
-    } else if (fullscreenIsSet == true) {
+        resizeCanvasWrapperForFullscreen();
+    } else {
         exitFullscreen(fullscreen);
-        document.getElementById('fullscreenButton').innerHTML = '⛶';
+        fullscreenButton.innerHTML = '⛶';
         fullscreenIsSet = false;
+        resetCanvasWrapperSize();
     }
-    
+
+    fullscreenButton.blur();
 }
 
 function enterFullscreen(element) {
-  if(element.requestFullscreen) {
-    element.requestFullscreen();
-  } else if(element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
-    element.msRequestFullscreen();
-  } else if(element.webkitRequestFullscreen) {  // iOS Safari
-    element.webkitRequestFullscreen();
-  }
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+        const canvasWrapper = document.querySelector('.canvasWrapper');
+        const canvas = document.getElementById('canvas');
+        if (document.fullscreenElement) {
+            resizeCanvasWrapperForFullscreen();
+        } else {
+            resetCanvasWrapperSize();
+        }
+    });
 }
 
 function exitFullscreen() {
-  if(document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if(document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  }
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
+}
+
+/** 📏 Canvas + Wrapper proportional an Bildschirm anpassen */
+function resizeCanvasWrapperForFullscreen() {
+    if (!document.fullscreenElement) return; // ❌ JS nur bei Fullscreen
+
+    const aspect = 4 / 3; 
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+
+    let newW, newH;
+
+    if (screenW / screenH > aspect) {
+        newH = screenH;
+        newW = newH * aspect;
+    } else {
+        newW = screenW;
+        newH = newW / aspect;
+    }
+
+    const canvasWrapper = document.querySelector('.canvasWrapper');
+    const canvas = document.getElementById('canvas');
+
+    canvasWrapper.style.width = `${newW}px`;
+    canvasWrapper.style.height = `${newH}px`;
+
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+}
+
+/** 🔄 Wrapper + Canvas zurück auf Standardgröße */
+function resetCanvasWrapperSize() {
+    const canvasWrapper = document.querySelector('.canvasWrapper');
+    const canvas = document.getElementById('canvas');
+
+    canvasWrapper.style.width = '720px';
+    canvasWrapper.style.height = '480px';
+
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
 }

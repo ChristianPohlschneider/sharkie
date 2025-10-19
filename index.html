@@ -37,19 +37,23 @@
 <body onload="init()">
 
 
-    <div id="fullscreen" class="startScreen">
-        
-        <canvas id="canvas" width="720" height="480"></canvas>
-        <div class="startScreen" id="startScreen">
-            <div id="headLine" class="headLine">Sharkie</div>
-            <img id="startScreenImg" class="startScreenImg" src="./img/3. Background/Mesa de trabajo 1.png"
-                alt="Startscreen">
-            <button type="button" onclick="startGame()" class="startButton" id="startButton">Start Game</button>
+    <div id="fullscreen" class="fullScreen">
+        <div class="canvasWrapper">
+
+            <canvas id="canvas" width="720" height="480"></canvas>
+
             <div class="settingsDiv">
                 <button class="infoButton" id="infoButton" onclick="">i</button>
                 <button type="button" class="audioButton" id="audioButton">🔇</button>
                 <button class="fullscreenButton" id="fullscreenButton" onclick="fullscreen()">⛶</button>
             </div>
+        </div>
+
+        <div class="startScreen" id="startScreen">
+            <div id="headLine" class="headLine">Sharkie</div>
+            <img id="startScreenImg" class="startScreenImg" src="./img/3. Background/Mesa de trabajo 1.png"
+                alt="Startscreen">
+            <button type="button" onclick="startGame()" class="startButton" id="startButton">Start Game</button>
         </div>
 
     </div>
