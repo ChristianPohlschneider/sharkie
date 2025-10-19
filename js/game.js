@@ -73,22 +73,6 @@ async function startGame() {
     setinitialEnemies(world);
 }
 
-// async function playOpeningTheme() {
-//     this.soundManager = new SoundManager();
-//     await this.soundManager.loadTheme('img/assets/audio/openingTheme.wav');
-//     this.soundManager.playTheme();
-// }
-
-// function startGame() {
-//     document.getElementById('startScreen').style.display = "none";
-//     world = new World(canvas, keyboard);
-//     this.world = world;
-//     setinitialEnemies(world);
-
-//     // bei Neustart wieder auf false setzen:
-//     // this.deathSoundPlayed = false;
-// }
-
 window.addEventListener('keydown', (event) => {
     keyboard[event.code] = true;
     //event.code: Space, event.keyCode: 32
@@ -101,42 +85,27 @@ window.addEventListener('keyup', (event) => {
 });
 
 function fullscreen() {
-    const fullscreen = document.getElementById('fullscreen');
-    const fullscreenButton = document.getElementById('fullscreenButton');
-
-    if (!fullscreenIsSet) {
+    let fullscreen = document.getElementById('fullscreen');
+    if (fullscreenIsSet == false) {
         enterFullscreen(fullscreen);
-        fullscreenButton.innerHTML = '✕';
+        document.getElementById('fullscreenButton').innerHTML = '✕';
         fullscreenIsSet = true;
-        resizeCanvasWrapperForFullscreen();
-    } else {
+    } else if (fullscreenIsSet == true) {
         exitFullscreen(fullscreen);
-        fullscreenButton.innerHTML = '⛶';
+        document.getElementById('fullscreenButton').innerHTML = '⛶';
         fullscreenIsSet = false;
-        resetCanvasWrapperSize();
     }
-
     fullscreenButton.blur();
 }
 
 function enterFullscreen(element) {
     if (element.requestFullscreen) {
         element.requestFullscreen();
-    } else if (element.webkitRequestFullscreen) {
-        element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) {
+    } else if (element.msRequestFullscreen) { // for IE11 (remove June 15, 2022) 
         element.msRequestFullscreen();
+    } else if (element.webkitRequestFullscreen) { //iOS Safari 
+        element.webkitRequestFullscreen();
     }
-
-    document.addEventListener('fullscreenchange', () => {
-        const canvasWrapper = document.querySelector('.canvasWrapper');
-        const canvas = document.getElementById('canvas');
-        if (document.fullscreenElement) {
-            resizeCanvasWrapperForFullscreen();
-        } else {
-            resetCanvasWrapperSize();
-        }
-    });
 }
 
 function exitFullscreen() {
@@ -147,42 +116,20 @@ function exitFullscreen() {
     }
 }
 
-/** 📏 Canvas + Wrapper proportional an Bildschirm anpassen */
-function resizeCanvasWrapperForFullscreen() {
-    if (!document.fullscreenElement) return; // ❌ JS nur bei Fullscreen
-
-    const aspect = 4 / 3; 
-    const screenW = window.innerWidth;
-    const screenH = window.innerHeight;
-
-    let newW, newH;
-
-    if (screenW / screenH > aspect) {
-        newH = screenH;
-        newW = newH * aspect;
+function checkOrientation() {
+    const warning = document.getElementById('rotateWarning');
+    
+    // Prüfe, ob Hochformat aktiv ist
+    if (window.innerHeight > window.innerWidth) {
+        warning.style.display = 'flex'; // Overlay zeigen
     } else {
-        newW = screenW;
-        newH = newW / aspect;
+        warning.style.display = 'none'; // Overlay ausblenden
     }
-
-    const canvasWrapper = document.querySelector('.canvasWrapper');
-    const canvas = document.getElementById('canvas');
-
-    canvasWrapper.style.width = `${newW}px`;
-    canvasWrapper.style.height = `${newH}px`;
-
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
 }
 
-/** 🔄 Wrapper + Canvas zurück auf Standardgröße */
-function resetCanvasWrapperSize() {
-    const canvasWrapper = document.querySelector('.canvasWrapper');
-    const canvas = document.getElementById('canvas');
+// Reagiere auf Drehung oder Größenänderung
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', checkOrientation);
 
-    canvasWrapper.style.width = '720px';
-    canvasWrapper.style.height = '480px';
-
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-}
+// Beim Laden prüfen
+window.addEventListener('load', checkOrientation);

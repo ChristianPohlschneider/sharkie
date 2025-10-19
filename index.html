@@ -38,16 +38,16 @@
 
 
     <div id="fullscreen" class="fullScreen">
-        <div class="canvasWrapper">
+        <!-- <div class="canvasWrapper"> -->
 
-            <canvas id="canvas" width="720" height="480"></canvas>
+        <canvas id="canvas" width="720" height="480"></canvas>
 
-            <div class="settingsDiv">
-                <button class="infoButton" id="infoButton" onclick="">i</button>
-                <button type="button" class="audioButton" id="audioButton">🔇</button>
-                <button class="fullscreenButton" id="fullscreenButton" onclick="fullscreen()">⛶</button>
-            </div>
+        <div class="settingsDiv">
+            <button class="infoButton" id="infoButton" onclick="">i</button>
+            <button type="button" class="audioButton" id="audioButton">🔇</button>
+            <button class="fullscreenButton" id="fullscreenButton" onclick="fullscreen()">⛶</button>
         </div>
+        <!-- </div> -->
 
         <div class="startScreen" id="startScreen">
             <div id="headLine" class="headLine">Sharkie</div>
@@ -56,6 +56,13 @@
             <button type="button" onclick="startGame()" class="startButton" id="startButton">Start Game</button>
         </div>
 
+    </div>
+
+    <div id="rotateWarning" class="rotateWarning">
+        <div class="rotateContent">
+            <img src="./img/assets/img/rotate-icon.svg" alt="Rotate device" class="rotateIcon">
+            <p>Bitte drehe dein Gerät ins Querformat, um weiterzuspielen.</p>
+        </div>
     </div>
 </body>
 
