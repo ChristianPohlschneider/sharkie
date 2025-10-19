@@ -18,10 +18,17 @@ body {
     background-size: 100% 100%;
 }
 
-h1 {
-    font-size: 70px;
+.headLine {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: clamp(24px, 10vw, 100px);
+    top: 0%;
+    font-size: clamp(24px, 10vw, 100px);
     letter-spacing: 3px;
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
 }
 
 .startScreen {
@@ -40,8 +47,11 @@ h1 {
 }
 
 .startButton {
-    display: inline-block;
-    right: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    right: 15%;
     position: absolute;
     padding: 15px 25px;
     font-size: 24px;
@@ -56,44 +66,85 @@ h1 {
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
 }
 
-.audioButton {
-    display: inline-block;
-    top: 1%;
-    right: 1%;
+.settingsDiv {
+    display: flex;
     position: absolute;
-    padding: 15px 25px;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    position: absolute;
+    gap: 10px;
+    height: 50px;
+    bottom: 0%;
+    right: 0%;
+    padding-right: 10px;
+    ;
+}
+
+.audioButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 35px;
+    padding: 3px 3px;
     font-size: 24px;
     cursor: pointer;
     text-align: center;
+    line-height: 30px;
     text-decoration: none;
     outline: none;
     color: #fff;
     background-color: rgb(239, 199, 46);
     border: none;
-    border-radius: 15px;
+    border-radius: 50%;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
 }
 
 .fullscreenButton {
-    display: inline-block;
-    /* top: 25%; */
-    bottom: 5%;
-    right: 1%;
-    position: absolute;
-    padding: 3px 5px;
-    /* font-size: 24px; */
-    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 35px;
     text-align: center;
+    line-height: 30px;
+    padding: 3px 3px;
+    font-size: 24px;
+    cursor: pointer;
     text-decoration: none;
     outline: none;
     color: #fff;
     background-color: rgb(239, 199, 46);
     border: none;
-    border-radius: 5px;
+    border-radius: 50%;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
 }
 
-.startButton:hover {
+.infoButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 35px;
+    text-align: center;
+    line-height: 30px;
+    padding: 3px 3px;
+    font-size: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgb(239, 199, 46);
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+}
+
+.startButton:hover,
+.audioButton:hover,
+.fullscreenButton:hover {
     background-color: rgb(220, 190, 70)
 }
 
@@ -106,7 +157,6 @@ h1 {
 canvas {
     background-color: black;
     display: block;
-    margin-bottom: 170px;
 }
 
 @media only screen and (max-width: 720px) {
@@ -147,5 +197,23 @@ canvas {
 
     .startScreen {
         height: 100vh;
+    }
+
+}
+
+@media (max-width: 500px) {
+    .startButton {
+        padding: 10px 20px;
+        font-size: 18px;
+        border-radius: 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    .startButton {
+        right: 12%;
+        padding: 8px 18px;
+        font-size: 16px;
+        border-radius: 12px;
     }
 }
