@@ -74,6 +74,17 @@ async function startGame() {
 }
 
 window.addEventListener('keydown', (event) => {
+        // Unterdrücke Standardaktionen für deine Steuer-Tasten
+    const keysToPrevent = [
+        "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown",
+        "KeyW", "KeyA", "KeyS", "KeyD",
+        "Space", "ControlLeft", "ControlRight"
+    ];
+
+    if (keysToPrevent.includes(event.code)) {
+        event.preventDefault(); // verhindert Textmarkierung, Scrollen, etc.
+    }
+    
     keyboard[event.code] = true;
     toggleButtonActive(event.code, true);
     //event.code: Space, event.keyCode: 32
