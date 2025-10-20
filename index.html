@@ -38,7 +38,7 @@
 
 
     <div id="fullscreen" class="fullScreen">
-        <!-- <div class="canvasWrapper"> -->
+
 
         <canvas id="canvas" width="720" height="480"></canvas>
 
@@ -47,7 +47,29 @@
             <button type="button" class="audioButton" id="audioButton">🔇</button>
             <button class="fullscreenButton" id="fullscreenButton" onclick="fullscreen()">⛶</button>
         </div>
-        <!-- </div> -->
+
+        <div id="mobileKeys" class="mobileKeys">
+            <div class="arrowKeys">
+                <button id="arrowLeft" class="arrowKey arrowLeft">
+                    <img src="img/assets/img/arrow.png" alt="arrow key">
+                </button>
+                <div class="arrowUpDownDiv">
+                    <button id="arrowUp" class="arrowKey arrowUp">
+                        <img src="img/assets/img/arrow.png" alt="arrow key">
+                    </button>
+                    <button id="arrowDown" class="arrowKey arrowDown">
+                        <img src="img/assets/img/arrow.png" alt="arrow key">
+                    </button>
+                </div>
+                <button id="arrowRight" class="arrowKey arrowRight">
+                    <img src="img/assets/img/arrow.png" alt="arrow key">
+                </button>
+            </div>
+            <div id="actionKeys" class="actionkeys">
+                <button id="spaceKey" class="spaceKey">⎵</button>
+                <button id="strgKey" class="arrowKey strgKey">Strg</button>
+            </div>
+        </div>
 
         <div class="startScreen" id="startScreen">
             <div id="headLine" class="headLine">Sharkie</div>

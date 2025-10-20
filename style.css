@@ -24,7 +24,7 @@ body {
     width: 100%;
     height: clamp(24px, 10vw, 100px);
     top: 0%;
-    font-size: clamp(24px, 10vw, 100px);
+    font-size: clamp(24px, 8vw, 80px);
     letter-spacing: 3px;
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
     align-items: center;
@@ -87,7 +87,7 @@ body {
     position: absolute;
     gap: 10px;
     height: 50px;
-    bottom: 0%;
+    top: 0%;
     right: 0%;
     padding-right: 10px;
     z-index: 10;
@@ -220,9 +220,113 @@ canvas {
     animation: rotatePhone 2s infinite ease-in-out;
 }
 
+.mobileKeys {
+    display: flex;
+    align-items: flex-end;
+    position: absolute;
+    width: 90%;
+    bottom: 5%;
+    left: 5%;
+    justify-content: space-between;
+}
+
+.arrowKeys {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.arrowUpDownDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+.arrowLeft {
+    transform: rotate(-180deg);
+}
+
+.arrowUp {
+    transform: rotate(-90deg);
+}
+
+.arrowDown {
+    transform: rotate(+90deg);
+}
+
+.arrowRight {}
+
+
+
+.strgKey {}
+
+.arrowKey {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10vw;
+    width: 10vw;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 70px;
+    max-height: 70px;
+    padding: 15px 15px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgb(239, 199, 46);
+    border: 2px solid white;
+    border-radius: 15px;
+    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+    z-index: 10;
+}
+
+.arrowKey img {
+    width: 32px;
+    height: 32px;
+}
+
+.actionkeys {
+    display: flex;
+    gap: 30px;
+}
+
+.spaceKey {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10vw;
+    width: 15vw;
+    min-width: 60px;
+    min-height: 40px;
+    max-width: 120px;
+    max-height: 70px;
+    padding: 15px 15px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgb(239, 199, 46);
+    border: 2px solid white;
+    border-radius: 15px;
+    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+    z-index: 10;
+}
+
 @keyframes rotatePhone {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(90deg); }
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(90deg);
+    }
 }
 
 @media only screen and (max-width: 720px) {
@@ -275,10 +379,51 @@ canvas {
 }
 
 @media (max-width: 500px) {
+.settingsDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 10px;
+}
+
+.infoButton {
+    font-size: 16px;
+    height: 22px;
+    width: 22px;
+}
+
+.audioButton {
+    font-size: 16px;
+    height: 22px;
+    width: 22px;
+}
+
+.fullscreenButton {
+    font-size: 16px;
+    height: 22px;
+    width: 22px;
+}
+}
+
+@media (max-width: 500px) {
     .startButton {
         padding: 10px 20px;
         font-size: 18px;
         border-radius: 12px;
+    }
+
+    .arrowKey {
+        font-size: 18px;
+    }
+
+    .arrowKey img {
+        width: 20px;
+        height: 20px;
+        border-radius: 12px;
+    }
+
+    .actionkeys {
+        gap: 15px;
     }
 }
 
