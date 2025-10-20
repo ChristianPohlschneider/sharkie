@@ -253,12 +253,6 @@ canvas {
     transform: rotate(+90deg);
 }
 
-.arrowRight {}
-
-
-
-.strgKey {}
-
 .arrowKey {
     display: flex;
     align-items: center;
@@ -280,6 +274,7 @@ canvas {
     border: 2px solid white;
     border-radius: 15px;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+    opacity: 0.7; /* 70% sichtbar */
     z-index: 10;
 }
 
@@ -314,7 +309,75 @@ canvas {
     border: 2px solid white;
     border-radius: 15px;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+    opacity: 0.7; /* 70% sichtbar */
     z-index: 10;
+}
+
+.arrowKey:hover,
+.spaceKey:hover {
+    background-color: rgb(220, 190, 70)
+}
+
+/* .arrowRight:active {
+    background-color: rgb(64, 73, 166);
+    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
+    transform: translateY(4px);
+}
+
+.arrowLeft:active {
+    background-color: rgb(64, 73, 166);
+    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
+    transform: translateY(4px);
+    transform: rotate(+180deg);
+}
+
+.arrowUp:active {
+    background-color: rgb(64, 73, 166);
+    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
+    transform: translateY(4px);
+    transform: rotate(-90deg);
+}
+
+.arrowDown:active {
+    background-color: rgb(64, 73, 166);
+    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
+    transform: translateY(4px);
+    transform: rotate(+90deg);
+}
+
+.strgKey:active {
+    background-color: rgb(64, 73, 166);
+    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
+    transform: translateY(4px);
+}
+
+.spaceKey:active {
+    background-color: rgb(64, 73, 166);
+    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
+    transform: translateY(4px);
+} */
+
+.arrowRight.active,
+.arrowLeft.active,
+.arrowUp.active,
+.arrowDown.active,
+.strgKey.active,
+.spaceKey.active {
+    background-color: rgb(64, 73, 166);
+    box-shadow: 0px 0px 9px 9px rgba(64, 73, 166, 0.1);
+    transform: translateY(4px);
+}
+
+.arrowLeft.active {
+    transform: translateY(4px) rotate(180deg);
+}
+
+.arrowUp.active {
+    transform: translateY(4px) rotate(-90deg);
+}
+
+.arrowDown.active {
+    transform: translateY(4px) rotate(90deg);
 }
 
 @keyframes rotatePhone {
@@ -379,30 +442,30 @@ canvas {
 }
 
 @media (max-width: 500px) {
-.settingsDiv {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 10px;
-}
+    .settingsDiv {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 10px;
+    }
 
-.infoButton {
-    font-size: 16px;
-    height: 22px;
-    width: 22px;
-}
+    .infoButton {
+        font-size: 16px;
+        height: 22px;
+        width: 22px;
+    }
 
-.audioButton {
-    font-size: 16px;
-    height: 22px;
-    width: 22px;
-}
+    .audioButton {
+        font-size: 16px;
+        height: 22px;
+        width: 22px;
+    }
 
-.fullscreenButton {
-    font-size: 16px;
-    height: 22px;
-    width: 22px;
-}
+    .fullscreenButton {
+        font-size: 16px;
+        height: 22px;
+        width: 22px;
+    }
 }
 
 @media (max-width: 500px) {

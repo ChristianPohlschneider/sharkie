@@ -75,14 +75,96 @@ async function startGame() {
 
 window.addEventListener('keydown', (event) => {
     keyboard[event.code] = true;
+    toggleButtonActive(event.code, true);
     //event.code: Space, event.keyCode: 32
-    // console.log(event.code);
+    //console.log(event.code);
 
 });
 
 window.addEventListener('keyup', (event) => {
     keyboard[event.code] = false;
+    toggleButtonActive(event.code, false);
 });
+
+window.addEventListener("load", () => {
+    initTouchControls();
+});
+
+function initTouchControls() {
+    const buttons = {
+        ArrowUp: document.getElementById("arrowUp"),
+        ArrowDown: document.getElementById("arrowDown"),
+        ArrowLeft: document.getElementById("arrowLeft"),
+        ArrowRight: document.getElementById("arrowRight"),
+        Space: document.getElementById("spaceKey"),
+        ControlLeft: document.getElementById("strgKey"),
+        ControlRight: document.getElementById("strgKey"),
+        KeyW: document.getElementById("arrowUp"),
+        KeyS: document.getElementById("arrowDown"),
+        KeyA: document.getElementById("arrowLeft"),
+        KeyD: document.getElementById("arrowRight"),
+    };
+
+    // Hilfsfunktion: Button gedrückt
+    const press = (key) => {
+        keyboard[key] = true;
+    };
+
+    // Hilfsfunktion: Button losgelassen
+    const release = (key) => {
+        keyboard[key] = false;
+    };
+
+    // Für jedes Element Touch- und Mausklick-Events hinzufügen
+    Object.entries(buttons).forEach(([key, btn]) => {
+        if (!btn) return;
+
+        // Touchstart → gedrückt
+        btn.addEventListener("touchstart", (e) => {
+            e.preventDefault(); // verhindert Scrollen auf Mobilgeräten
+            press(key);
+        });
+
+        // Touchend → losgelassen
+        btn.addEventListener("touchend", (e) => {
+            e.preventDefault();
+            release(key);
+        });
+
+        // Optional: auch Mausunterstützung (z. B. Desktop-Test)
+        btn.addEventListener("mousedown", () => press(key));
+        btn.addEventListener("mouseup", () => release(key));
+        btn.addEventListener("mouseleave", () => release(key)); // falls Maus rausgeht
+    });
+}
+
+function toggleButtonActive(code, isActive) {
+    const keyMap = {
+        ArrowLeft: "arrowLeft",
+        ArrowRight: "arrowRight",
+        ArrowUp: "arrowUp",
+        ArrowDown: "arrowDown",
+        Space: "spaceKey",
+        ControlLeft: "strgKey",
+        ControlRight: "strgKey",
+        KeyW: "arrowUp",
+        KeyS: "arrowDown",
+        KeyA: "arrowLeft",
+        KeyD: "arrowRight"
+    };
+
+    const btnId = keyMap[code];
+    if (!btnId) return;
+
+    const button = document.getElementById(btnId);
+    if (!button) return;
+
+    if (isActive) {
+        button.classList.add("active");
+    } else {
+        button.classList.remove("active");
+    }
+}
 
 function fullscreen() {
     let fullscreen = document.getElementById('fullscreen');

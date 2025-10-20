@@ -134,8 +134,8 @@ class World {
                         // Schaden berechnen
                         const damage = isPoisoned ? 2 * enemy.damageFromBubble : enemy.damageFromBubble;
                         enemy.hit(damage);
-
-                        console.log(decodedFilename, damage);
+                        //consoleLog
+                        // console.log(decodedFilename, damage);
 
                         // Sound
                         if (soundManager) {

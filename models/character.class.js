@@ -149,6 +149,9 @@ class Character extends MovableObject {
 
         this.world.setStoppableInterval(() => {
 
+            // Bewegung nur erlauben, wenn Sharky nicht tot ist
+            if (this.isDead()) return;
+
             this.world.checkCollisionWithBarrier();
 
             const leftScreenLimit = this.cameraFrozen ? freezePoint - 130 : -50;
@@ -157,9 +160,9 @@ class Character extends MovableObject {
             if ((this.world.keyboard.ArrowRight || this.world.keyboard.KeyD)
                 && this.x < rightScreenLimit
                 && (!this.world.isCollidingBarrier || this.otherDirection)) {
-                if (this.world.keyboard.ShiftLeft) {
-                    this.speed = 5;
-                }
+                // if (this.world.keyboard.ShiftLeft) {
+                //     this.speed = 5;
+                // }
                 this.x += this.speed;
 
                 if (!this.cameraFrozen && this.x >= freezePoint) {
@@ -185,9 +188,9 @@ class Character extends MovableObject {
             if ((this.world.keyboard.ArrowLeft || this.world.keyboard.KeyA)
                 && this.x > leftScreenLimit
                 && (!this.world.isCollidingBarrier || !this.otherDirection)) {
-                if (this.world.keyboard.ShiftLeft) {
-                    this.speed = 5;
-                }
+                // if (this.world.keyboard.ShiftLeft) {
+                //     this.speed = 5;
+                // }
                 this.x -= this.speed;
 
                 // Kamera-Logik bleibt unverändert, wenn eingefroren
@@ -251,7 +254,7 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isShooting) {
                 // Shoot-Loop übernimmt Animation, nichts hier
-            } else if (this.world.keyboard.KeyC && !this.isHurt() && !this.isDead()) {
+            } else if ((this.world.keyboard.ControlLeft || this.world.keyboard.ControlRight) && !this.isHurt() && !this.isDead()) {
                 // Fin Slap placeholder
             } else if (this.world.keyboard.ArrowRight || this.world.keyboard.ArrowLeft ||
                 this.world.keyboard.ArrowUp || this.world.keyboard.ArrowDown ||
@@ -304,7 +307,7 @@ class Character extends MovableObject {
             }
 
             // Fin Slap
-            if (this.world.keyboard.KeyC && !this.isHurt() && !this.isDead()) {
+            if ((this.world.keyboard.ControlLeft || this.world.keyboard.ControlRight) && !this.isHurt() && !this.isDead()) {
                 if (!this.isSlapping) {
                     this.isSlapping = true;
                     this.slapAnimationFrame = 0;

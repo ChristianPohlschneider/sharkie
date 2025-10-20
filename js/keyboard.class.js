@@ -4,7 +4,8 @@ class Keyboard {
   ArrowUp = false;
   ArrowDown = false;
   Space = false;
-  ShiftLeft = false;
+  ControlLeft = false;
+  ControlRight = false;
   KeyC = false;
   KeyW = false;
   KeyS = false;
