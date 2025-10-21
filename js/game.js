@@ -15,6 +15,27 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const infoButton = document.getElementById('infoButton');
+    const infoOverlay = document.getElementById('infoOverlay');
+    const closeInfo = document.getElementById('closeInfo');
+
+    infoButton.addEventListener('click', () => {
+        infoOverlay.classList.remove('hidden');
+    });
+
+    closeInfo.addEventListener('click', () => {
+        infoOverlay.classList.add('hidden');
+    });
+
+    // Optional: Overlay schließen, wenn man außerhalb klickt
+    infoOverlay.addEventListener('click', (e) => {
+        if (e.target === infoOverlay) {
+            infoOverlay.classList.add('hidden');
+        }
+    });
+});
+
 function init() {
     canvas = document.getElementById('canvas');
 }

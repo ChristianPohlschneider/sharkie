@@ -156,14 +156,16 @@ body {
 .startButton:hover,
 .audioButton:hover,
 .fullscreenButton:hover,
-.infoButton:hover {
+.infoButton:hover,
+.closeInfo:hover {
     background-color: rgb(220, 190, 70)
 }
 
 .startButton:active,
 .audioButton:active,
 .fullscreenButton:active,
-.infoButton:active {
+.infoButton:active,
+.closeInfo:active {
     background-color: rgb(64, 73, 166);
     box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
     transform: translateY(4px);
@@ -274,8 +276,7 @@ canvas {
     border: 2px solid white;
     border-radius: 15px;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
-    opacity: 0.7; /* 70% sichtbar */
-    /* z-index: 10; */
+    opacity: 0.7;
 }
 
 .arrowKey img {
@@ -309,7 +310,8 @@ canvas {
     border: 2px solid white;
     border-radius: 15px;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
-    opacity: 0.7; /* 70% sichtbar */
+    opacity: 0.7;
+    /* 70% sichtbar */
     /* z-index: 10; */
 }
 
@@ -317,45 +319,6 @@ canvas {
 .spaceKey:hover {
     background-color: rgb(220, 190, 70)
 }
-
-/* .arrowRight:active {
-    background-color: rgb(64, 73, 166);
-    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
-    transform: translateY(4px);
-}
-
-.arrowLeft:active {
-    background-color: rgb(64, 73, 166);
-    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
-    transform: translateY(4px);
-    transform: rotate(+180deg);
-}
-
-.arrowUp:active {
-    background-color: rgb(64, 73, 166);
-    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
-    transform: translateY(4px);
-    transform: rotate(-90deg);
-}
-
-.arrowDown:active {
-    background-color: rgb(64, 73, 166);
-    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
-    transform: translateY(4px);
-    transform: rotate(+90deg);
-}
-
-.strgKey:active {
-    background-color: rgb(64, 73, 166);
-    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
-    transform: translateY(4px);
-}
-
-.spaceKey:active {
-    background-color: rgb(64, 73, 166);
-    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
-    transform: translateY(4px);
-} */
 
 .arrowRight.active,
 .arrowLeft.active,
@@ -378,6 +341,110 @@ canvas {
 
 .arrowDown.active {
     transform: translateY(4px) rotate(90deg);
+}
+
+.infoOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    overflow: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.infoContent {
+    background: rgb(59, 175, 209);
+    border-radius: 20px;
+    padding: 0px 40px 25px 40px;
+    max-width: 400px;
+    max-height: 88vh;
+    margin-top: 5px;
+    overflow-y: auto;
+    text-align: left;
+    color: rgb(27, 20, 100);
+    border: 2px solid white;
+    border-radius: 15px;
+    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.infoContent h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.infoContent ul {
+    list-style: none;
+    padding: 0;
+}
+
+.infoContent li {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 8px 0;
+    font-size: 1rem;
+}
+
+.infoContent b {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.closeInfo {
+    display: block;
+    margin: 18px auto 0;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    background-color: rgb(239, 199, 46);
+    border: 2px solid white;
+    transition: background 0.2s;
+}
+
+.arrowKeyInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+    padding: 15px 15px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgb(239, 199, 46);
+    border: 2px solid white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+}
+
+.arrowKeyInfo img {
+    width: 20px;
+    height: 20px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 @keyframes rotatePhone {
@@ -439,6 +506,23 @@ canvas {
         height: 100vh;
     }
 
+    .infoOverlay {
+        align-items: flex-start;
+    }
+
+    .infoContent {
+        overflow-y: auto;
+    }
+
+    
+    .infoContent ul li {
+        font-size: 0.9rem;
+    }
+
+    .closeInfo {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 500px) {
@@ -496,5 +580,9 @@ canvas {
         padding: 8px 18px;
         font-size: 16px;
         border-radius: 12px;
+    }
+
+    .infoContent ul li {
+        font-size: 12px;
     }
 }

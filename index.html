@@ -39,7 +39,6 @@
 
     <div id="fullscreen" class="fullScreen">
 
-
         <canvas id="canvas" width="720" height="480"></canvas>
 
         <div class="settingsDiv">
@@ -67,7 +66,7 @@
             </div>
             <div id="actionKeys" class="actionkeys">
                 <button id="spaceKey" class="spaceKey">⎵</button>
-                <button id="strgKey" class="arrowKey strgKey">Strg</button>
+                <button id="strgKey" class="arrowKey strgKey">Ctrl</button>
             </div>
         </div>
 
@@ -77,15 +76,54 @@
                 alt="Startscreen">
             <button type="button" onclick="startGame()" class="startButton" id="startButton">Start Game</button>
         </div>
+    </div>
 
+    <div id="infoOverlay" class="infoOverlay hidden">
+        <div class="infoContent">
+            <h2>Controls</h2>
+            <ul>
+                <li><button class="arrowKeyInfo arrowLeft">
+                        <img src="img/assets/img/arrow.png" alt="arrow key">
+                    </button><b>Arrow Left: </b> &nbsp; Move left</li>
+                <li><button class="arrowKeyInfo arrowRight">
+                        <img src="img/assets/img/arrow.png" alt="arrow key">
+                    </button>
+                    <b>Arrow Right:</b> &nbsp; Move right
+                </li>
+                <li><button class="arrowKeyInfo arrowUp">
+                        <img src="img/assets/img/arrow.png" alt="arrow key">
+                    </button>
+                    <b>Arrow Up:</b> &nbsp; Swim up
+                </li>
+                <li><button class="arrowKeyInfo arrowDown">
+                        <img src="img/assets/img/arrow.png" alt="arrow key">
+                    </button>
+                    <b>Arrow Down:</b> &nbsp; Swim down
+                </li>
+                <li><button class="arrowKeyInfo">⎵</button>
+                    <b>Space:</b> &nbsp; Attack
+                </li>
+                <li><button class="arrowKeyInfo">Ctrl</button>
+                    <b>Ctrl:</b> &nbsp; Bubble attack
+                </li>
+                <li><button type="button" class="audioButton">🔇</button>
+                    <b>Audio:</b> &nbsp; Toggle sound on/off
+                </li>
+                <li><button class="fullscreenButton">⛶</button>
+                    <b>Fullscreen:</b> &nbsp; Toggle fullscreen
+                </li>
+            </ul>
+            <button id="closeInfo" class="closeInfo">Close</button>
+        </div>
     </div>
 
     <div id="rotateWarning" class="rotateWarning">
         <div class="rotateContent">
             <img src="./img/assets/img/rotate-icon.svg" alt="Rotate device" class="rotateIcon">
-            <p>Bitte drehe dein Gerät ins Querformat, um weiterzuspielen.</p>
+            <p>Please rotate your device to landscape mode to continue playing.</p>
         </div>
     </div>
+
 </body>
 
 </html>
