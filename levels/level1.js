@@ -138,7 +138,7 @@ function setFinalEnemie(world, bossSpawnCoordinateX) {
 }
 
 function deleteOtherEnemies(world, enemyDeleteCoordinateX) {
-    this.world.setStoppableInterval(() => {
+    world.setStoppableInterval(() => {
         world.level.enemies = world.level.enemies.filter(
             enemy => enemy.x >= enemyDeleteCoordinateX
         );

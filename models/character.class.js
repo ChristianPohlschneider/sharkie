@@ -140,8 +140,6 @@ class Character extends MovableObject {
         this.animate();
     }
 
-
-
     animate() {
 
         const freezePoint = this.world.level.level_end_x - 450;
@@ -249,6 +247,7 @@ class Character extends MovableObject {
                 if (this.img.src == 'http://127.0.0.1:5500/img/1.Sharkie/6.dead/1.Poisoned/12.png') {
                     this.world.stopGame();
                     clearInterval(this.animationInterval);
+                    showLoseOverlay();
                 }
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);

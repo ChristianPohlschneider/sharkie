@@ -94,8 +94,52 @@ async function startGame() {
     setinitialEnemies(world);
 }
 
+
+function resetLevel1() {
+    // Hintergrundobjekte komplett neu initialisieren
+    level1.backgroundObjects = [
+        new BackgroundObject('img/3. Background/Layers/5. Water/L1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/2. Floor/L1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
+
+        new BackgroundObject('img/3. Background/Layers/5. Water/L2.png', 720),
+        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L2.png', 720),
+        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L2.png', 720),
+        new BackgroundObject('img/3. Background/Layers/2. Floor/L2.png', 720),
+        new BackgroundObject('img/3. Background/Layers/1. Light/2.png', 720),
+
+        new BackgroundObject('img/3. Background/Layers/5. Water/L2.png', -720),
+        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L2.png', -720),
+        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L2.png', -720),
+        new BackgroundObject('img/3. Background/Layers/2. Floor/L2.png', -720),
+        new BackgroundObject('img/3. Background/Layers/1. Light/2.png', -720),
+
+        new BackgroundObject('img/3. Background/Layers/5. Water/L1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/2. Floor/L1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
+    ];
+
+    // Coins & Poison Bottles zurücksetzen
+    level1.coins.forEach(c => c.isCollected = false);
+    level1.poisonBottles.forEach(b => b.isCollected = false);
+    level1.shrinkingObjects = [];
+
+    // Kamera & Frame-Zustände zurücksetzen
+    if (world) {
+        world.camera_x = 0;
+        world.ctx.translate(0, 0);
+    }
+}
+
+
+
+
 window.addEventListener('keydown', (event) => {
-        // Unterdrücke Standardaktionen für deine Steuer-Tasten
+    // Unterdrücke Standardaktionen für deine Steuer-Tasten
     const keysToPrevent = [
         "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown",
         "KeyW", "KeyA", "KeyS", "KeyD",
@@ -105,7 +149,7 @@ window.addEventListener('keydown', (event) => {
     if (keysToPrevent.includes(event.code)) {
         event.preventDefault(); // verhindert Textmarkierung, Scrollen, etc.
     }
-    
+
     keyboard[event.code] = true;
     toggleButtonActive(event.code, true);
     //event.code: Space, event.keyCode: 32
@@ -232,7 +276,7 @@ function exitFullscreen() {
 
 function checkOrientation() {
     const warning = document.getElementById('rotateWarning');
-    
+
     // Prüfe, ob Hochformat aktiv ist
     if (window.innerHeight > window.innerWidth) {
         warning.style.display = 'flex'; // Overlay zeigen
@@ -247,3 +291,49 @@ window.addEventListener('orientationchange', checkOrientation);
 
 // Beim Laden prüfen
 window.addEventListener('load', checkOrientation);
+
+function showWinOverlay() {
+    setTimeout(() => {
+        document.getElementById('winOverlay').classList.remove('hidden');
+    }, 1000);
+}
+
+function showLoseOverlay() {
+    setTimeout(() => {
+        document.getElementById('loseOverlay').classList.remove('hidden');
+    }, 1000);
+}
+
+function hideOverlays() {
+    document.getElementById('winOverlay').classList.add('hidden');
+    document.getElementById('loseOverlay').classList.add('hidden');
+}
+
+// Event Listeners für Buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const menuBtn = document.getElementById('menuButton');
+    const restartWinBtn = document.getElementById('restartWinButton');
+    const restartLoseBtn = document.getElementById('restartLoseButton');
+
+    if (menuBtn) {
+        menuBtn.addEventListener('click', () => {
+            hideOverlays();
+            showStartScreen(); // Funktion zum Zurückkehren ins Menü (du kannst sie anpassen)
+        });
+    }
+
+    if (restartWinBtn) {
+        restartWinBtn.addEventListener('click', () => {
+            hideOverlays();
+            startGame(); // deine vorhandene Spiel-Start-Funktion
+        });
+    }
+
+    if (restartLoseBtn) {
+        restartLoseBtn.addEventListener('click', () => {
+            hideOverlays();
+            startGame();
+        });
+    }
+});
+

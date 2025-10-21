@@ -355,7 +355,7 @@ canvas {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .infoContent {
@@ -435,6 +435,100 @@ canvas {
     height: 20px;
 }
 
+/* Grundlayout für alle Game Overlays */
+.gameOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    overflow: auto;
+}
+
+.overlayContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Container für das Bild, Buttons liegen darin */
+.overlayImageContainer {
+    position: relative;
+    /* Buttons absolut innerhalb */
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+}
+
+.overlayImage {
+    /* width: 100%;
+    height: auto; */
+    width: 720px;
+    height: 480px;
+    display: block;
+    /* object-fit: cover; */
+}
+
+/* Buttons absolut innerhalb des Bildes */
+.overlayButtons {
+    position: absolute;
+    bottom: 5%;
+    /* Abstand vom unteren Bildrand */
+    left: 65%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    /* flex-wrap: wrap; */
+}
+
+.overlayButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* padding: 15px 25px; */
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+
+    color: #fff;
+    background-color: rgb(239, 199, 46);
+    border: 2px solid white;
+    border-radius: 15px;
+    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+    height: 10vw;
+    width: 25vw;
+    max-width: 200px;
+    min-width: 100px;
+}
+
+.imageButton {
+    width: 60vw;
+    /* 80% der Viewport-Breite */
+    max-width: 587px;
+    /* maximale Breite wie das Originalbild */
+    min-width: 200px;
+    /* minimale Breite bei sehr kleinen Geräten */
+    aspect-ratio: 587 / 136;
+    /* sorgt dafür, dass Höhe proportional zur Breite bleibt */
+    background-image: url('img/6.Botones/Try again/Recurso 15.png');
+    background-size: cover;
+    background-position: center;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: transform 0.2s ease;
+}
+
+.imageButton:hover {
+    transform: scale(1.05);
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -475,6 +569,24 @@ canvas {
         width: 100%;
         height: calc(100vw * 0.68);
     }
+
+    .overlayImage {
+        width: 100%;
+        height: calc(100vw * 0.68);
+        /* gleiche Skalierung wie .fullScreen */
+    }
+
+    .overlayImageContainer {
+        width: 100%;
+    }
+
+    .overlayButtons {
+        gap: 15px;
+    }
+
+    .overlayButton {
+        font-size: 20px;
+    }
 }
 
 @media only screen and (max-height: 850px) {
@@ -490,20 +602,11 @@ canvas {
 
 @media only screen and (max-height: 480px) {
 
-    canvas {
-        height: 100vh;
-    }
-
+    canvas,
+    .fullScreen,
+    .startScreen,
     .startScreenImg {
-        height: 100vh;
-    }
-
-    .fullScreen {
-        height: 100vh;
-    }
-
-    .startScreen {
-        height: 100vh;
+        height: 100vh; /* Canvas & Fullscreen anpassen */
     }
 
     .infoOverlay {
@@ -514,7 +617,7 @@ canvas {
         overflow-y: auto;
     }
 
-    
+
     .infoContent ul li {
         font-size: 0.9rem;
     }
@@ -522,6 +625,41 @@ canvas {
     .closeInfo {
         padding: 6px 12px;
         font-size: 0.9rem;
+    }
+
+    /* Overlay Content */
+    .overlayContent {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh; /* nimmt volle Höhe ein */
+    }
+
+    /* Container für Overlay-Bild */
+    .overlayImageContainer {
+        width: 100%;
+        height: 100%; /* genau wie fullscreen div */
+        position: relative;
+    }
+
+    .overlayImage {
+        width: 100%;
+        height: 100%; /* füllt Container proportional */
+        /* object-fit: cover; */
+    }
+
+    /* Buttons bleiben innerhalb des Bildes */
+    .overlayButtons {
+        bottom: 5%;
+        gap: 10px;
+        /* flex-direction: column; */
+    }
+
+    .overlayButton {
+        /* width: 80vw; */
+        font-size: 18px;
+        /* border-radius: 8%; */
     }
 }
 
@@ -550,6 +688,11 @@ canvas {
         height: 22px;
         width: 22px;
     }
+
+        .overlayButton {
+        border-radius: 10px;
+        
+    }
 }
 
 @media (max-width: 500px) {
@@ -572,6 +715,11 @@ canvas {
     .actionkeys {
         gap: 15px;
     }
+
+        .overlayButton {
+        
+        font-size: 16px;
+        }
 }
 
 @media (max-width: 400px) {
@@ -584,5 +732,12 @@ canvas {
 
     .infoContent ul li {
         font-size: 12px;
+    }
+
+    .overlayButton {
+        
+        font-size: 12px;
+        border-radius: 5px;
+        
     }
 }

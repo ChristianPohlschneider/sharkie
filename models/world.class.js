@@ -293,6 +293,7 @@ class World {
         });
     }
 
+
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
@@ -331,7 +332,7 @@ class World {
         this.ctx.restore();
     }
 
-    //Modulo uneven
+    // //Modulo uneven
     gameLoopFrame1(camera_xWidthModulo) {
         for (let backgroundLoopIndex = 0; backgroundLoopIndex < 5; backgroundLoopIndex++) {
             this.level.backgroundObjects[backgroundLoopIndex].x = 720 + camera_xWidthModulo * 720;
@@ -349,6 +350,7 @@ class World {
             this.level.backgroundObjects[backgroundLoopIndex].x = -720 + camera_xWidthModulo * 720;
         }
     }
+
 
     stopGame() {
         this.intervalIds.forEach(clearInterval);

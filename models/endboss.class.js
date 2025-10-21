@@ -110,6 +110,7 @@ class Endboss extends MovableObject {
                 const deadImageSrc = 'http://127.0.0.1:5500/img/2.Enemy/3%20Final%20Enemy/Dead/Mesa%20de%20trabajo%202%20copia%2010.png';
                 if (this.img.src === deadImageSrc) {
                     this.handleDeath();
+                    showWinOverlay();
                 }
 
             } else if (this.isHurt() && !this.isDead()) {
