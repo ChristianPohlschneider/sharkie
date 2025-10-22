@@ -1,6 +1,7 @@
 class World {
     character;
-    level = level1;
+    // level = level1;
+    level;
     statusBar = new StatusBar();
     poisonBar = new PoisonBar();
     coinBar = new CoinBar();
@@ -11,19 +12,15 @@ class World {
     shootableObject = [];
     intervalIds = [];
     isCollidingBarrier = false;
-    // audioCoin = new Audio('img/assets/audio/coin.wav');
-    // audioBubble = new Audio('img/assets/audio/bubble.wav');
-    // audioHit = new Audio('img/assets/audio/hit.wav');
-    // audioAcid = new Audio('img/assets/audio/acid.wav');
-    // audioHurtSharky = new Audio('img/assets/audio/hurtSharky.wav');
-    // audioGameTheme = new Audio('img/assets/audio/gameTheme.wav');
+    animationFrameId = null;
+    camera_xWidthModulo = 0;
 
 
-    constructor(canvas, keyboard) {//hand over variables to world
+    constructor(canvas, keyboard, level) {//hand over variables to world
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-
+        this.level = level;
         this.character = new Character(this);
 
         this.draw();
@@ -253,16 +250,23 @@ class World {
 
         //scroll world in opposite direction of sharkie
         this.ctx.translate(this.camera_x, 0);
-        let camera_xWidthModulo = Math.floor(-this.camera_x / 720);
-        // console.log(camera_xWidthModulo);
+        this.camera_xWidthModulo = Math.floor(-this.camera_x / 720);
+        //Console Log
+        console.log(this.camera_x);
 
-        if (camera_xWidthModulo % 2 == 0) {
+        if (this.camera_xWidthModulo % 2 == 0) {
+            //Console Log
             // console.log("Frame1");
-            this.gameLoopFrame2(camera_xWidthModulo);
+            // console.log(this.camera_xWidthModulo);
+
+            this.gameLoopFrame2(this.camera_xWidthModulo);
             this.addObjectsToMap(this.level.backgroundObjects);
-        } else if ((camera_xWidthModulo + 1) % 2 == 0) {
+        } else if ((this.camera_xWidthModulo + 1) % 2 == 0) {
+            //Console Log
             // console.log("Frame2");
-            this.gameLoopFrame1(camera_xWidthModulo);
+            // console.log(this.camera_xWidthModulo);
+
+            this.gameLoopFrame1(this.camera_xWidthModulo);
             this.addObjectsToMap(this.level.backgroundObjects);
         }
 
@@ -286,11 +290,14 @@ class World {
         this.addToMap(this.poisonBar);
         this.addToMap(this.coinBar);
 
+        this.animationFrameId = requestAnimationFrame(() => this.draw());
         //Draw wird immer wieder aufgerufen
-        let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+        // let self = this;
+        // requestAnimationFrame(function () {
+        //     self.draw();
+        // });
+
+        
     }
 
 
@@ -352,7 +359,23 @@ class World {
     }
 
 
-    stopGame() {
+    // stopGame() {
+    //     this.intervalIds.forEach(clearInterval);
+    // }
+        stopGame() {
         this.intervalIds.forEach(clearInterval);
+        this.intervalIds = [];
+
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
+
+        console.log("Alle Intervalle und AnimationFrames gestoppt.");
+    }
+
+    cleanup() {
+        this.stopGame();
+        console.log("World wurde bereinigt.");
     }
 }

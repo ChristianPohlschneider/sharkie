@@ -1,4 +1,6 @@
-level1 = new Level(
+// level1 = new Level(
+function createLevel1() {
+    return new Level(
     [
         // new PufferFish(),
         // new PufferFish(),
@@ -103,6 +105,8 @@ level1 = new Level(
 
 );
 
+}
+
 function setinitialEnemies(world) {
     world.level.enemies = [
         //world, x, y, phase, speed
@@ -138,7 +142,7 @@ function setFinalEnemie(world, bossSpawnCoordinateX) {
 }
 
 function deleteOtherEnemies(world, enemyDeleteCoordinateX) {
-    world.setStoppableInterval(() => {
+    this.world.setStoppableInterval(() => {
         world.level.enemies = world.level.enemies.filter(
             enemy => enemy.x >= enemyDeleteCoordinateX
         );

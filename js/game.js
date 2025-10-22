@@ -80,60 +80,86 @@ async function startAudio(src) {
 
 
 // Startet das Spiel und ggf. die Musik
+// async function startGame() {
+//     document.getElementById('startScreen').style.display = "none";
+    
+//     // Wenn Sound noch nicht läuft, starten wir ihn automatisch
+//     if (soundManager) {
+//         soundManager.stopTheme();
+//     }
+//     await startAudio('img/assets/audio/gameTheme.wav');
+
+//     world = new World(canvas, keyboard);
+//     this.world = world;
+
+//     setinitialEnemies(world);
+// }
+
 async function startGame() {
     document.getElementById('startScreen').style.display = "none";
 
-    // Wenn Sound noch nicht läuft, starten wir ihn automatisch
-    if (soundManager) {
-        soundManager.stopTheme();
+    // Falls alte Welt läuft → aufräumen
+    if (world) {
+        if (typeof world.cleanup === "function") world.cleanup();
+        world = null;
+        console.log("Alte Welt gelöscht");
     }
+
+    // Musik vorbereiten
+    if (soundManager) soundManager.stopTheme();
     await startAudio('img/assets/audio/gameTheme.wav');
 
-    world = new World(canvas, keyboard);
+    // 🆕 Neues Level erzeugen
+    const level = createLevel1(); // Funktion aus level1.js
+
+    // 🆕 Neue Welt mit Level starten
+    world = new World(canvas, keyboard, level);
     this.world = world;
+
+    // Gegner hinzufügen
     setinitialEnemies(world);
 }
 
 
-function resetLevel1() {
-    // Hintergrundobjekte komplett neu initialisieren
-    level1.backgroundObjects = [
-        new BackgroundObject('img/3. Background/Layers/5. Water/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/2. Floor/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
+// function resetLevel1() {
+//     // Hintergrundobjekte komplett neu initialisieren
+//     level1.backgroundObjects = [
+//         new BackgroundObject('img/3. Background/Layers/5. Water/L1.png', 0),
+//         new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L1.png', 0),
+//         new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L1.png', 0),
+//         new BackgroundObject('img/3. Background/Layers/2. Floor/L1.png', 0),
+//         new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
 
-        new BackgroundObject('img/3. Background/Layers/5. Water/L2.png', 720),
-        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L2.png', 720),
-        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L2.png', 720),
-        new BackgroundObject('img/3. Background/Layers/2. Floor/L2.png', 720),
-        new BackgroundObject('img/3. Background/Layers/1. Light/2.png', 720),
+//         new BackgroundObject('img/3. Background/Layers/5. Water/L2.png', 720),
+//         new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L2.png', 720),
+//         new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L2.png', 720),
+//         new BackgroundObject('img/3. Background/Layers/2. Floor/L2.png', 720),
+//         new BackgroundObject('img/3. Background/Layers/1. Light/2.png', 720),
 
-        new BackgroundObject('img/3. Background/Layers/5. Water/L2.png', -720),
-        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L2.png', -720),
-        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L2.png', -720),
-        new BackgroundObject('img/3. Background/Layers/2. Floor/L2.png', -720),
-        new BackgroundObject('img/3. Background/Layers/1. Light/2.png', -720),
+//         new BackgroundObject('img/3. Background/Layers/5. Water/L2.png', -720),
+//         new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L2.png', -720),
+//         new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L2.png', -720),
+//         new BackgroundObject('img/3. Background/Layers/2. Floor/L2.png', -720),
+//         new BackgroundObject('img/3. Background/Layers/1. Light/2.png', -720),
 
-        new BackgroundObject('img/3. Background/Layers/5. Water/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/2. Floor/L1.png', 0),
-        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
-    ];
+//         new BackgroundObject('img/3. Background/Layers/5. Water/L1.png', 0),
+//         new BackgroundObject('img/3. Background/Layers/4.Fondo 2/L1.png', 0),
+//         new BackgroundObject('img/3. Background/Layers/3.Fondo 1/L1.png', 0),
+//         new BackgroundObject('img/3. Background/Layers/2. Floor/L1.png', 0),
+//         new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
+//     ];
 
-    // Coins & Poison Bottles zurücksetzen
-    level1.coins.forEach(c => c.isCollected = false);
-    level1.poisonBottles.forEach(b => b.isCollected = false);
-    level1.shrinkingObjects = [];
+//     // Coins & Poison Bottles zurücksetzen
+//     level1.coins.forEach(c => c.isCollected = false);
+//     level1.poisonBottles.forEach(b => b.isCollected = false);
+//     level1.shrinkingObjects = [];
 
-    // Kamera & Frame-Zustände zurücksetzen
-    if (world) {
-        world.camera_x = 0;
-        world.ctx.translate(0, 0);
-    }
-}
+//     // Kamera & Frame-Zustände zurücksetzen
+//     if (world) {
+//         world.camera_x = 0;
+//         world.ctx.translate(0, 0);
+//     }
+// }
 
 
 
