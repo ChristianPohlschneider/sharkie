@@ -120,6 +120,42 @@ async function startGame() {
     setinitialEnemies(world);
 }
 
+function showStartScreen() {
+    // 🔹 1. Alte Welt stoppen
+    if (typeof world !== 'undefined' && world) {
+        console.log("Zurück ins Hauptmenü – alte Welt wird beendet.");
+        if (typeof world.cleanup === 'function') world.cleanup();
+        world = null;
+    }
+
+    // 🔹 2. Sound stoppen
+    if (typeof soundManager !== 'undefined' && soundManager) {
+        soundManager.stopTheme();
+    }
+
+    // 🔹 3. Canvas leeren
+    const canvas = document.getElementById('canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // 🔹 4. Alle Overlays ausblenden
+    hideOverlays();
+
+    // 🔹 5. Startscreen anzeigen
+    const startScreen = document.getElementById('startScreen');
+    if (startScreen) {
+        startScreen.style.display = "flex"; // oder "block" je nach CSS
+    }
+
+    // 🔹 6. Optional: Startscreen Musik
+    if (typeof startAudio === 'function') {
+        startAudio('img/assets/audio/openingTheme.wav'); // Menü-Theme
+    }
+
+    console.log("Startscreen angezeigt.");
+}
 
 // function resetLevel1() {
 //     // Hintergrundobjekte komplett neu initialisieren
@@ -333,7 +369,20 @@ function showLoseOverlay() {
 function hideOverlays() {
     document.getElementById('winOverlay').classList.add('hidden');
     document.getElementById('loseOverlay').classList.add('hidden');
+    document.getElementById('infoOverlay').classList.add('hidden');
 }
+
+// function hideOverlays() {
+//     const overlays = [
+//         document.getElementById('winOverlay'),
+//         document.getElementById('loseOverlay'),
+//         document.getElementById('infoOverlay')
+//     ];
+
+//     overlays.forEach(overlay => {
+//         if (overlay) overlay.style.display = "none";
+//     });
+// }
 
 // Event Listeners für Buttons
 document.addEventListener('DOMContentLoaded', () => {
