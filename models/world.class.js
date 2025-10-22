@@ -61,7 +61,18 @@ class World {
                 if (this.character.isColliding(enemy)) {
                     if (this.character.isSlapping && enemy.damageFromFinSlap != 0) {
                         enemy.hit(enemy.damageFromFinSlap);
-                    } else if (!this.character.isSlapping) {
+                    } 
+                    
+                    if (enemy instanceof JellyFish) {
+                    if (!this.character.isDead()) {
+                        soundManager.playEffect('img/assets/audio/hurtSharky.wav', 0);
+                    }
+                    this.character.hit(enemy.damageDueToCollision);
+                    this.statusBar.setPercentage(this.character.energy);
+                }
+                    
+                    // Alle anderen Gegner verletzen nur, wenn Sharky nicht slapt
+                    else if (!this.character.isSlapping) {
                         if (!this.character.isDead()) {
                             soundManager.playEffect('img/assets/audio/hurtSharky.wav', 0);
                         }
