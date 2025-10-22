@@ -252,7 +252,7 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         this.camera_xWidthModulo = Math.floor(-this.camera_x / 720);
         //Console Log
-        console.log(this.camera_x);
+        // console.log(this.camera_x);
 
         if (this.camera_xWidthModulo % 2 == 0) {
             //Console Log

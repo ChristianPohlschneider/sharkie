@@ -20,10 +20,9 @@ class Character extends MovableObject {
     hasPlayedBubbleSound = false;
     slapAnimationFrame = 0;
     hasPlayedSlapSound = false;
-    // audioBubble = new Audio('img/assets/audio/bubble.wav');
-    // audioPoisonBubble = new Audio('img/assets/audio/poisonBubble.wav');
-    // audioSlap = new Audio('img/assets/audio/slap.m4a');
-    // audioSharkyDies = new Audio('img/assets/audio/sharkyDies.mp3');
+    lastIdleTime = null;     // Zeitpunkt, wann Sharky zuletzt idle war
+    isLongIdlePlayed = false; // Flag, damit die Lang-Idle Animation nur einmal startet
+    currentSharkyAnimation = null; // Merkt sich aktuell laufende Animation
 
     offset = {
         top: 105,
@@ -60,6 +59,23 @@ class Character extends MovableObject {
         'img/1.Sharkie/1.IDLE/16.png',
         'img/1.Sharkie/1.IDLE/17.png',
         'img/1.Sharkie/1.IDLE/18.png',
+    ];
+
+    IMAGES_LONG_IDLE = [
+        'img/1.Sharkie/2.Long_IDLE/i1.png',
+        'img/1.Sharkie/2.Long_IDLE/I2.png',
+        'img/1.Sharkie/2.Long_IDLE/I3.png',
+        'img/1.Sharkie/2.Long_IDLE/I4.png',
+        'img/1.Sharkie/2.Long_IDLE/I5.png',
+        'img/1.Sharkie/2.Long_IDLE/I6.png',
+        'img/1.Sharkie/2.Long_IDLE/I7.png',
+        'img/1.Sharkie/2.Long_IDLE/I8.png',
+        'img/1.Sharkie/2.Long_IDLE/I9.png',
+        'img/1.Sharkie/2.Long_IDLE/I10.png',
+        'img/1.Sharkie/2.Long_IDLE/I11.png',
+        'img/1.Sharkie/2.Long_IDLE/I12.png',
+        'img/1.Sharkie/2.Long_IDLE/I13.png',
+        'img/1.Sharkie/2.Long_IDLE/I14.png',
     ];
 
     IMAGES_BUBBLE_TRAP = [
@@ -126,6 +142,7 @@ class Character extends MovableObject {
         super().loadImage('img/1.Sharkie/3.Swim/1.png');
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_LONG_IDLE);
         this.loadImages(this.IMAGES_BUBBLE_TRAP);
         this.loadImages(this.IMAGES_BUBBLE_TRAP_POISON);
         this.loadImages(this.IMAGES_FINSLAP);
@@ -146,6 +163,7 @@ class Character extends MovableObject {
 
 
         this.world.setStoppableInterval(() => {
+
 
             // Bewegung nur erlauben, wenn Sharky nicht tot ist
             if (this.isDead()) return;
@@ -222,9 +240,9 @@ class Character extends MovableObject {
         }, 1000 / 60);
 
         this.world.setStoppableInterval(() => {
-
+            const now = new Date().getTime();
             if (this.world.keyboard.Space) {
-                const now = new Date().getTime();
+                // const now = new Date().getTime();
                 if (!this.isShooting && (now - this.lastShot >= this.shootCooldown)) {
                     this.isShooting = true;
                     this.currentShootImage = 0;
@@ -244,6 +262,7 @@ class Character extends MovableObject {
                 }
 
                 this.playAnimation(this.IMAGES_DEAD);
+
                 if (this.img.src == 'http://127.0.0.1:5500/img/1.Sharkie/6.dead/1.Poisoned/12.png') {
                     this.world.stopGame();
                     clearInterval(this.animationInterval);
@@ -251,6 +270,7 @@ class Character extends MovableObject {
                 }
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
+
             } else if (this.isShooting) {
                 // Shoot-Loop übernimmt Animation, nichts hier
             } else if ((this.world.keyboard.ControlLeft || this.world.keyboard.ControlRight) && !this.isHurt() && !this.isDead()) {
@@ -260,8 +280,26 @@ class Character extends MovableObject {
                 this.world.keyboard.KeyW || this.world.keyboard.KeyS ||
                 this.world.keyboard.KeyA || this.world.keyboard.KeyD) {
                 this.playAnimation(this.IMAGES_SWIMMING);
+
+                // Idle-Timer zurücksetzen
+                this.lastIdleTime = null;
+                this.isLongIdlePlayed = false;
             } else {
-                this.playAnimation(this.IMAGES_IDLE);
+                if (this.lastIdleTime === null) {
+                    this.lastIdleTime = now;
+                    this.isLongIdlePlayed = false;
+                }
+
+                const idleDuration = now - this.lastIdleTime;
+
+                if (idleDuration >= 10000) {
+                    // Long-Idle regelmäßig aufrufen, solange Sharky idle ist
+                    this.playAnimation(this.IMAGES_LONG_IDLE);
+                    this.isLongIdlePlayed = true;
+                } else {
+                    // Normale Idle-Animation regelmäßig aufrufen
+                    this.playAnimation(this.IMAGES_IDLE);
+                }
             }
         }, 200);
 
