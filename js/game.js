@@ -372,35 +372,58 @@ function hideOverlays() {
     document.getElementById('infoOverlay').classList.add('hidden');
 }
 
-// function hideOverlays() {
-//     const overlays = [
-//         document.getElementById('winOverlay'),
-//         document.getElementById('loseOverlay'),
-//         document.getElementById('infoOverlay')
-//     ];
-
-//     overlays.forEach(overlay => {
-//         if (overlay) overlay.style.display = "none";
-//     });
-// }
 
 // Event Listeners für Buttons
+// document.addEventListener('DOMContentLoaded', () => {
+//     const menuBtn = document.getElementById('menuButton');
+//     const restartWinBtn = document.getElementById('restartWinButton');
+//     const restartLoseBtn = document.getElementById('restartLoseButton');
+
+//     if (menuBtn) {
+//         menuBtn.addEventListener('click', () => {
+//             hideOverlays();
+//             showStartScreen(); // Funktion zum Zurückkehren ins Menü (du kannst sie anpassen)
+//         });
+//     }
+
+//     if (restartWinBtn) {
+//         restartWinBtn.addEventListener('click', () => {
+//             hideOverlays();
+//             startGame(); // deine vorhandene Spiel-Start-Funktion
+//         });
+//     }
+
+//     if (restartLoseBtn) {
+//         restartLoseBtn.addEventListener('click', () => {
+//             hideOverlays();
+//             startGame();
+//         });
+//     }
+// });
 document.addEventListener('DOMContentLoaded', () => {
-    const menuBtn = document.getElementById('menuButton');
+    const menuWinBtn = document.getElementById('menuButton');
+    const menuLoseBtn = document.getElementById('menuButtonLose');
     const restartWinBtn = document.getElementById('restartWinButton');
     const restartLoseBtn = document.getElementById('restartLoseButton');
 
-    if (menuBtn) {
-        menuBtn.addEventListener('click', () => {
+    if (menuWinBtn) {
+        menuWinBtn.addEventListener('click', () => {
             hideOverlays();
-            showStartScreen(); // Funktion zum Zurückkehren ins Menü (du kannst sie anpassen)
+            showStartScreen();
+        });
+    }
+
+    if (menuLoseBtn) {
+        menuLoseBtn.addEventListener('click', () => {
+            hideOverlays();
+            showStartScreen();
         });
     }
 
     if (restartWinBtn) {
         restartWinBtn.addEventListener('click', () => {
             hideOverlays();
-            startGame(); // deine vorhandene Spiel-Start-Funktion
+            startGame();
         });
     }
 
