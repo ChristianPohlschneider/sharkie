@@ -3,6 +3,11 @@
     src: url('fonts/titanOne.ttf') format('truetype');
 }
 
+html, body {
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
 body {
     display: flex;
     justify-content: center;

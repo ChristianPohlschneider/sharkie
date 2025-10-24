@@ -20,9 +20,9 @@ class Character extends MovableObject {
     hasPlayedBubbleSound = false;
     slapAnimationFrame = 0;
     hasPlayedSlapSound = false;
-    lastIdleTime = null;     // Zeitpunkt, wann Sharky zuletzt idle war
-    isLongIdlePlayed = false; // Flag, damit die Lang-Idle Animation nur einmal startet
-    currentSharkyAnimation = null; // Merkt sich aktuell laufende Animation
+    lastIdleTime = null;
+    isLongIdlePlayed = false;
+    currentSharkyAnimation = null;
 
     offset = {
         top: 105,
@@ -133,10 +133,8 @@ class Character extends MovableObject {
         'img/1.Sharkie/6.dead/1.Poisoned/11.png',
         'img/1.Sharkie/6.dead/1.Poisoned/12.png',
     ];
-    //hand over world variables
     world;
     level;
-
 
     constructor(world) {
         super().loadImage('img/1.Sharkie/3.Swim/1.png');
@@ -149,11 +147,6 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.world = world;
-        // this.applyGravity();
-
-        this.oldX = this.x;
-        this.oldY = this.y;
-
         this.animate();
     }
 

@@ -23,7 +23,4 @@ class Barrier extends MovableObject {
         this.offset.left = offsetLeft;
         this.offset.right = offsetRight
     }
-
-
-
 }
