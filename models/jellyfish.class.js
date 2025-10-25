@@ -16,7 +16,6 @@ class JellyFish extends MovableObject {
     moveInterval = null;
     oscillateInterval = null;
     animationInterval = null;
-    // audioEnemyDie = new Audio('img/assets/audio/enemyDie.wav');
 
     offset = {
         top: 10,
@@ -37,8 +36,6 @@ class JellyFish extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Dead/Pink/P2.png',
         'img/2.Enemy/2 Jelly fish/Dead/Pink/P3.png',
         'img/2.Enemy/2 Jelly fish/Dead/Pink/P4.png',
-
-
     ];
 
     IMAGES_HURT = [
@@ -54,68 +51,68 @@ class JellyFish extends MovableObject {
         this.loadImages(this.IMAGES_DIE);
         this.loadImages(this.IMAGES_HURT);
         this.world = world;
-        // this.x = 700 + Math.random() * 500;
         this.x = x;
         this.y = y;
         this.speed = speed;
-        this.animate(phase, x);
-
+        this.animate(phase);
     }
 
-    animate(phase, x) {
+    animate(phase) {
         this.phase = phase;
+        this.startMove();
+        this.startPositionReset();
+        this.startOscillation();
+        this.startAnimationLoop();
+    }
 
+    startMove() {
         this.moveInterval = this.moveLeft(this.speed, this.interval);
+    }
+
+    startPositionReset() {
         this.world.setStoppableInterval(() => {
-            // eigene Bewegungsintervalle speichern
-
-            if (this.x < -250) {
-                this.x = this.world.level.level_end_x + 400
-
-            }
+            if (this.x < -250) this.x = this.world.level.level_end_x + 400;
         }, 200);
+    }
 
+    startOscillation() {
         this.oscillateInterval = this.oscillate(this.phase);
+    }
 
-        // Animationsloop (nicht stoppen, solange Fisch lebt)
+    startAnimationLoop() {
         this.animationInterval = this.world.setStoppableInterval(() => {
-            if (this.isDead() && this.isDeadID < 4) {
-                this.handleDeath();
-
-            } else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else {
-                this.playAnimation(this.IMAGES_SWIMMING);
-            }
-
+            if (this.isDead() && this.isDeadID < 4) this.handleDeath();
+            else if (this.isHurt()) this.playAnimation(this.IMAGES_HURT);
+            else this.playAnimation(this.IMAGES_SWIMMING);
         }, 200);
     }
 
     handleDeath() {
-        if (!this.hasDied) {
-            this.hasDied = true;
+        if (this.hasDied) return;
+        this.hasDied = true;
+        if (soundManager) soundManager.playEffect('img/assets/audio/enemyDie.wav', 400);
+        clearInterval(this.moveInterval);
+        clearInterval(this.oscillateInterval);
+        clearInterval(this.animationInterval);
+        this.isDeadID = 0;
+        this.startDeathAnimation();
+    }
 
-            // Sound über SoundManager mit 400ms Verzögerung
-            if (soundManager) {
-                soundManager.playEffect('img/assets/audio/enemyDie.wav', 400);
+    startDeathAnimation() {
+        const dieInterval = setInterval(() => {
+            this.loadImage(this.IMAGES_DIE[this.isDeadID]);
+            this.isDeadID++;
+            if (this.isDeadID >= this.IMAGES_DIE.length) {
+                clearInterval(dieInterval);
+                this.removeFromLevel();
             }
+        }, 200);
+    }
 
-            clearInterval(this.moveInterval);
-            clearInterval(this.oscillateInterval);
-            clearInterval(this.animationInterval);
-
-            this.isDeadID = 0;
-            const dieInterval = setInterval(() => {
-                this.loadImage(this.IMAGES_DIE[this.isDeadID]);
-                this.isDeadID++;
-                if (this.isDeadID >= this.IMAGES_DIE.length) {
-                    clearInterval(dieInterval);
-                    this.world.level.enemies.splice(this.world.level.enemies.indexOf(this), 1);
-                    this.world.level.shrinkingObjects.push(this);
-                    this.shrinkOut();
-                }
-            }, 200);
-        }
+    removeFromLevel() {
+        this.world.level.enemies.splice(this.world.level.enemies.indexOf(this), 1);
+        this.world.level.shrinkingObjects.push(this);
+        this.shrinkOut();
     }
 
     isDead() {

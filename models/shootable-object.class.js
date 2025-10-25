@@ -19,17 +19,12 @@ class ShootableObject extends MovableObject {
             this.poisonBar.poisonCount(-10);
             this.poisonBar.setPoisonAmount(this.poisonBar.venomSac);
         } else {
-            this.loadImage('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png')
+            this.loadImage('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
         }
-        if (otherDirection == false) {
-            setInterval(() => {
-                this.x += 20;
-            }, 50);
-        } else if (otherDirection == true) {
-            setInterval(() => {
-                this.x -= 20;
-            }, 50);
-        }
+        const speed = 20;
+        setInterval(() => {
+            this.x += otherDirection ? -speed : speed;
+        }, 50);
     }
 
 }

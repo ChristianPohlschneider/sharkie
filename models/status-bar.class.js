@@ -17,11 +17,9 @@ class StatusBar extends MovableObject {
         this.y = 0;
         this.height = 60;
         this.width = 200;
-        
         this.loadImage('img/4. Marcadores/green/Life/100_  copia 2.png');
         this.loadImages(this.IMAGES_LIFE);
     }
-
 
     setPercentage(percentage) {
         if (percentage < 100) {
@@ -31,5 +29,4 @@ class StatusBar extends MovableObject {
             this.loadImage(this.IMAGES_LIFE[5])
         }
     }
-
 }

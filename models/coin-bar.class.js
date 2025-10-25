@@ -17,10 +17,8 @@ class CoinBar extends MovableObject {
         this.y = 100;
         this.height = 60;
         this.width = 200;
-
         this.loadImage('img/4. Marcadores/green/Coin/0_  copia 4.png');
         this.loadImages(this.IMAGES_COINBAR);
-
     }
 
     setWalletAmount(coinsInWallet) {

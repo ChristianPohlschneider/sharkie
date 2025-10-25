@@ -4,7 +4,7 @@ class SoundManager {
         this.themeBuffer = null;
         this.source = null;
         this.gainNode = null;
-        this.enabled = false; // Audio standardmäßig AUS
+        this.enabled = false;
     }
 
     async loadTheme(url) {
@@ -15,25 +15,15 @@ class SoundManager {
 
     async playTheme() {
         if (!this.themeBuffer || !this.enabled) return;
-
-        // AudioContext ggf. wieder aktivieren
-        if (this.audioCtx.state === 'suspended') {
-            await this.audioCtx.resume();
-        }
-
-        this.stopTheme(); // alte Musik stoppen
-
+        if (this.audioCtx.state === 'suspended') await this.audioCtx.resume();
+        this.stopTheme();
         this.source = this.audioCtx.createBufferSource();
         this.source.buffer = this.themeBuffer;
         this.source.loop = true;
-
-        // Lautstärkeregler (GainNode)
         this.gainNode = this.audioCtx.createGain();
-        this.gainNode.gain.value = this.enabled ? 1 : 0;
-
+        this.gainNode.gain.value = 1; // kein ternary nötig
         this.source.connect(this.gainNode);
         this.gainNode.connect(this.audioCtx.destination);
-
         this.source.start(0);
     }
 
@@ -47,31 +37,23 @@ class SoundManager {
 
     toggleSound() {
         this.enabled = !this.enabled;
-
-        // Falls AudioContext pausiert ist, aktivieren
         if (this.audioCtx.state === "suspended" && this.enabled) {
             this.audioCtx.resume();
         }
-
-        // Lautstärke anpassen, wenn Musik läuft
         if (this.gainNode) {
             this.gainNode.gain.value = this.enabled ? 1 : 0;
         }
-
         return this.enabled;
     }
 
     async playEffect(url, delay = 0) {
-        if (!this.enabled) return; // 🔇 Effekt abbrechen, wenn Audio deaktiviert
-
+        if (!this.enabled) return;
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
         const buffer = await this.audioCtx.decodeAudioData(arrayBuffer);
-
         const source = this.audioCtx.createBufferSource();
         source.buffer = buffer;
         source.connect(this.audioCtx.destination);
-
         if (delay > 0) {
             source.start(this.audioCtx.currentTime + delay / 1000); // Delay in Sekunden
         } else {

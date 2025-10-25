@@ -26,17 +26,13 @@ class MovableObject extends DrawableObject {
     };
 
     playAnimation(images) {
-        // Wenn neues Set gestartet wird → Index zurücksetzen
         if (this.currentAnimation !== images) {
             this.currentAnimation = images;
             this.currentImage = 0;
         }
-
-        // Bild aus imageCache setzen – unverändert
         let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
-
         this.currentImage++;
     }
 
@@ -48,8 +44,6 @@ class MovableObject extends DrawableObject {
         let path = images[this.currentShootImage];
         this.img = this.imageCache[path];
         this.currentShootImage++
-        // let i = this.currentImage % images.length;
-
     }
 
     moveRight(speed, interval) {
@@ -84,9 +78,8 @@ class MovableObject extends DrawableObject {
             y + this.offset.top < object.y + object.height - object.offset.bottom;
     }
 
-
     hit(damageFromCollision) {
-        if (this.hasDied) return; // keine Hits mehr nach dem Tod
+        if (this.hasDied) return;
         this.energy -= damageFromCollision;
         if (this.energy < 0) {
             this.energy = 0;
@@ -96,30 +89,22 @@ class MovableObject extends DrawableObject {
     }
 
     isHurt() {
-        let timepassed = new Date().getTime() - this.lastHit; //Difference in ms
-        timepassed = timepassed / 1000; //Difference in s
+        let timepassed = new Date().getTime() - this.lastHit;
+        timepassed = timepassed / 1000;
         return timepassed < 1;
     }
 
-    // Schrumpf-Animation bei Kollision
     shrinkOut() {
         if (this.isShrinking) return;
         this.isShrinking = true;
-
-        // Standard-Animation stoppen
         clearInterval(this.animationInterval);
-
-        let steps = 10;
         let count = 0;
-        let interval = setInterval(() => {
-            this.scale -= 0.1; // kleiner werden
-            count++;
-
-            if (count >= steps) {
-
+        const steps = 10;
+        const interval = setInterval(() => {
+            this.scale -= 0.1;
+            if (++count >= steps) {
                 clearInterval(interval);
-                this.isCollected = true; // markiere Gegenstand als entfernt
-
+                this.isCollected = true;
             }
         }, 10);
     }

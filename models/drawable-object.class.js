@@ -9,14 +9,10 @@ class DrawableObject {
     isCollected = false;
 
     loadImage(path) {
-        this.img = new Image(); //this.image = document.getElementById('image') <img id="image">
+        this.img = new Image();
         this.img.src = path;
     }
 
-    /**
-     * 
-     * @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
-     */
     loadImages(array) {
         array.forEach(path => {
             if (!this.imageCache[path]) {
@@ -27,53 +23,49 @@ class DrawableObject {
         });
     }
 
-    // drawImages(ctx) {
-    //     if (!this.img) return;
-    //     try {
-    //         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    //     } catch (error) {
-    //         console.warn('Error loading image', error);
-    //         console.log('Could not load image, ', this.img.src);
-    //     }
-
-    // }
-
     drawImages(ctx) {
-    if (!this.img) return;
+        if (!this.img) return;
+        try {
+            this.prepareCanvas(ctx);
+            this.renderImage(ctx);
+            ctx.restore();
+        } catch (error) {
+            this.handleDrawError(error);
+        }
+    }
 
-    try {
+    prepareCanvas(ctx) {
         ctx.save();
-
-        // Mittelpunkt berechnen
         const centerX = this.x + this.width / 2;
         const centerY = this.y + this.height / 2;
-
-        // zum Mittelpunkt verschieben und skalieren
         ctx.translate(centerX, centerY);
         ctx.scale(this.scale || 1, this.scale || 1);
+    }
 
-        // Bild so zeichnen, dass es um den Mittelpunkt skaliert
-        ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height);
+    renderImage(ctx) {
+        ctx.drawImage(
+            this.img,
+            -this.width / 2,
+            -this.height / 2,
+            this.width,
+            this.height
+        );
+    }
 
-        ctx.restore();
-    } catch (error) {
+    handleDrawError(error) {
         console.warn('Error loading image', error);
-        if (this.img && this.img.src) {
+        if (this.img?.src) {
             console.log('Could not load image:', this.img.src);
         }
     }
-}
-
 
     drawFrame(ctx, object) {
         if (this instanceof Character || this instanceof Barrier) {
-            //draw collision rectangle blue
             ctx.beginPath();
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'blue';
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
-            //draw collision rectangle red
             ctx.beginPath();
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'red';
@@ -82,22 +74,15 @@ class DrawableObject {
         }
     }
 
-    // Zeichnen
     drawShrinkingObjects(ctx) {
-        if (this.isCollected) return; // überspringen, wenn eingesammelt
-
+        if (this.isCollected) return;
         const img = this.img || this.imageCache[this.COIN_IMAGES[0]];
         const w = this.width * this.scale;
         const h = this.height * this.scale;
-
         ctx.clearRect(this.x, this.y, this.size, this.size);
-
         ctx.save();
-
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
         ctx.drawImage(img, -w / 2, -h / 2, w, h);
-
         ctx.restore();
     }
-
 }

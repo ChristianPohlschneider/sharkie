@@ -18,8 +18,6 @@ class Endboss extends MovableObject {
     biteCounter = 0;
     world;
     audioBossThemePlayed = false;
-    // audioBossDies = new Audio('img/assets/audio/bossDies.wav');
-    // audioBossTheme = new Audio('img/assets/audio/bossTheme.wav');
     audioBossBite = new Audio('img/assets/audio/bossBite.flac');
 
     offset = {
@@ -95,32 +93,10 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-
         this.world.setStoppableInterval(() => {
-            if (this.isDead()) {
-                // Sound als Effekt über SoundManager mit 200ms Verzögerung
-                if (soundManager) {
-                    soundManager.playEffect('img/assets/audio/bossDies.wav', 200);
-                }
-
-                // Tod-Animation abspielen
-                this.playAnimation(this.IMAGES_DIE);
-
-                // Wenn das letzte Bild erreicht ist, handle Death aufrufen
-                const deadImageSrc = 'http://127.0.0.1:5500/img/2.Enemy/3%20Final%20Enemy/Dead/Mesa%20de%20trabajo%202%20copia%2010.png';
-                if (this.img.src === deadImageSrc) {
-                    this.handleDeath();
-                    showWinOverlay();
-                }
-
-            } else if (this.isHurt() && !this.isDead()) {
-                if (this.spawnID >= 8) {
-                    this.playAnimation(this.IMAGES_HURT);
-                }
-                // Bei spawnID < 8 nichts tun
-            } else {
-                this.checkBossSpawn();
-            }
+            if (this.isDead()) this.handleBossDeathState();
+            else if (this.isHurt() && !this.isDead()) this.handleBossHurtState();
+            else this.checkBossSpawn();
         }, 200);
 
         this.world.setStoppableInterval(() => {
@@ -131,171 +107,169 @@ class Endboss extends MovableObject {
         }, 3000);
     }
 
+    handleBossDeathState() {
+        this.playDeathSound();
+        this.playAnimation(this.IMAGES_DIE);
+        const deadImageSrc = 'http://127.0.0.1:5500/img/2.Enemy/3%20Final%20Enemy/Dead/Mesa%20de%20trabajo%202%20copia%2010.png';
+        if (this.img?.src === deadImageSrc) {
+            this.handleDeath();
+            showWinOverlay();
+        }
+    }
+
+    playDeathSound() {
+        if (typeof soundManager !== 'undefined') {
+            soundManager.playEffect('img/assets/audio/bossDies.wav', 200);
+        }
+    }
+
+    handleBossHurtState() {
+        if (this.spawnID >= 8) {
+            this.playAnimation(this.IMAGES_HURT);
+        }
+    }
+
     async handleDeath() {
-        // 800 ms warten, bevor der Win-Screen Sound startet
         setTimeout(async () => {
             if (soundManager) {
-                // Aktuelle Musik stoppen
                 soundManager.stopTheme();
-
-                // Win-Screen Musik laden und starten
                 await soundManager.loadTheme('img/assets/audio/winScreen.mp3');
                 soundManager.playTheme();
             }
         }, 800);
-
-        // Spiel stoppen
         this.world.stopGame();
     }
 
     async checkBossSpawn() {
         if (this.spawnID < 8) {
-            // Boss-Theme nur einmal abspielen
-            if (!this.audioBossThemePlayed && soundManager) {
-                soundManager.stopTheme(); // aktuelle Musik stoppen
-
-                await soundManager.loadTheme('img/assets/audio/bossTheme.wav');
-                soundManager.playTheme();
-
-                this.audioBossThemePlayed = true;
-            }
-
-            // Spawn-Animation abspielen
-            this.playAnimation(this.IMAGES_SPAWNING);
-
+            await this.handleBossSpawnSequence();
         } else if (!this.isAttacking) {
-            // Schwimm-Animation, wenn nicht angreifend
-            this.playAnimation(this.IMAGES_SWIMMING);
-            this.isSwimming = true;
+            this.handleBossSwimmingState();
         }
-
         this.spawnID++;
-        // console.log(this.spawnID);
+    }
+
+    async handleBossSpawnSequence() {
+        if (!this.audioBossThemePlayed) {
+            await this.playBossTheme();
+        }
+        this.playAnimation(this.IMAGES_SPAWNING);
+    }
+
+    async playBossTheme() {
+        if (!soundManager) return;
+        soundManager.stopTheme();
+        await soundManager.loadTheme('img/assets/audio/bossTheme.wav');
+        soundManager.playTheme();
+        this.audioBossThemePlayed = true;
+    }
+
+    handleBossSwimmingState() {
+        this.playAnimation(this.IMAGES_SWIMMING);
+        this.isSwimming = true;
     }
 
     randomAttack(randomMoveID) {
-        // randomMoveID = 2;
-        // console.log("randomID: " + randomMoveID);
-        if (randomMoveID == 0) {
-            // console.log("randomID = 0: " + randomMoveID);
-            //enemy attackes and moves fast forward, this.x - 400 and then back
-            if (soundManager) soundManager.playEffect('img/assets/audio/bossBite.flac', 0);
+        if (randomMoveID === 0) {
+            this.performAttack(true, 'up');
+        } else if (randomMoveID === 1) {
+            this.performAttack(true, 'down');
+        } else if (randomMoveID === 2) {
+            this.performAttack(false, 'up');
+        } else if (randomMoveID === 3) {
+            this.performAttack(true, null);
+        } else if (randomMoveID === 4) {
+            this.performAttack(false, 'down');
+        }
+    }
+
+    performAttack(playSound, direction) {
+        if (playSound) {
+            this.playBossBiteSound();
             this.attackMove();
+        }
+        if (direction === 'up') {
             this.verticalMoveUp();
-        } else if (randomMoveID == 1) {
-            if (soundManager) soundManager.playEffect('img/assets/audio/bossBite.flac', 0);
-            // console.log("randomID = 1: " + randomMoveID);
-            this.attackMove();
-            //enemy moves this.y down -400 and then back
-            this.verticalMoveDown();
-        } else if (randomMoveID == 2) {
-            // console.log("randomID = 2: " + randomMoveID);
-            //enemy moves this.y down -400 and then back
-            this.verticalMoveUp();
-        } else if (randomMoveID == 3) {
-            if (soundManager) soundManager.playEffect('img/assets/audio/bossBite.flac', 0);
-            // console.log("randomID = 3: " + randomMoveID);
-            //enemy moves this.y down -400 and then back
-            this.attackMove();
-        } else if (randomMoveID == 4) {
-            // console.log("randomID = 4: " + randomMoveID);
-            //enemy moves this.y down -400 and then back
+        } else if (direction === 'down') {
             this.verticalMoveDown();
         }
-
     }
 
-    // Bewegung 1: Angriff vorwärts und zurück
+    playBossBiteSound() {
+        if (typeof soundManager !== 'undefined') {
+            soundManager.playEffect('img/assets/audio/bossBite.flac', 0);
+        }
+    }
+
     attackMove() {
         this.isAttacking = true;
-        const distance = -370;
-        const speed = 23; // Geschwindigkeit
-
-        let forward = true;
         this.biteCounter = 0;
-
+        const distance = -370;
+        const speed = 23;
+        let forward = true;
         const interval = setInterval(() => {
             if (forward) {
-                this.x -= speed;
-                this.moved -= speed;
-
-                // Animation nur während forward
-                if (this.biteCounter % 3 == 0 && !this.isHurt()) {
-                    this.playAnimation(this.IMAGES_ATTACK);
-                }
-                this.biteCounter++
-                // console.log(this.biteCounter);
-                // console.log(this.moved);
-                // console.log(this.img.src);
-
-
-                if (this.moved <= distance) {
-                    forward = false; // Richtung umkehren
-                }
+                this.handleAttackForward(speed, distance, () => (forward = false));
             } else {
-                // Rückwärtsbewegung ohne Animation
-                this.x += speed;
-                this.moved += speed;
-
-                if (this.moved >= 0) {
-                    clearInterval(interval); // Bewegung abgeschlossen
-                    this.isAttacking = false;
-                }
+                this.handleAttackBackward(speed, interval);
             }
         }, 50);
-
     }
 
-    // Bewegung 2: nach unten und zurück
+    handleAttackForward(speed, distance, onTurnBack) {
+        this.x -= speed;
+        this.moved -= speed;
+        if (this.biteCounter % 3 === 0 && !this.isHurt()) {
+            this.playAnimation(this.IMAGES_ATTACK);
+        }
+        this.biteCounter++;
+        if (this.moved <= distance) {
+            onTurnBack();
+        }
+    }
+
+    handleAttackBackward(speed, interval) {
+        this.x += speed;
+        this.moved += speed;
+        if (this.moved >= 0) {
+            clearInterval(interval);
+            this.isAttacking = false;
+        }
+    }
+
     verticalMoveDown() {
-        // this.playAnimation(this.IMAGES_SWIMMING);
+        this.handleVerticalMove(150, 9, 'down');
+    }
 
-        const startY = this.y;
-        const distance = 150;
-        const speed = 9;
+    verticalMoveUp() {
+        this.handleVerticalMove(200, 12, 'up');
+    }
+
+    handleVerticalMove(distance, speed, direction) {
         let moved = 0;
-        let down = true;
-
+        let going = true;
         const interval = setInterval(() => {
-            if (down) {
-                this.y += speed;
+            if (going) {
+                this.updateVerticalPosition(speed, direction, 1);
                 moved += speed;
-                if (moved >= distance) down = false;
+                if (moved >= distance) going = false;
             } else {
-                this.y -= speed;
+                this.updateVerticalPosition(speed, direction, -1);
                 moved -= speed;
                 if (moved <= 0) clearInterval(interval);
             }
         }, 50);
     }
 
-    // Bewegung 3: nach oben und zurück
-    verticalMoveUp() {
-        // this.playAnimation(this.IMAGES_SWIMMING);
-
-        const startY = this.y;
-        // const distance = 200;
-        const distance = 200;
-        // const speed = 20;
-        const speed = 12;
-        let moved = 0;
-        let up = true;
-
-        const interval = setInterval(() => {
-            if (up) {
-                this.y -= speed;
-                moved += speed;
-                if (moved >= distance) up = false;
-            } else {
-                this.y += speed;
-                moved -= speed;
-                if (moved <= 0) clearInterval(interval);
-            }
-        }, 50);
+    updateVerticalPosition(speed, direction, factor) {
+        if (direction === 'down') {
+            this.y += speed * factor;
+        } else {
+            this.y -= speed * factor;
+        }
     }
 
     isDead() {
         return this.energy == 0;
     }
-
 }

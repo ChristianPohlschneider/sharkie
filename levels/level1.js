@@ -1,7 +1,7 @@
 function createLevel1() {
     return new Level(
         [
-            // enemies
+            // enemies set later
         ],
         [
             new Barrier(600, 280, 200, 100, 'img/3. Background/Barrier/3.png', 0, 0, 20, 20),

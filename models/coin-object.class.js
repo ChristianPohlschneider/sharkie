@@ -4,14 +4,6 @@ class Coin extends MovableObject {
     height = 50;
     width = 50;
     coinValue = 4;
-    COIN_IMAGES = [
-        'img/4. Marcadores/1. Coins/1.png',
-        'img/4. Marcadores/1. Coins/2.png',
-        'img/4. Marcadores/1. Coins/3.png',
-        'img/4. Marcadores/1. Coins/4.png',
-    ];
-
-   
     animationInterval;
     world;
     level;
@@ -23,15 +15,19 @@ class Coin extends MovableObject {
         bottom: 4
     };
 
-    constructor(x, y, level) {
+    COIN_IMAGES = [
+        'img/4. Marcadores/1. Coins/1.png',
+        'img/4. Marcadores/1. Coins/2.png',
+        'img/4. Marcadores/1. Coins/3.png',
+        'img/4. Marcadores/1. Coins/4.png',
+    ];
 
+    constructor(x, y, level) {
         super().loadImage('img/4. Marcadores/1. Coins/1.png');
         this.loadImages(this.COIN_IMAGES);
         this.x = x;
         this.y = y;
         this.level = level;
-        // this.animate();
-
     }
 
     setWorld(world) {
@@ -39,10 +35,9 @@ class Coin extends MovableObject {
         this.animate();
     }
 
-   animate() {
+    animate() {
         this.animationInterval = this.world.setStoppableInterval(() => {
             this.playAnimation(this.COIN_IMAGES);
         }, 200);
     }
-
 }

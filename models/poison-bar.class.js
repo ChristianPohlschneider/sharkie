@@ -17,10 +17,8 @@ class PoisonBar extends MovableObject {
         this.y = 50;
         this.height = 60;
         this.width = 200;
-
         this.loadImage('img/4. Marcadores/green/poisoned bubbles/0_ copia 2.png');
         this.loadImages(this.IMAGES_POISONBAR);
-
     }
 
     setPoisonAmount(poisonInVenomSac) {

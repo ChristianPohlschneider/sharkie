@@ -15,7 +15,6 @@ class PufferFish extends MovableObject {
     moveInterval = null;
     oscillateInterval = null;
     animationInterval = null;
-    // audioEnemyDie = new Audio('img/assets/audio/enemyDie.wav');
 
     offset = {
         top: 10,
@@ -53,71 +52,39 @@ class PufferFish extends MovableObject {
         this.loadImages(this.IMAGES_DIE);
         this.loadImages(this.IMAGES_HURT);
         this.world = world;
-        // this.x = 700 + Math.random() * 500;
         this.x = x;
         this.y = y;
         this.speed = speed;
-        this.animate(phase, x);
-
+        this.animate(phase);
     }
 
-    animate(phase, x) {
+    animate(phase) {
         this.phase = phase;
-
         this.moveInterval = this.moveLeft(this.speed, this.interval);
         this.world.setStoppableInterval(() => {
-            // eigene Bewegungsintervalle speichern
-
-            if (this.x < -250) {
-                this.x = this.world.level.level_end_x + 400
-
-            }
+            if (this.x < -250) this.x = this.world.level.level_end_x + 400;
         }, 200);
-
         this.oscillateInterval = this.oscillate(this.phase);
-
-        // Animationsloop (nicht stoppen, solange Fisch lebt)
         this.animationInterval = this.world.setStoppableInterval(() => {
-            if (this.isDead()) {
-                this.handleDeath();
-            } else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else {
-                this.playAnimation(this.IMAGES_SWIMMING);
-            }
+            if (this.isDead()) this.handleDeath();
+            else if (this.isHurt()) this.playAnimation(this.IMAGES_HURT);
+            else this.playAnimation(this.IMAGES_SWIMMING);
         }, 200);
     }
 
     handleDeath() {
-        if (!this.hasDied) {
-            this.hasDied = true;
-
-            // Sound über SoundManager mit 600ms Verzögerung
-            if (soundManager) {
-                soundManager.playEffect('img/assets/audio/enemyDie.wav', 600);
-            }
-
-            // Animation abspielen
-            this.playAnimation(this.IMAGES_DIE);
-
-            // Nur eigene Bewegungsintervalle stoppen
-            clearInterval(this.moveInterval);
-            clearInterval(this.oscillateInterval);
-
-            // nach Animation entfernen
-            setTimeout(() => {
-                const index = this.world.level.enemies.indexOf(this);
-                if (index > -1) {
-                    this.world.level.enemies.splice(index, 1);
-                }
-
-                // In shrinkingObjects einfügen
-                this.world.level.shrinkingObjects.push(this);
-
-                // Shrink-Out starten
-                this.shrinkOut();
-            }, this.IMAGES_DIE.length * 200); // Gesamtdauer der Animation
-        }
+        if (this.hasDied) return;
+        this.hasDied = true;
+        if (soundManager) soundManager.playEffect('img/assets/audio/enemyDie.wav', 600);
+        this.playAnimation(this.IMAGES_DIE);
+        clearInterval(this.moveInterval);
+        clearInterval(this.oscillateInterval);
+        setTimeout(() => {
+            const idx = this.world.level.enemies.indexOf(this);
+            if (idx > -1) this.world.level.enemies.splice(idx, 1);
+            this.world.level.shrinkingObjects.push(this);
+            this.shrinkOut();
+        }, this.IMAGES_DIE.length * 200);
     }
 
     isDead() {
