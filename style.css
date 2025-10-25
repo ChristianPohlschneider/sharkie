@@ -209,9 +209,8 @@ body {
 .infoButton:active,
 .closeInfo:active,
 .overlayButton:active {
-    background-color: rgb(64, 73, 166);
+    background-color: rgb(94, 101, 169);
     box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
-    transform: translateY(4px);
 }
 
 canvas {
@@ -371,21 +370,20 @@ canvas {
 .arrowDown.active,
 .strgKey.active,
 .spaceKey.active {
-    background-color: rgb(83, 26, 130);
-    box-shadow: 0px 0px 9px 9px rgba(64, 73, 166, 0.1);
-    transform: translateY(4px);
+    background-color: rgb(94, 101, 169);
+    box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
 }
 
 .arrowLeft.active {
-    transform: translateY(4px) rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .arrowUp.active {
-    transform: translateY(4px) rotate(-90deg);
+    transform: rotate(-90deg);
 }
 
 .arrowDown.active {
-    transform: translateY(4px) rotate(90deg);
+    transform: rotate(90deg);
 }
 
 .infoOverlay {
@@ -404,7 +402,7 @@ canvas {
 }
 
 .infoContent {
-    background: rgb(59, 175, 209);
+    background-color: rgb(94, 101, 169);
     border-radius: 20px;
     padding: 0px 40px 25px 40px;
     max-width: 400px;
@@ -450,7 +448,8 @@ canvas {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    color: #fff;
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
+    color: rgb(83, 26, 130);
     background-color: rgb(252, 238, 33);
     border: 2px solid white;
     transition: background 0.2s;
@@ -468,7 +467,8 @@ canvas {
     text-align: center;
     text-decoration: none;
     outline: none;
-    color: #fff;
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
+    color: rgb(83, 26, 130);
     background-color: rgb(252, 238, 33);
     border: 2px solid white;
     border-radius: 10px;
