@@ -59,21 +59,6 @@ class DrawableObject {
         }
     }
 
-    drawFrame(ctx, object) {
-        if (this instanceof Character || this instanceof Barrier) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'red';
-            ctx.rect(this.x + object.offset.left, this.y + object.offset.top, this.width - object.offset.right - object.offset.left, this.height - object.offset.top - object.offset.bottom);
-            ctx.stroke();
-        }
-    }
-
     drawShrinkingObjects(ctx) {
         if (this.isCollected) return;
         const img = this.img || this.imageCache[this.COIN_IMAGES[0]];

@@ -198,7 +198,6 @@ class World {
             this.flipImage(object);
         }
         object.drawImages(this.ctx);
-        object.drawFrame(this.ctx, object);
         if (object.otherDirection) {
             this.flipImageBack(object);
         }
@@ -208,7 +207,6 @@ class World {
         if (!objects) return [];
         let visibleObjects = objects.filter(o => !o.isCollected);
         visibleObjects.forEach(o => o.drawShrinkingObjects(this.ctx));
-        visibleObjects.forEach(o => o.drawFrame(this.ctx, o));
         return visibleObjects;
     }
 

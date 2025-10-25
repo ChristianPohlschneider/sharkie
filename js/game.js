@@ -304,7 +304,6 @@ function onRestartButtonClick() {
 
 function initOverlayButtons() {
     const buttons = getMenuButtons();
-
     bindOverlayButton(buttons.menuWin, onMenuButtonClick);
     bindOverlayButton(buttons.menuLose, onMenuButtonClick);
     bindOverlayButton(buttons.restartWin, onRestartButtonClick);
