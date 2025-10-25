@@ -76,7 +76,6 @@ async function startGame() {
     if (world) {
         if (typeof world.cleanup === "function") world.cleanup();
         world = null;
-        console.log("Alte Welt gelöscht");
     }
     if (soundManager) soundManager.stopTheme();
     await startAudio('img/assets/audio/gameTheme.wav');
@@ -100,7 +99,6 @@ function showStartScreen() {
 
 function initshowStartScreen() {
     if (typeof world !== 'undefined' && world) {
-        console.log("Zurück ins Hauptmenü – alte Welt wird beendet.");
         if (typeof world.cleanup === 'function') world.cleanup();
         world = null;
     }

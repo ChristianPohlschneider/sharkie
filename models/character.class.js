@@ -379,16 +379,11 @@ class Character extends MovableObject {
             this.playAnimation(this.IMAGES_IDLE);
         }
     }
-    
+
     isShooting() {
         let timeShotpassed = new Date().getTime() - this.lastShot;
         timeShotpassed = timeShotpassed / 1000;
         return timeShotpassed < 0.4;
-    }
-
-    isAboveWaterSurface() {
-        console.log(this.y)
-        return this.y > -75;
     }
 
     bubbleShot() {

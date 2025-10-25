@@ -247,11 +247,9 @@ class World {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
         }
-        console.log("Alle Intervalle und AnimationFrames gestoppt.");
     }
 
     cleanup() {
         this.stopGame();
-        console.log("World wurde bereinigt.");
     }
 }
