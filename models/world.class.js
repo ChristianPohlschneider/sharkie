@@ -13,6 +13,7 @@ class World {
     isCollidingBarrier = false;
     animationFrameId = null;
     camera_xWidthModulo = 0;
+    totalScore = 0;
 
     constructor(canvas, keyboard, level) {
         this.ctx = canvas.getContext('2d');
@@ -124,6 +125,7 @@ class World {
         this.coinBar.coinCount(coin.coinValue);
         this.coinBar.setWalletAmount(this.coinBar.wallet);
         if (soundManager) soundManager.playEffect('img/assets/audio/coin.wav', 0);
+        this.totalScore += this.coinBar.score;
         coin.shrinkOut();
         this.level.shrinkingObjects.push(coin);
     }
@@ -144,6 +146,7 @@ class World {
         this.poisonBar.poisonCount(poisonBottle.poisonValue);
         this.poisonBar.setPoisonAmount(this.poisonBar.venomSac);
         if (soundManager) soundManager.playEffect('img/assets/audio/acid.wav', 0);
+        this.totalScore += this.poisonBar.score;
         poisonBottle.shrinkOut();
         this.level.shrinkingObjects.push(poisonBottle);
     }

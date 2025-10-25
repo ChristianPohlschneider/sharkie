@@ -31,10 +31,41 @@ body {
     height: clamp(24px, 10vw, 100px);
     top: 0%;
     font-size: clamp(24px, 8vw, 80px);
+    color: rgb(252, 238, 33);
     letter-spacing: 3px;
+    text-shadow:
+        -2px -2px 0 rgb(83, 26, 130),
+        2px -2px 0 rgb(83, 26, 130),
+        -2px 2px 0 rgb(83, 26, 130),
+        2px 2px 0 rgb(83, 26, 130),
+        -4px -4px 0 white,
+        4px -4px 0 white,
+        -4px 4px 0 white,
+        4px 4px 0 white;
+    align-items: center;
+    justify-content: center;
+}
+
+.scoreDiv {
+    position: absolute;
+    display: flex;
+    color: rgb(252, 238, 33);
+    width: 100%;
+    height: clamp(24px, 10vw, 100px);
+    top: 10%;
+    font-size: clamp(24px, 8vw, 50px);
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
     align-items: center;
     justify-content: center;
+    text-shadow:
+        -2px -2px 0 rgb(83, 26, 130),
+        2px -2px 0 rgb(83, 26, 130),
+        -2px 2px 0 rgb(83, 26, 130),
+        2px 2px 0 rgb(83, 26, 130),
+        -4px -4px 0 white,
+        4px -4px 0 white,
+        -4px 4px 0 white,
+        4px 4px 0 white;
 }
 
 .fullScreen {
@@ -71,13 +102,14 @@ body {
     right: 15%;
     position: absolute;
     padding: 15px 25px;
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
+    color: rgb(83, 26, 130);
     font-size: 24px;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
     outline: none;
-    color: #fff;
-    background-color: rgb(239, 199, 46);
+    background-color: rgb(252, 238, 33);
     border: 2px solid white;
     border-radius: 15px;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
@@ -112,8 +144,9 @@ body {
     line-height: 30px;
     text-decoration: none;
     outline: none;
-    color: #fff;
-    background-color: rgb(239, 199, 46);
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
+    color: rgb(83, 26, 130);
+    background-color: rgb(252, 238, 33);
     border: 2px solid white;
     border-radius: 50%;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
@@ -132,8 +165,9 @@ body {
     cursor: pointer;
     text-decoration: none;
     outline: none;
-    color: #fff;
-    background-color: rgb(239, 199, 46);
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
+    color: rgb(83, 26, 130);
+    background-color: rgb(252, 238, 33);
     border: 2px solid white;
     border-radius: 50%;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
@@ -152,8 +186,9 @@ body {
     cursor: pointer;
     text-decoration: none;
     outline: none;
-    color: #fff;
-    background-color: rgb(239, 199, 46);
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
+    color: rgb(83, 26, 130);
+    background-color: rgb(252, 238, 33);
     border: 2px solid white;
     border-radius: 50%;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
@@ -163,15 +198,17 @@ body {
 .audioButton:hover,
 .fullscreenButton:hover,
 .infoButton:hover,
-.closeInfo:hover {
-    background-color: rgb(220, 190, 70)
+.closeInfo:hover,
+.overlayButton:hover {
+    transform: scale(1.05);
 }
 
 .startButton:active,
 .audioButton:active,
 .fullscreenButton:active,
 .infoButton:active,
-.closeInfo:active {
+.closeInfo:active,
+.overlayButton:active {
     background-color: rgb(64, 73, 166);
     box-shadow: 0px 0px 9px 9px rgb(64, 73, 166, 0.1);
     transform: translateY(4px);
@@ -193,6 +230,7 @@ canvas {
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.85);
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
     color: white;
     display: none;
     justify-content: center;
@@ -278,8 +316,9 @@ canvas {
     text-align: center;
     text-decoration: none;
     outline: none;
-    color: #fff;
-    background-color: rgb(239, 199, 46);
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
+    color: rgb(83, 26, 130);
+    background-color: rgb(252, 238, 33);
     border: 2px solid white;
     border-radius: 15px;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
@@ -312,8 +351,9 @@ canvas {
     text-align: center;
     text-decoration: none;
     outline: none;
-    color: #fff;
-    background-color: rgb(239, 199, 46);
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
+    color: rgb(83, 26, 130);
+    background-color: rgb(252, 238, 33);
     border: 2px solid white;
     border-radius: 15px;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
@@ -322,7 +362,7 @@ canvas {
 
 .arrowKey:hover,
 .spaceKey:hover {
-    background-color: rgb(220, 190, 70)
+    background-color: rgb(255, 246, 115);
 }
 
 .arrowRight.active,
@@ -331,7 +371,7 @@ canvas {
 .arrowDown.active,
 .strgKey.active,
 .spaceKey.active {
-    background-color: rgb(64, 73, 166);
+    background-color: rgb(83, 26, 130);
     box-shadow: 0px 0px 9px 9px rgba(64, 73, 166, 0.1);
     transform: translateY(4px);
 }
@@ -411,7 +451,7 @@ canvas {
     border-radius: 10px;
     cursor: pointer;
     color: #fff;
-    background-color: rgb(239, 199, 46);
+    background-color: rgb(252, 238, 33);
     border: 2px solid white;
     transition: background 0.2s;
 }
@@ -429,7 +469,7 @@ canvas {
     text-decoration: none;
     outline: none;
     color: #fff;
-    background-color: rgb(239, 199, 46);
+    background-color: rgb(252, 238, 33);
     border: 2px solid white;
     border-radius: 10px;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
@@ -491,13 +531,14 @@ canvas {
     text-align: center;
     text-decoration: none;
     outline: none;
-
-    color: #fff;
-    background-color: rgb(239, 199, 46);
+    font-family: 'titanOne', Arial, Helvetica, sans-serif;
+    color: rgb(83, 26, 130);
+    background-color: rgb(252, 238, 33);
     border: 2px solid white;
     border-radius: 15px;
     box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
     height: 10vw;
+    max-height: 80px;
     width: 25vw;
     max-width: 200px;
     min-width: 100px;
@@ -535,6 +576,7 @@ canvas {
 }
 
 @keyframes rotatePhone {
+
     0%,
     100% {
         transform: rotate(0deg);
@@ -590,6 +632,7 @@ canvas {
 }
 
 @media only screen and (max-height: 480px) {
+
     canvas,
     .fullScreen,
     .startScreen,

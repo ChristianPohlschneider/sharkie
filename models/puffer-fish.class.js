@@ -8,6 +8,7 @@ class PufferFish extends MovableObject {
     damageFromBubble = 50;
     damageFromFinSlap = 100;
     damageDueToCollision = 10;
+    score = 50;
     world;
     spawnID = 8;
     lastHit = 0;
@@ -75,16 +76,19 @@ class PufferFish extends MovableObject {
     handleDeath() {
         if (this.hasDied) return;
         this.hasDied = true;
-        if (soundManager) soundManager.playEffect('img/assets/audio/enemyDie.wav', 600);
+        soundManager?.playEffect('img/assets/audio/enemyDie.wav', 600);
         this.playAnimation(this.IMAGES_DIE);
+        this.world.totalScore += this.score;
         clearInterval(this.moveInterval);
         clearInterval(this.oscillateInterval);
-        setTimeout(() => {
-            const idx = this.world.level.enemies.indexOf(this);
-            if (idx > -1) this.world.level.enemies.splice(idx, 1);
-            this.world.level.shrinkingObjects.push(this);
-            this.shrinkOut();
-        }, this.IMAGES_DIE.length * 200);
+        setTimeout(() => this.removeAndShrink(), this.IMAGES_DIE.length * 200);
+    }
+
+    removeAndShrink() {
+        const idx = this.world.level.enemies.indexOf(this);
+        if (idx > -1) this.world.level.enemies.splice(idx, 1);
+        this.world.level.shrinkingObjects.push(this);
+        this.shrinkOut();
     }
 
     isDead() {

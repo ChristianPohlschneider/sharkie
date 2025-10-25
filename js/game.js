@@ -213,45 +213,14 @@ function toggleButtonActive(code, isActive) {
     else button.classList.remove("active");
 }
 
-// function fullscreen() {
-//     let fullscreen = document.getElementById('fullscreen');
-//     if (fullscreenIsSet == false) {
-//         enterFullscreen(fullscreen);
-//         document.getElementById('fullscreenButton').innerHTML = '✕';
-//         fullscreenIsSet = true;
-//     } else if (fullscreenIsSet == true) {
-//         exitFullscreen(fullscreen);
-//         document.getElementById('fullscreenButton').innerHTML = '⛶';
-//         fullscreenIsSet = false;
-//     }
-//     fullscreenButton.blur();
-// }
-
-// function enterFullscreen(element) {
-//     if (element.requestFullscreen) {
-//         element.requestFullscreen();
-//     } else if (element.msRequestFullscreen) {
-//         element.msRequestFullscreen();
-//     } else if (element.webkitRequestFullscreen) {
-//         element.webkitRequestFullscreen();
-//     }
-// }
-
-// function exitFullscreen() {
-//     if (document.exitFullscreen) {
-//         document.exitFullscreen();
-//     } else if (document.webkitExitFullscreen) {
-//         document.webkitExitFullscreen();
-//     }
-// }
 function fullscreen() {
     const fsElement = document.getElementById('fullscreen');
     const button = document.getElementById('fullscreenButton');
 
-    if (!document.fullscreenElement) { // kein Fullscreen
+    if (!document.fullscreenElement) {
         enterFullscreen(fsElement);
         button.innerHTML = '✕';
-    } else { // Fullscreen aktiv
+    } else {
         exitFullscreen();
         button.innerHTML = '⛶';
     }
@@ -291,9 +260,12 @@ window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
 window.addEventListener('load', checkOrientation);
 
-function showWinOverlay() {
+function showWinOverlay(totalScore) {
     setTimeout(() => {
-        document.getElementById('winOverlay').classList.remove('hidden');
+        const overlay = document.getElementById('winOverlay');
+        const scoreDiv = document.getElementById('scoreDiv');
+        scoreDiv.textContent = `Your Score is: ${totalScore}`;
+        overlay.classList.remove('hidden');
     }, 1000);
 }
 

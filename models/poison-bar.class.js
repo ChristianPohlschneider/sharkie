@@ -1,5 +1,6 @@
 class PoisonBar extends MovableObject {
     venomSac = 0;
+    score = 20;
     world;
 
     IMAGES_POISONBAR = [

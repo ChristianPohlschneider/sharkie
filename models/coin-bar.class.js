@@ -1,5 +1,6 @@
 class CoinBar extends MovableObject {
     wallet = 0;
+    score = 10;
     world;
 
     IMAGES_COINBAR = [

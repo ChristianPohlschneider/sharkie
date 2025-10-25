@@ -8,6 +8,7 @@ class JellyFish extends MovableObject {
     damageFromBubble = 25;
     damageFromFinSlap = 0;
     damageDueToCollision = 20;
+    score = 100;
     world;
     spawnID = 8;
     isDeadID = 0;
@@ -91,6 +92,7 @@ class JellyFish extends MovableObject {
         if (this.hasDied) return;
         this.hasDied = true;
         if (soundManager) soundManager.playEffect('img/assets/audio/enemyDie.wav', 400);
+        this.world.totalScore += this.score;
         clearInterval(this.moveInterval);
         clearInterval(this.oscillateInterval);
         clearInterval(this.animationInterval);
