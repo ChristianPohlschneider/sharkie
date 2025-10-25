@@ -215,37 +215,70 @@ function toggleButtonActive(code, isActive) {
     else button.classList.remove("active");
 }
 
+// function fullscreen() {
+//     let fullscreen = document.getElementById('fullscreen');
+//     if (fullscreenIsSet == false) {
+//         enterFullscreen(fullscreen);
+//         document.getElementById('fullscreenButton').innerHTML = '✕';
+//         fullscreenIsSet = true;
+//     } else if (fullscreenIsSet == true) {
+//         exitFullscreen(fullscreen);
+//         document.getElementById('fullscreenButton').innerHTML = '⛶';
+//         fullscreenIsSet = false;
+//     }
+//     fullscreenButton.blur();
+// }
+
+// function enterFullscreen(element) {
+//     if (element.requestFullscreen) {
+//         element.requestFullscreen();
+//     } else if (element.msRequestFullscreen) {
+//         element.msRequestFullscreen();
+//     } else if (element.webkitRequestFullscreen) {
+//         element.webkitRequestFullscreen();
+//     }
+// }
+
+// function exitFullscreen() {
+//     if (document.exitFullscreen) {
+//         document.exitFullscreen();
+//     } else if (document.webkitExitFullscreen) {
+//         document.webkitExitFullscreen();
+//     }
+// }
 function fullscreen() {
-    let fullscreen = document.getElementById('fullscreen');
-    if (fullscreenIsSet == false) {
-        enterFullscreen(fullscreen);
-        document.getElementById('fullscreenButton').innerHTML = '✕';
-        fullscreenIsSet = true;
-    } else if (fullscreenIsSet == true) {
-        exitFullscreen(fullscreen);
-        document.getElementById('fullscreenButton').innerHTML = '⛶';
-        fullscreenIsSet = false;
+    const fsElement = document.getElementById('fullscreen');
+    const button = document.getElementById('fullscreenButton');
+
+    if (!document.fullscreenElement) { // kein Fullscreen
+        enterFullscreen(fsElement);
+        button.innerHTML = '✕';
+    } else { // Fullscreen aktiv
+        exitFullscreen();
+        button.innerHTML = '⛶';
     }
-    fullscreenButton.blur();
+    button.blur();
 }
 
 function enterFullscreen(element) {
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.msRequestFullscreen) {
-        element.msRequestFullscreen();
-    } else if (element.webkitRequestFullscreen) {
-        element.webkitRequestFullscreen();
-    }
+    if (element.requestFullscreen) element.requestFullscreen();
+    else if (element.msRequestFullscreen) element.msRequestFullscreen();
+    else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
 }
 
 function exitFullscreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    }
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
 }
+
+document.addEventListener('fullscreenchange', () => {
+    const button = document.getElementById('fullscreenButton');
+    if (document.fullscreenElement) {
+        button.innerHTML = '✕';
+    } else {
+        button.innerHTML = '⛶';
+    }
+});
 
 function checkOrientation() {
     const warning = document.getElementById('rotateWarning');
