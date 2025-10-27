@@ -267,7 +267,7 @@ canvas {
 }
 
 .mobileKeys {
-    display: flex;
+     display: none;
     align-items: flex-end;
     position: absolute;
     width: 90%;
@@ -618,6 +618,10 @@ canvas {
 
     .overlayButton {
         font-size: 20px;
+    }
+
+    #mobileKeys {
+        display: flex;
     }
 }
 

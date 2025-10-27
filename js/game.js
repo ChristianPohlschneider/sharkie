@@ -4,6 +4,16 @@ let keyboard = new Keyboard();
 let soundManager;
 let fullscreenIsSet = false;
 
+/**
+ * * This function attaches a "pointerdown" event listener to the button with the ID "audioButton".
+ * When the button is pressed, the event's default behavior is prevented,
+ * propagation is stopped, and the asynchronous function `toggleGameSound()` is called
+ * to toggle the game's sound on or off.
+ * 
+ * @listens DOMContentLoaded - Waits for the HTML document to be fully loaded before adding the button listener.
+ * @listens pointerdown - Handles pointer events (e.g., mouse, touch, stylus) on the audio button.
+ * @throws {Error} Propagates any error thrown by `toggleGameSound()` if it fails.
+ */
 window.addEventListener("DOMContentLoaded", () => {
     const audioBtn = document.getElementById("audioButton");
     audioBtn.addEventListener("pointerdown", async (event) => {
