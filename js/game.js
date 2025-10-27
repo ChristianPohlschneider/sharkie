@@ -23,6 +23,15 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+/** 
+ * This function retrieves references to the information button, 
+ * the overlay element, and the close button within the overlay. 
+ * It then calls `handleInfoOverlay()` to manage the display logic 
+ * and interactions for the info overlay.
+ * 
+ * @listens DOMContentLoaded - Ensures the elements are accessed only after the DOM is ready.
+ * @throws {Error} May propagate errors thrown by `handleInfoOverlay()` if initialization fails.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     const infoButton = document.getElementById('infoButton');
     const infoOverlay = document.getElementById('infoOverlay');
@@ -30,6 +39,19 @@ document.addEventListener('DOMContentLoaded', () => {
     handleInfoOverlay();
 });
 
+/**
+ * This function sets up event listeners for opening and closing the info overlay:
+ * - Clicking the **info button** shows the overlay by removing the `hidden` class.
+ * - Clicking the **close button** hides the overlay by adding the `hidden` class.
+ * - Clicking anywhere outside the overlay content (on the overlay background itself)
+ *   also hides the overlay.
+ *
+ * @function handleInfoOverlay
+ * @listens click - On `infoButton` to open the overlay.
+ * @listens click - On `closeInfo` to close the overlay.
+ * @listens click - On `infoOverlay` background to close when clicking outside content.
+ * @throws {TypeError} If one of the required elements (`infoButton`, `infoOverlay`, `closeInfo`) is not found in the DOM.
+ */
 function handleInfoOverlay() {
     infoButton.addEventListener('click', () => {
         infoOverlay.classList.remove('hidden');
@@ -44,10 +66,29 @@ function handleInfoOverlay() {
     });
 }
 
+/**
+ * This function retrieves the `<canvas>` element from the DOM using its ID (`canvas`)
+ * and assigns it to the global variable `canvas`. 
+ * It should be called before any rendering or drawing operations are performed.
+ * 
+ * @function init
+ * @throws {TypeError} If the element with ID "canvas" is not found in the DOM.
+ */
 function init() {
     canvas = document.getElementById('canvas');
 }
 
+/**
+ * This asynchronous function ensures that a `SoundManager` instance exists and,
+ * if not, creates one and loads the main audio theme. It resumes the audio context
+ * if it is currently suspended (e.g., due to browser autoplay policies), toggles
+ * the sound state, updates the button icon (`🔊` for sound on, `🔇` for sound off),
+ * and triggers the appropriate background theme handling.
+ * 
+ * @async
+ * @function toggleGameSound
+ * @throws {Error} If loading the theme or resuming the audio context fails.
+ */
 async function toggleGameSound() {
     if (!soundManager) {
         soundManager = new SoundManager();
@@ -62,6 +103,17 @@ async function toggleGameSound() {
     handleGameSoundThemePlay(enabled);
 }
 
+/**
+ * Controls playback of the game's background theme based on the current sound state.
+ * 
+ * This function starts or stops the main theme depending on whether sound is enabled.
+ * When `enabled` is `true`, the theme begins playing; otherwise, it stops any ongoing playback.
+ * It relies on the global `soundManager` instance to manage the audio.
+ * 
+ * @function handleGameSoundThemePlay
+ * @param {boolean} enabled - Indicates whether the game sound is enabled (`true`) or disabled (`false`).
+ * @throws {Error} If `soundManager` is undefined or its audio methods fail.
+ */
 function handleGameSoundThemePlay(enabled) {
     if (enabled) {
         soundManager.playTheme();
@@ -70,6 +122,19 @@ function handleGameSoundThemePlay(enabled) {
     }
 }
 
+/**
+ * Initializes and starts audio playback using the provided source file.
+ * 
+ * This asynchronous function ensures that a `SoundManager` instance exists,
+ * loads the specified audio theme, resumes the audio context if it is suspended,
+ * and then begins playing the theme. It is typically used to start background
+ * music or a main theme at the beginning of the game or application.
+ * 
+ * @async
+ * @function startAudio
+ * @param {string} src - The file path or URL of the audio source to load and play.
+ * @throws {Error} If the audio file cannot be loaded or if resuming the audio context fails.
+ */
 async function startAudio(src) {
     if (!soundManager) {
         soundManager = new SoundManager();
@@ -81,6 +146,22 @@ async function startAudio(src) {
     soundManager.playTheme();
 }
 
+/**
+ * Starts the game by initializing the world, level, enemies, and audio.
+ * 
+ * This asynchronous function performs the following steps:
+ * 1. Hides the start screen.
+ * 2. Cleans up any existing `world` instance if present.
+ * 3. Stops any currently playing theme via the `soundManager`.
+ * 4. Starts the game's main theme using `startAudio()`.
+ * 5. Creates the first level using `createLevel1()`.
+ * 6. Initializes a new `World` instance with the canvas, keyboard, and level.
+ * 7. Assigns the new world to the current context and sets up initial enemies.
+ * 
+ * @async
+ * @function startGame
+ * @throws {Error} If audio fails to start or if world initialization encounters an issue.
+ */
 async function startGame() {
     document.getElementById('startScreen').style.display = "none";
     if (world) {
@@ -95,6 +176,18 @@ async function startGame() {
     setinitialEnemies(world);
 }
 
+/**
+ * Displays the game's start screen and plays the opening theme.
+ * 
+ * This function performs the following steps:
+ * 1. Calls `initshowStartScreen()` to initialize the start screen elements.
+ * 2. Hides any active overlays using `hideOverlays()`.
+ * 3. Makes the start screen visible by setting its `display` style to `flex`.
+ * 4. Plays the opening audio theme by calling `startAudio()` if the function is available.
+ * 
+ * @function showStartScreen
+ * @throws {Error} If the start screen element cannot be found or if audio playback fails.
+ */
 function showStartScreen() {
     initshowStartScreen();
     hideOverlays();
@@ -107,6 +200,17 @@ function showStartScreen() {
     }
 }
 
+/**
+ * Prepares the start screen by cleaning up any existing game world and stopping audio.
+ * 
+ * This function performs the following steps:
+ * 1. Checks if a `world` instance exists; if so, calls its `cleanup()` method and sets `world` to `null`.
+ * 2. Stops any currently playing theme via the `soundManager` if it exists.
+ * 3. Initializes the start screen canvas by calling `initshowStartScreenCanvas()`.
+ * 
+ * @function initshowStartScreen
+ * @throws {Error} If cleanup or canvas initialization fails.
+ */
 function initshowStartScreen() {
     if (typeof world !== 'undefined' && world) {
         if (typeof world.cleanup === 'function') world.cleanup();
@@ -118,6 +222,15 @@ function initshowStartScreen() {
     initshowStartScreenCanvas();
 }
 
+/**
+ * Initializes the start screen canvas by clearing any previous drawings.
+ * 
+ * This function retrieves the `<canvas>` element with the ID `canvas` and,
+ * if it exists, clears its 2D drawing context to prepare it for the start screen.
+ * 
+ * @function initshowStartScreenCanvas
+ * @throws {Error} If the canvas element is not found or if the 2D context cannot be retrieved.
+ */
 function initshowStartScreenCanvas() {
     const canvas = document.getElementById('canvas');
     if (canvas) {
@@ -126,6 +239,22 @@ function initshowStartScreenCanvas() {
     }
 }
 
+/**
+ * Handles keydown events to control the game and prevent default browser behavior.
+ * 
+ * This function listens for specific keyboard inputs used in the game:
+ * - Arrow keys: "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"
+ * - WASD keys: "KeyW", "KeyA", "KeyS", "KeyD"
+ * - Action keys: "Space", "ControlLeft", "ControlRight"
+ * 
+ * When any of these keys are pressed:
+ * 1. The default browser behavior is prevented (e.g., scrolling).
+ * 2. The `keyboard` object is updated to reflect the key as pressed (`true`).
+ * 3. The corresponding on-screen button (if any) is activated using `toggleButtonActive()`.
+ * 
+ * @listens keydown - Listens for keyboard input to control the game.
+ * @param {KeyboardEvent} event - The keydown event object.
+ */
 window.addEventListener('keydown', (event) => {
     const keysToPrevent = [
         "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown",
@@ -139,15 +268,47 @@ window.addEventListener('keydown', (event) => {
     toggleButtonActive(event.code, true);
 });
 
+/**
+ * Handles keyup events to update the game input state and UI.
+ * 
+ * This function listens for all key releases:
+ * 1. Marks the key as released (`false`) in the `keyboard` object.
+ * 2. Deactivates the corresponding on-screen button (if any) using `toggleButtonActive()`.
+ * 
+ * @listens keyup - Tracks when a key is released to update the game state.
+ * @param {KeyboardEvent} event - The keyup event object.
+ */
 window.addEventListener('keyup', (event) => {
     keyboard[event.code] = false;
     toggleButtonActive(event.code, false);
 });
 
+/**
+ * Initializes touch controls once the page has fully loaded.
+ * 
+ * This function waits for the `load` event, which fires when all assets
+ * (images, scripts, styles, etc.) are fully loaded, and then calls
+ * `initTouchControls()` to set up any mobile or touch-based input.
+ * 
+ * @listens load - Ensures all page resources are loaded before initializing touch controls.
+ * @function
+ */
 window.addEventListener("load", () => {
     initTouchControls();
 });
 
+/**
+ * Retrieves the DOM elements for all touch or on-screen control buttons.
+ * 
+ * This function returns an object mapping keyboard codes to their corresponding
+ * touch button elements on the screen. This allows both arrow/WASD keys and
+ * action keys (Space, Ctrl) to be controlled via touch input.
+ * 
+ * @function getTouchButtons
+ * @returns {Object.<string, HTMLElement|null>} An object where the keys are keyboard codes
+ *   (e.g., "ArrowUp", "KeyW", "Space") and the values are the corresponding button DOM elements.
+ *   If an element is not found, the value will be `null`.
+ */
 function getTouchButtons() {
     return {
         ArrowUp: document.getElementById("arrowUp"),
@@ -164,6 +325,22 @@ function getTouchButtons() {
     };
 }
 
+/**
+ * Creates handlers for pressing and releasing keys, updating both the keyboard state and UI.
+ * 
+ * This function returns an object containing two functions:
+ * - `press(key)`: Marks the specified key as pressed (`true`) in the `keyboard` object
+ *   and activates the corresponding on-screen button via `toggleButtonActive()`.
+ * - `release(key)`: Marks the specified key as released (`false`) in the `keyboard` object
+ *   and deactivates the corresponding on-screen button.
+ * 
+ * These handlers are typically used for touch or on-screen button input.
+ * 
+ * @function createPressReleaseHandlers
+ * @returns {Object} An object with two methods:
+ *   @property {function(string): void} press - Handles pressing a key.
+ *   @property {function(string): void} release - Handles releasing a key.
+ */
 function createPressReleaseHandlers() {
     const press = (key) => {
         keyboard[key] = true;
@@ -176,6 +353,22 @@ function createPressReleaseHandlers() {
     return { press, release };
 }
 
+/**
+ * Binds touch and mouse events to on-screen buttons to simulate keyboard input.
+ * 
+ * This function iterates over a mapping of keyboard codes to DOM elements (`buttons`)
+ * and attaches event listeners for each button:
+ * - `touchstart` / `mousedown`: Calls the `press` handler for the key.
+ * - `touchend` / `mouseup` / `mouseleave`: Calls the `release` handler for the key.
+ * 
+ * The `preventDefault()` method is used on touch events to avoid scrolling or
+ * other default browser behavior when interacting with the buttons.
+ * 
+ * @function bindTouchEvents
+ * @param {Object.<string, HTMLElement|null>} buttons - An object mapping keyboard codes to DOM button elements.
+ * @param {function(string): void} press - Function to call when a key is pressed.
+ * @param {function(string): void} release - Function to call when a key is released.
+ */
 function bindTouchEvents(buttons, press, release) {
     Object.entries(buttons).forEach(([key, btn]) => {
         if (!btn) return;
@@ -187,12 +380,36 @@ function bindTouchEvents(buttons, press, release) {
     });
 }
 
+/**
+ * Initializes touch and on-screen controls for mobile or touch devices.
+ * 
+ * This function performs the following steps:
+ * 1. Retrieves the DOM elements for all touch buttons using `getTouchButtons()`.
+ * 2. Creates press and release handlers for updating the `keyboard` state and UI via `createPressReleaseHandlers()`.
+ * 3. Binds touch and mouse events to the buttons using `bindTouchEvents()`.
+ * 
+ * This allows players to control the game via touch or mouse input, simulating keyboard events.
+ * 
+ * @function initTouchControls
+ */
 function initTouchControls() {
     const buttons = getTouchButtons();
     const { press, release } = createPressReleaseHandlers();
     bindTouchEvents(buttons, press, release);
 }
 
+/**
+ * Maps a keyboard code to the corresponding on-screen button ID.
+ * 
+ * This function is used to identify which DOM element corresponds to
+ * a given key code, including both arrow/WASD keys and action keys like
+ * Space or Ctrl. It is useful for highlighting or toggling the active
+ * state of touch or visual buttons.
+ * 
+ * @function getButtonId
+ * @param {string} code - The keyboard code (e.g., "ArrowUp", "KeyW", "Space").
+ * @returns {string|undefined} The ID of the corresponding button element, or `undefined` if not mapped.
+ */
 function getButtonId(code) {
     const keyMap = {
         ArrowLeft: "arrowLeft",
@@ -210,11 +427,37 @@ function getButtonId(code) {
     return keyMap[code];
 }
 
+/**
+ * Retrieves a DOM element by its button ID.
+ * 
+ * This function returns the HTML element corresponding to the provided
+ * button ID. If the ID is invalid or not provided, it returns `null`.
+ * It is typically used to access on-screen buttons for touch or keyboard input.
+ * 
+ * @function getButtonElement
+ * @param {string} btnId - The ID of the button element to retrieve.
+ * @returns {HTMLElement|null} The DOM element with the given ID, or `null` if not found.
+ */
 function getButtonElement(btnId) {
     if (!btnId) return null;
     return document.getElementById(btnId);
 }
 
+/**
+ * Toggles the "active" visual state of an on-screen button based on a key code.
+ * 
+ * This function performs the following steps:
+ * 1. Maps the keyboard code to the corresponding button ID using `getButtonId()`.
+ * 2. Retrieves the button DOM element using `getButtonElement()`.
+ * 3. Adds the "active" class if `isActive` is `true`, or removes it if `false`.
+ * 
+ * This is used to visually indicate which keys are currently pressed,
+ * supporting both keyboard and touch input.
+ * 
+ * @function toggleButtonActive
+ * @param {string} code - The keyboard code (e.g., "ArrowUp", "KeyW", "Space").
+ * @param {boolean} isActive - Whether the button should be marked as active (`true`) or inactive (`false`).
+ */
 function toggleButtonActive(code, isActive) {
     const btnId = getButtonId(code);
     const button = getButtonElement(btnId);
@@ -223,6 +466,19 @@ function toggleButtonActive(code, isActive) {
     else button.classList.remove("active");
 }
 
+/**
+ * Toggles fullscreen mode for the game and updates the fullscreen button icon.
+ * 
+ * This function checks whether the document is currently in fullscreen:
+ * - If not, it enters fullscreen mode for the element with ID `fullscreen` and
+ *   changes the button icon to '✕'.
+ * - If already in fullscreen, it exits fullscreen and changes the button icon to '⛶'.
+ * 
+ * The button loses focus after toggling to prevent accidental repeated activations.
+ * 
+ * @function fullscreen
+ * @throws {Error} If entering or exiting fullscreen fails.
+ */
 function fullscreen() {
     const fsElement = document.getElementById('fullscreen');
     const button = document.getElementById('fullscreenButton');
@@ -237,17 +493,48 @@ function fullscreen() {
     button.blur();
 }
 
+/**
+ * Requests fullscreen mode for a given DOM element.
+ * 
+ * This function attempts to make the specified element enter fullscreen
+ * using standard and vendor-prefixed methods for cross-browser compatibility.
+ * 
+ * @function enterFullscreen
+ * @param {HTMLElement} element - The DOM element to display in fullscreen.
+ * @throws {Error} If the browser does not support fullscreen for the element.
+ */
 function enterFullscreen(element) {
     if (element.requestFullscreen) element.requestFullscreen();
     else if (element.msRequestFullscreen) element.msRequestFullscreen();
     else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
 }
 
+/**
+ * Exits fullscreen mode for the document.
+ * 
+ * This function attempts to exit fullscreen using standard and vendor-prefixed
+ * methods for cross-browser compatibility.
+ * 
+ * @function exitFullscreen
+ * @throws {Error} If the browser does not support exiting fullscreen.
+ */
 function exitFullscreen() {
     if (document.exitFullscreen) document.exitFullscreen();
     else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
 }
 
+/**
+ * Updates the fullscreen button icon when the fullscreen state changes.
+ * 
+ * This function listens for the `fullscreenchange` event on the document:
+ * - If the document enters fullscreen, it updates the button icon to '✕'.
+ * - If the document exits fullscreen, it updates the button icon to '⛶'.
+ * 
+ * This ensures the button always reflects the current fullscreen state.
+ * 
+ * @listens fullscreenchange - Fires whenever the document enters or exits fullscreen.
+ * @function
+ */
 document.addEventListener('fullscreenchange', () => {
     const button = document.getElementById('fullscreenButton');
     if (document.fullscreenElement) {
@@ -257,6 +544,17 @@ document.addEventListener('fullscreenchange', () => {
     }
 });
 
+/**
+ * Checks the device orientation and displays a warning if in portrait mode.
+ * 
+ * This function compares the window's height and width:
+ * - If the height is greater than the width (portrait), it shows the
+ *   element with ID `rotateWarning` by setting `display: flex`.
+ * - If in landscape mode, it hides the warning by setting `display: none`.
+ * 
+ * @function checkOrientation
+ * @throws {Error} If the `rotateWarning` element cannot be found in the DOM.
+ */
 function checkOrientation() {
     const warning = document.getElementById('rotateWarning');
     if (window.innerHeight > window.innerWidth) {
@@ -266,10 +564,36 @@ function checkOrientation() {
     }
 }
 
+/**
+ * Ensures the device orientation is checked and the rotate warning is updated
+ * whenever the window size or orientation changes, or when the page loads.
+ * 
+ * Listens to the following events:
+ * - `resize`: Fires when the window is resized.
+ * - `orientationchange`: Fires when the device orientation changes.
+ * - `load`: Fires when the page has fully loaded.
+ * 
+ * @listens resize
+ * @listens orientationchange
+ * @listens load
+ * @function
+ */
 window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
 window.addEventListener('load', checkOrientation);
 
+/**
+ * Displays the win overlay with the player's total score after a short delay.
+ * 
+ * This function waits 1 second before:
+ * 1. Retrieving the overlay element with ID `winOverlay`.
+ * 2. Updating the text content of the `scoreDiv` element to show the `totalScore`.
+ * 3. Making the overlay visible by removing the `hidden` class.
+ * 
+ * @function showWinOverlay
+ * @param {number} totalScore - The player's total score to display on the overlay.
+ * @throws {Error} If the `winOverlay` or `scoreDiv` elements cannot be found in the DOM.
+ */
 function showWinOverlay(totalScore) {
     setTimeout(() => {
         const overlay = document.getElementById('winOverlay');
@@ -279,18 +603,49 @@ function showWinOverlay(totalScore) {
     }, 1000);
 }
 
+/**
+ * Displays the lose overlay after a short delay.
+ * 
+ * This function waits 1 second before retrieving the element with ID `loseOverlay`
+ * and making it visible by removing the `hidden` class.
+ * 
+ * @function showLoseOverlay
+ * @throws {Error} If the `loseOverlay` element cannot be found in the DOM.
+ */
 function showLoseOverlay() {
     setTimeout(() => {
         document.getElementById('loseOverlay').classList.remove('hidden');
     }, 1000);
 }
 
+/**
+ * Hides all overlay elements (win, lose, and info) by adding the `hidden` class.
+ * 
+ * This function retrieves the elements with IDs `winOverlay`, `loseOverlay`, and `infoOverlay`
+ * and hides them, typically used when returning to the start screen or restarting the game.
+ * 
+ * @function hideOverlays
+ * @throws {Error} If any of the overlay elements cannot be found in the DOM.
+ */
 function hideOverlays() {
     document.getElementById('winOverlay').classList.add('hidden');
     document.getElementById('loseOverlay').classList.add('hidden');
     document.getElementById('infoOverlay').classList.add('hidden');
 }
 
+/**
+ * Retrieves the DOM elements for menu and restart buttons in win and lose overlays.
+ * 
+ * This function returns an object containing references to the following buttons:
+ * - `menuWin`: Menu button on the win overlay.
+ * - `menuLose`: Menu button on the lose overlay.
+ * - `restartWin`: Restart button on the win overlay.
+ * - `restartLose`: Restart button on the lose overlay.
+ * 
+ * @function getMenuButtons
+ * @returns {Object.<string, HTMLElement|null>} An object mapping button identifiers
+ *   to their corresponding DOM elements. If an element is not found, the value will be `null`.
+ */
 function getMenuButtons() {
     return {
         menuWin: document.getElementById('menuButton'),
@@ -300,21 +655,60 @@ function getMenuButtons() {
     };
 }
 
+/**
+ * Binds a click event to a given overlay button.
+ * 
+ * This function attaches the provided callback to the `click` event of the
+ * specified button element. If the button does not exist (`null` or `undefined`),
+ * the function does nothing.
+ * 
+ * @function bindOverlayButton
+ * @param {HTMLElement|null} btn - The button DOM element to bind the click event to.
+ * @param {Function} callback - The function to execute when the button is clicked.
+ */
 function bindOverlayButton(btn, callback) {
     if (!btn) return;
     btn.addEventListener('click', callback);
 }
 
+/**
+ * Handles the menu button click by hiding all overlays and showing the start screen.
+ * 
+ * This function is typically used for both win and lose overlays to return the player
+ * to the start screen when they click the menu button.
+ * 
+ * @function onMenuButtonClick
+ */
 function onMenuButtonClick() {
     hideOverlays();
     showStartScreen();
 }
 
+/**
+ * Handles the restart button click by hiding all overlays and starting a new game.
+ * 
+ * This function is typically used for both win and lose overlays to restart the game
+ * when the player clicks the restart button.
+ * 
+ * @function onRestartButtonClick
+ */
 function onRestartButtonClick() {
     hideOverlays();
     startGame();
 }
 
+/**
+ * Initializes the overlay buttons by binding their respective click event handlers.
+ * 
+ * This function performs the following bindings:
+ * - Win and lose menu buttons → `onMenuButtonClick()`
+ * - Win and lose restart buttons → `onRestartButtonClick()`
+ * 
+ * It uses `getMenuButtons()` to retrieve the button elements and `bindOverlayButton()`
+ * to attach the event listeners. This ensures the overlays respond correctly to user input.
+ * 
+ * @function initOverlayButtons
+ */
 function initOverlayButtons() {
     const buttons = getMenuButtons();
     bindOverlayButton(buttons.menuWin, onMenuButtonClick);
@@ -323,6 +717,16 @@ function initOverlayButtons() {
     bindOverlayButton(buttons.restartLose, onRestartButtonClick);
 }
 
+/**
+ * Initializes overlay buttons once the DOM content is fully loaded.
+ * 
+ * This function waits for the `DOMContentLoaded` event and then calls
+ * `initOverlayButtons()` to set up event handlers for menu and restart buttons
+ * in the win and lose overlays.
+ * 
+ * @listens DOMContentLoaded - Ensures the overlay buttons are initialized after the DOM is ready.
+ * @function
+ */
 document.addEventListener('DOMContentLoaded', () => {
     initOverlayButtons();
 });

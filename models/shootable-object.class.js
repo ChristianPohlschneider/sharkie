@@ -13,6 +13,19 @@ class ShootableObject extends MovableObject {
         this.minRange = x - 150;
     }
 
+    /**
+     * Shoots a bubble from the character's current position.
+     * 
+     * Depending on whether the player has poison in the venom sac,
+     * the function either shoots a normal bubble or a poisoned bubble.
+     * Poison usage decreases the venom sac by 10 units and updates
+     * the poison bar UI.
+     * 
+     * The bubble moves horizontally at a fixed speed.
+     * 
+     * @param {boolean} otherDirection - If true, the bubble moves to the left; otherwise, it moves to the right.
+     * @returns {void}
+     */
     shoot(otherDirection) {
         if (this.poisonBar.getVenomSac() > 0) {
             this.loadImage('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');

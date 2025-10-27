@@ -1,3 +1,18 @@
+/**
+ * Creates and returns the first level of the game.
+ * 
+ * This function initializes a `Level` instance with the following components:
+ * 1. **Enemies** – currently empty; to be set later.
+ * 2. **Barriers** – an array of `Barrier` objects defining obstacles and collision areas.
+ * 3. **Background Objects** – an array of `BackgroundObject` instances for parallax layers.
+ * 4. **Poison Bottles** – an array of `PoisonBottle` objects positioned within the level.
+ * 5. **Coins** – an array of `Coin` objects for player collection.
+ * 
+ * Each component specifies position, size, image sources, and offsets where applicable.
+ * 
+ * @function createLevel1
+ * @returns {Level} A fully initialized `Level` object representing the first level of the game.
+ */
 function createLevel1() {
     return new Level(
         [
@@ -81,6 +96,17 @@ function createLevel1() {
     );
 }
 
+/**
+ * Initializes the enemies for a given game world.
+ * 
+ * This function sets the `enemies` array of the world's current level with
+ * instances of `PufferFish` and `JellyFish`, specifying their positions,
+ * movement speed, and other parameters. This prepares the level for gameplay
+ * with all enemy objects in place.
+ * 
+ * @function setinitialEnemies
+ * @param {World} world - The game world whose level will have enemies initialized.
+ */
 function setinitialEnemies(world) {
     world.level.enemies = [
         new PufferFish(world, 800, 150, 1, 1),
@@ -103,10 +129,33 @@ function setinitialEnemies(world) {
     ]
 }
 
+/**
+ * Adds the final boss enemy to the current level of the game world.
+ * 
+ * This function creates a new `Endboss` instance at the specified X-coordinate
+ * and appends it to the `enemies` array of the world's current level.
+ * 
+ * @function setFinalEnemie
+ * @param {World} world - The game world whose level will have the final boss added.
+ * @param {number} bossSpawnCoordinateX - The X-coordinate where the final boss will spawn.
+ */
 function setFinalEnemie(world, bossSpawnCoordinateX) {
     world.level.enemies.push(new Endboss(world, bossSpawnCoordinateX));
 }
 
+/**
+ * Continuously removes enemies that have moved past a certain X-coordinate.
+ * 
+ * This function sets up a repeating interval (every 200ms) to filter the `enemies`
+ * array of the world's current level. Any enemy whose X-coordinate is less than
+ * `enemyDeleteCoordinateX` is removed, effectively clearing enemies that have been
+ * passed by the player.
+ * 
+ * @function deleteOtherEnemies
+ * @param {World} world - The game world whose level enemies will be filtered.
+ * @param {number} enemyDeleteCoordinateX - The X-coordinate threshold; enemies with
+ *   lower X values are removed.
+ */
 function deleteOtherEnemies(world, enemyDeleteCoordinateX) {
     this.world.setStoppableInterval(() => {
         world.level.enemies = world.level.enemies.filter(

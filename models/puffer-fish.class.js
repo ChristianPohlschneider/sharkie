@@ -59,6 +59,16 @@ class PufferFish extends MovableObject {
         this.animate(phase);
     }
 
+    /**
+     * Starts the full animation and movement sequence for the enemy object.
+     * 
+     * This method sets up horizontal movement, vertical oscillation, and the animation loop.
+     * It also handles resetting the enemy's position when it moves off-screen and updates
+     * the animation based on the enemy's state (dead, hurt, or swimming).
+     * 
+     * @method animate
+     * @param {number} phase - The initial phase used for oscillation calculations.
+     */
     animate(phase) {
         this.phase = phase;
         this.moveInterval = this.moveLeft(this.speed, this.interval);
@@ -73,6 +83,15 @@ class PufferFish extends MovableObject {
         }, 200);
     }
 
+    /**
+     * Handles the death sequence of the enemy.
+     * 
+     * Plays the death sound effect, triggers the death animation, updates the total score,
+     * stops movement and oscillation intervals, and schedules removal and shrinking of the object.
+     * Ensures that the death sequence runs only once per enemy.
+     * 
+     * @method handleDeath
+     */
     handleDeath() {
         if (this.hasDied) return;
         this.hasDied = true;
@@ -84,6 +103,12 @@ class PufferFish extends MovableObject {
         setTimeout(() => this.removeAndShrink(), this.IMAGES_DIE.length * 200);
     }
 
+    /**
+     * Removes the enemy from the active enemies array and adds it to the
+     * shrinking objects array, then starts the shrinking animation.
+     * 
+     * @method removeAndShrink
+     */
     removeAndShrink() {
         const idx = this.world.level.enemies.indexOf(this);
         if (idx > -1) this.world.level.enemies.splice(idx, 1);
@@ -91,6 +116,12 @@ class PufferFish extends MovableObject {
         this.shrinkOut();
     }
 
+    /**
+     * Checks whether the enemy is dead.
+     * 
+     * @method isDead
+     * @returns {boolean} - Returns true if the enemy's energy is 0 or less, otherwise false.
+     */
     isDead() {
         return this.energy <= 0;
     }

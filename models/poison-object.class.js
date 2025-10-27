@@ -32,11 +32,26 @@ class PoisonBottle extends MovableObject {
         this.y = y;
         this.level = level;
     }
+
+    /**
+     * Sets the game world for this object and starts its animation loop.
+     * 
+     * @method setWorld
+     * @param {Object} world - The game world instance this object belongs to.
+     */
     setWorld(world) {
         this.world = world;
         this.animate();
     }
 
+    /**
+     * Starts the animation loop for the poison bottle object.
+     * 
+     * Continuously cycles through the images defined in `POISONBOTTLE_IMAGES`
+     * at an interval of 200 milliseconds.
+     * 
+     * @method animate
+     */
     animate() {
         this.world.setStoppableInterval(() => {
             this.playAnimation(this.POISONBOTTLE_IMAGES);

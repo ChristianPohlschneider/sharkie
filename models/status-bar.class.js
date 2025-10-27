@@ -21,6 +21,16 @@ class StatusBar extends MovableObject {
         this.loadImages(this.IMAGES_LIFE);
     }
 
+    /**
+     * Updates the life bar image based on the given energy percentage.
+     * 
+     * The function selects an image from the `IMAGES_LIFE` array according to
+     * the current energy percentage. It divides the percentage into 5 intervals 
+     * and picks the corresponding image. If the percentage is 100 or below the
+     * first threshold, the last image in the array is used.
+     *
+     * @param {number} percentage - The current energy/life percentage (0 to 100).
+     */
     setPercentage(percentage) {
         if (percentage < 100) {
             let absoluteEnergy = Math.floor(percentage / 20);

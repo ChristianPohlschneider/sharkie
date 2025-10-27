@@ -30,11 +30,29 @@ class Coin extends MovableObject {
         this.level = level;
     }
 
+    /**
+     * Assigns the game world to the character and starts its animations.
+     * 
+     * This method sets the `world` property to the given `world` object and
+     * immediately calls `animate()` to begin the character's update loops.
+     * 
+     * @method setWorld
+     * @param {Object} world - The game world instance that the character belongs to.
+     */
     setWorld(world) {
         this.world = world;
         this.animate();
     }
 
+    /**
+     * Starts the animation loop for the character or object.
+     * 
+     * This method uses the world's `setStoppableInterval` to repeatedly call
+     * `playAnimation()` with `COIN_IMAGES` every 200 milliseconds.
+     * The interval ID is stored in `animationInterval` to allow stopping it later.
+     * 
+     * @method animate
+     */
     animate() {
         this.animationInterval = this.world.setStoppableInterval(() => {
             this.playAnimation(this.COIN_IMAGES);
