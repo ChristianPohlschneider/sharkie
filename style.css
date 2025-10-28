@@ -267,7 +267,7 @@ canvas {
 }
 
 .mobileKeys {
-     display: none;
+    display: none;
     align-items: flex-end;
     position: absolute;
     width: 90%;
@@ -563,6 +563,61 @@ canvas {
     transform: scale(1.05);
 }
 
+.burgerMenu {
+    background-color: rgb(47, 49, 141);
+    position: absolute;
+    top: 0;
+    right: -244px;
+    width: 220px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid white;
+    border-radius: 15px 0 0 15px;
+    z-index: 20;
+    transition: right 0.4s ease-in-out;
+}
+
+.burgerMenu.active {
+    right: 0;
+}
+
+#burgerOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 15;
+}
+
+#burgerOverlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.controlInfoButton {
+    position: relative;
+    right: 0%;
+    z-index: 10;
+}
+
+.legalNoticeButton {
+    position: relative;
+    right: 0%;
+    z-index: 10;
+}
+
+.closeBurgerMenu {
+    position: relative;
+    right: 0%;
+    z-index: 10;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -688,6 +743,10 @@ canvas {
     .overlayButton {
         font-size: 18px;
     }
+
+    .startButton {
+        top: 60%;
+    }
 }
 
 @media (max-width: 500px) {
@@ -756,6 +815,18 @@ canvas {
         border-radius: 12px;
     }
 
+    .controlInfoButton {
+        right: 0%;
+    }
+
+    .legalNoticeButton {
+        right: 0%;
+    }
+
+    .closeBurgerMenu {
+        right: 0%;
+    }
+
     .infoContent ul li {
         font-size: 12px;
     }
@@ -765,5 +836,11 @@ canvas {
         font-size: 12px;
         border-radius: 5px;
 
+    }
+}
+
+@media only screen and (max-height: 350px) {
+    .startButton {
+        top: 70%;
     }
 }

@@ -730,3 +730,67 @@ function initOverlayButtons() {
 document.addEventListener('DOMContentLoaded', () => {
     initOverlayButtons();
 });
+
+/**
+ * Opens the burger menu by sliding it into view and enabling click detection outside the menu.
+ *
+ * This function:
+ * - Selects the burger menu (`#burgerMenu`) and the overlay element (`#burgerOverlay`).
+ * - Creates the overlay dynamically if it does not yet exist and appends it to the fullscreen container.
+ * - Adds the `.active` class to both elements to trigger their visible/animated state via CSS.
+ * - Registers a click listener on the overlay so that clicking outside the menu will close it.
+ *
+ * @function openBurgerMenu
+ * @returns {void} This function does not return a value.
+ */
+function openBurgerMenu() {
+    const burgerMenu = document.getElementById('burgerMenu');
+    let overlay = document.getElementById('burgerOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'burgerOverlay';
+        document.getElementById('fullscreen').appendChild(overlay);
+    }
+    burgerMenu.classList.add('active');
+    overlay.classList.add('active');
+    overlay.addEventListener('click', closeBurgerMenu);
+}
+
+/**
+ * Closes the burger menu and removes its active visual state.
+ *
+ * This function:
+ * - Selects the burger menu (`#burgerMenu`) and overlay (`#burgerOverlay`) elements.
+ * - Removes the `.active` class from both elements, triggering the CSS transition
+ *   that slides the menu out of view.
+ * - Uses optional chaining (`?.`) to safely handle the case where the overlay
+ *   might not exist in the DOM.
+ *
+ * @function closeBurgerMenu
+ * @returns {void} This function does not return a value.
+ */
+function closeBurgerMenu() {
+    const burgerMenu = document.getElementById('burgerMenu');
+    const overlay = document.getElementById('burgerOverlay');
+    burgerMenu.classList.remove('active');
+    overlay?.classList.remove('active');
+}
+
+/**
+ * Initializes event listeners for the burger menu buttons after the DOM is fully loaded.
+ *
+ * This code:
+ * - Waits for the `DOMContentLoaded` event to ensure all elements are available in the DOM.
+ * - Selects the open button (`#openBurgerMenu`) and close button (`#closeBurgerMenu`).
+ * - Attaches click event listeners to open and close the burger menu using the
+ *   `openBurgerMenu` and `closeBurgerMenu` functions.
+ *
+ * @event DOMContentLoaded
+ * @returns {void} This setup code does not return a value.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const openBtn = document.getElementById('openBurgerMenu');
+    const closeBtn = document.getElementById('closeBurgerMenu');
+    openBtn.addEventListener('click', openBurgerMenu);
+    closeBtn.addEventListener('click', closeBurgerMenu);
+});

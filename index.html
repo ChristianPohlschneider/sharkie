@@ -36,9 +36,15 @@
         <canvas id="canvas" width="720" height="480"></canvas>
 
         <div class="settingsDiv">
-            <button class="infoButton" id="infoButton" onclick="">i</button>
+            <button class="infoButton" id="openBurgerMenu" onclick="openBurgerMenu()">i</button>
             <button type="button" class="audioButton" id="audioButton">🔇</button>
             <button class="fullscreenButton" id="fullscreenButton" onclick="fullscreen()">⛶</button>
+        </div>
+
+        <div class="burgerMenu" id="burgerMenu">
+            <button id="infoButton" class="startButton controlInfoButton">Control Info</button>
+            <button id="legalNoticeButton" class="startButton legalNoticeButton" onclick="window.location.href = 'legal_notice.html'">Legal Notice</button>
+            <button id="closeBurgerMenu" class="startButton closeBurgerMenu">Close Menu</button>
         </div>
 
         <div id="mobileKeys" class="mobileKeys">
