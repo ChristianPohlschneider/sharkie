@@ -19,6 +19,7 @@ class Endboss extends MovableObject {
     biteCounter = 0;
     world;
     audioBossThemePlayed = false;
+    audioBossDeathPlayed = false;
     audioBossBite = new Audio('img/assets/audio/bossBite.flac');
 
     offset = {
@@ -122,19 +123,23 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Handles the boss's death state.
-     * 
-     * This method performs the following:
-     * 1. Plays the boss's death sound via `playDeathSound()`.
-     * 2. Plays the death animation (`IMAGES_DIE`).
-     * 3. Adds the boss's score to the world's total score.
-     * 4. Checks if the current image matches the final death frame (`deadImageSrc`). 
-     *    If so, it calls `handleDeath()` and displays the win overlay with `showWinOverlay(world.totalScore)`.
-     * 
+     * Handles the death state of the boss enemy.
+     *
+     * This method manages the sequence that occurs when the boss dies:
+     * - Plays the death sound once.
+     * - Displays the death animation.
+     * - Adds the boss's score to the total world score.
+     * - Checks if the current image corresponds to the "dead" sprite, and if so:
+     *   - Triggers the boss's death handler.
+     *   - Displays the win overlay with the updated total score.
+     *
      * @method handleBossDeathState
+     * @returns {void} This function does not return a value.
      */
     handleBossDeathState() {
-        this.playDeathSound();
+        if (!this.audioBossDeathPlayed) {
+            this.playDeathSound();
+        }
         this.playAnimation(this.IMAGES_DIE);
         this.world.totalScore += this.score;
         const deadImageSrc = 'http://127.0.0.1:5500/img/2.Enemy/3%20Final%20Enemy/Dead/Mesa%20de%20trabajo%202%20copia%2010.png';
@@ -145,16 +150,25 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Plays the boss's death sound effect.
-     * 
-     * This method checks if `soundManager` is defined and, if so,
-     * plays the sound file `'img/assets/audio/bossDies.wav'` at volume 200.
-     * 
+     * Plays the boss death sound effect.
+     *
+     * This method ensures the death sound for the boss is played only once.
+     * - If the audio object does not already exist, it creates a new `Audio` instance.
+     * - Plays the sound from the specified file path.
+     * - Sets a flag to indicate that the death audio has already been played.
+     *
      * @method playDeathSound
+     * @returns {void} This function does not return a value.
      */
     playDeathSound() {
-        if (typeof soundManager !== 'undefined') {
-            soundManager.playEffect('img/assets/audio/bossDies.wav', 200);
+        // if (typeof soundManager !== 'undefined') {
+        //     soundManager.playEffect('img/assets/audio/bossDies.wav', 200);
+        // }
+        if (!this.bossDeathAudio) {
+            this.bossDeathAudio = new Audio('img/assets/audio/bossDies.wav');
+            // this.bossDeathAudio.loop = true;
+            this.bossDeathAudio.play();
+            this.audioBossDeathPlayed = true;
         }
     }
 
