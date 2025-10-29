@@ -24,7 +24,7 @@ class Character extends MovableObject {
     hasPlayedIdleSound = false;
     lastIdleTime = null;
     isLongIdlePlayed = false;
-    currentSharkyAnimation = null;
+    currentSharkyAnimation = null;   
 
     offset = {
         top: 105,
