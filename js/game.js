@@ -4,21 +4,23 @@ let keyboard = new Keyboard();
 let soundManager;
 let fullscreenIsSet = false;
 
-/**
- * * This function attaches a "pointerdown" event listener to the button with the ID "audioButton".
- * When the button is pressed, the event's default behavior is prevented,
- * propagation is stopped, and the asynchronous function `toggleGameSound()` is called
- * to toggle the game's sound on or off.
+/** 
+ * Initializes the audio button and sound system once the DOM is loaded.
+ * Sets the initial sound icon state via `initGameSoundUI()` and attaches
+ * a `pointerdown` listener to toggle game sound after a user interaction.
  * 
- * @listens DOMContentLoaded - Waits for the HTML document to be fully loaded before adding the button listener.
- * @listens pointerdown - Handles pointer events (e.g., mouse, touch, stylus) on the audio button.
- * @throws {Error} Propagates any error thrown by `toggleGameSound()` if it fails.
+ * @listens DOMContentLoaded - Ensures the audio button exists before attaching listeners.
+ * @throws {Error} May propagate errors from `initGameSound()` or `toggleGameSound()`.
  */
 window.addEventListener("DOMContentLoaded", () => {
     const audioBtn = document.getElementById("audioButton");
+    initGameSoundUI();
     audioBtn.addEventListener("pointerdown", async (event) => {
         event.stopPropagation();
         event.preventDefault();
+        if (!soundManager) {
+            await initGameSound();
+        }
         await toggleGameSound();
     });
 });
@@ -78,62 +80,81 @@ function init() {
     canvas = document.getElementById('canvas');
 }
 
-/**
- * This asynchronous function ensures that a `SoundManager` instance exists and,
- * if not, creates one and loads the main audio theme. It resumes the audio context
- * if it is currently suspended (e.g., due to browser autoplay policies), toggles
- * the sound state, updates the button icon (`🔊` for sound on, `🔇` for sound off),
- * and triggers the appropriate background theme handling.
+/** 
+ * Initializes the visual state of the audio button based on the saved sound setting.
+ * Retrieves the `soundEnabled` value from `localStorage` and updates the button icon accordingly.
+ * 
+ * @function initGameSoundUI
+ * @throws {TypeError} If the audio button element cannot be found in the DOM.
+ */
+function initGameSoundUI() {
+    const savedState = JSON.parse(localStorage.getItem('soundEnabled')) ?? true;
+    const btn = document.getElementById("audioButton");
+    if (btn) btn.textContent = savedState ? "🔊" : "🔇";
+}
+
+/** 
+ * Initializes the game's sound system by creating the SoundManager if needed,
+ * loading the theme audio, resuming the AudioContext, and playing or stopping
+ * the theme based on the saved `soundEnabled` state from `localStorage`.
+ * 
+ * @async
+ * @function initGameSound
+ * @param {string} [src='img/assets/audio/openingTheme.wav'] - The path to the audio file to load as the theme.
+ * @throws {Error} If loading the audio theme or resuming the AudioContext fails.
+ */
+async function initGameSound(src = 'img/assets/audio/openingTheme.wav') {
+    if (!soundManager) {
+        soundManager = new SoundManager();
+        await soundManager.loadTheme(src);
+    }
+    const savedState = JSON.parse(localStorage.getItem('soundEnabled')) ?? true;
+    if (soundManager.audioCtx.state === 'suspended') {
+        await soundManager.audioCtx.resume();
+    }
+    handleGameSoundThemePlay(savedState);
+}
+
+/** 
+ * Toggles the game sound on or off, updates the audio button icon, 
+ * saves the new state in `localStorage`, and starts or stops the theme accordingly.
  * 
  * @async
  * @function toggleGameSound
- * @throws {Error} If loading the theme or resuming the audio context fails.
+ * @throws {Error} If resuming the AudioContext or toggling the sound fails.
  */
 async function toggleGameSound() {
-    if (!soundManager) {
-        soundManager = new SoundManager();
-        await soundManager.loadTheme('img/assets/audio/openingTheme.wav');
-    }
+    if (!soundManager) return;
     if (soundManager.audioCtx.state === "suspended") {
         await soundManager.audioCtx.resume();
     }
     const enabled = soundManager.toggleSound();
+    localStorage.setItem('soundEnabled', JSON.stringify(enabled));
     const btn = document.getElementById("audioButton");
-    btn.textContent = enabled ? "🔊" : "🔇";
+    if (btn) btn.textContent = enabled ? "🔊" : "🔇";
     handleGameSoundThemePlay(enabled);
 }
 
-/**
- * Controls playback of the game's background theme based on the current sound state.
- * 
- * This function starts or stops the main theme depending on whether sound is enabled.
- * When `enabled` is `true`, the theme begins playing; otherwise, it stops any ongoing playback.
- * It relies on the global `soundManager` instance to manage the audio.
+/** 
+ * Plays or stops the game's background theme based on the given sound state.
  * 
  * @function handleGameSoundThemePlay
- * @param {boolean} enabled - Indicates whether the game sound is enabled (`true`) or disabled (`false`).
- * @throws {Error} If `soundManager` is undefined or its audio methods fail.
+ * @param {boolean} enabled - If `true`, plays the theme; if `false`, stops it.
  */
 function handleGameSoundThemePlay(enabled) {
-    if (enabled) {
-        soundManager.playTheme();
-    } else {
-        soundManager.stopTheme();
-    }
+    if (!soundManager) return;
+    if (enabled) soundManager.playTheme();
+    else soundManager.stopTheme();
 }
 
-/**
- * Initializes and starts audio playback using the provided source file.
- * 
- * This asynchronous function ensures that a `SoundManager` instance exists,
- * loads the specified audio theme, resumes the audio context if it is suspended,
- * and then begins playing the theme. It is typically used to start background
- * music or a main theme at the beginning of the game or application.
+/** 
+ * Initializes the SoundManager (if needed), loads the specified audio theme,
+ * resumes the AudioContext if suspended, and starts playing the theme.
  * 
  * @async
  * @function startAudio
- * @param {string} src - The file path or URL of the audio source to load and play.
- * @throws {Error} If the audio file cannot be loaded or if resuming the audio context fails.
+ * @param {string} src - The path to the audio file to load and play.
+ * @throws {Error} If loading the audio or resuming the AudioContext fails.
  */
 async function startAudio(src) {
     if (!soundManager) {
