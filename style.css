@@ -674,10 +674,6 @@ canvas {
     .overlayButton {
         font-size: 20px;
     }
-
-    #mobileKeys {
-        display: flex;
-    }
 }
 
 @media only screen and (max-height: 850px) {
@@ -842,5 +838,11 @@ canvas {
 @media only screen and (max-height: 350px) {
     .startButton {
         top: 70%;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    #mobileKeys {
+        display: flex;
     }
 }
