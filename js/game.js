@@ -815,3 +815,27 @@ document.addEventListener('DOMContentLoaded', () => {
     openBtn.addEventListener('click', openBurgerMenu);
     closeBtn.addEventListener('click', closeBurgerMenu);
 });
+
+// legal_overlay
+document.addEventListener("DOMContentLoaded", () => {
+    const legalButton = document.getElementById("legalButton");
+    const legalOverlay = document.getElementById("legalOverlay");
+    const closeLegal = document.getElementById("closeLegal");
+    const backToGame = document.getElementById("backToGame");
+
+    // Overlay öffnen
+    legalButton.addEventListener("click", () => {
+        legalOverlay.classList.add("show");
+    });
+
+    // Overlay schließen (× oder Back)
+    closeLegal.addEventListener("click", () => legalOverlay.classList.remove("show"));
+    backToGame.addEventListener("click", () => legalOverlay.classList.remove("show"));
+
+    // Overlay schließen, wenn man außerhalb des Inhalts klickt
+    legalOverlay.addEventListener("click", (e) => {
+        if (e.target === legalOverlay) {
+            legalOverlay.classList.remove("show");
+        }
+    });
+});

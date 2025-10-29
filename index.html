@@ -41,9 +41,20 @@
             <button class="fullscreenButton" id="fullscreenButton" onclick="fullscreen()">⛶</button>
         </div>
 
+        <div id="legalOverlay" class="overlay hidden">
+            <div class="txtContainer">
+                <button id="closeLegal" class="closeButton">×</button>
+                <h1>Legal Notice</h1>
+                <!-- Restlicher Text -->
+                <div class="backButtonDiv">
+                    <button id="backToGame" class="backButton">Back</button>
+                </div>
+            </div>
+        </div>
+
         <div class="burgerMenu" id="burgerMenu">
             <button id="infoButton" class="startButton controlInfoButton">Control Info</button>
-            <button id="legalNoticeButton" class="startButton legalNoticeButton" onclick="window.location.href = 'legal_notice.html'">Legal Notice</button>
+            <button id="legalButton" class="startButton legalNoticeButton">Legal Notice</button>
             <button id="closeBurgerMenu" class="startButton closeBurgerMenu">Close Menu</button>
         </div>
 
