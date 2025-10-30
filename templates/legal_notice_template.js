@@ -1,20 +1,7 @@
-<!DOCTYPE html>
-<html lang="en" translate="no">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legal Notice</title>
-    <link rel="shortcut icon" href="./img/assets/img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./legal-notice.css">
-</head>
-
-<body>
-
-    <main>
-        <div class="txtContainer">
-            <div class="txtField maxWidth">
+function renderLegalNotice() {
+    return `
+        <div id="legalOverlay" class="overlay hidden">
+            <div class="txtContainer">   
                 <h1>Legal Notice</h1>
                 <h2>Imprint</h2>
                 <ul>
@@ -88,14 +75,10 @@
                     For any questions or notices, please contact us at <a
                         href="mailto:c.pohlschneider@t-online.de">c.pohlschneider@t-online.de</a><br><br>
                     Date: October 28, 2025</p>
-            </div>
-            <div class="backButtonDiv">
-                <button id="backToGame" class="backButton" onclick="window.location.href = 'index.html'">Back</button>
+                <div class="backButtonDiv">
+                    <button id="backToGame" class="closeInfo">Close</button>
+                </div>
             </div>
         </div>
-
-    </main>
-
-</body>
-
-</html>
+    `;
+}

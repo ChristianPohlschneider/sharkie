@@ -25,48 +25,33 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-/** 
- * This function retrieves references to the information button, 
- * the overlay element, and the close button within the overlay. 
- * It then calls `handleInfoOverlay()` to manage the display logic 
- * and interactions for the info overlay.
- * 
- * @listens DOMContentLoaded - Ensures the elements are accessed only after the DOM is ready.
- * @throws {Error} May propagate errors thrown by `handleInfoOverlay()` if initialization fails.
- */
 document.addEventListener('DOMContentLoaded', () => {
     const infoButton = document.getElementById('infoButton');
-    const infoOverlay = document.getElementById('infoOverlay');
-    const closeInfo = document.getElementById('closeInfo');
-    handleInfoOverlay();
-});
 
-/**
- * This function sets up event listeners for opening and closing the info overlay:
- * - Clicking the **info button** shows the overlay by removing the `hidden` class.
- * - Clicking the **close button** hides the overlay by adding the `hidden` class.
- * - Clicking anywhere outside the overlay content (on the overlay background itself)
- *   also hides the overlay.
- *
- * @function handleInfoOverlay
- * @listens click - On `infoButton` to open the overlay.
- * @listens click - On `closeInfo` to close the overlay.
- * @listens click - On `infoOverlay` background to close when clicking outside content.
- * @throws {TypeError} If one of the required elements (`infoButton`, `infoOverlay`, `closeInfo`) is not found in the DOM.
- */
-function handleInfoOverlay() {
     infoButton.addEventListener('click', () => {
+        // Template aus info_overlay_template.js abrufen
+        const html = renderInfoOverlay();
+
+        // Dynamisch in #fullscreen einfügen
+        document.getElementById('fullscreen').insertAdjacentHTML('beforeend', html);
+
+        const infoOverlay = document.getElementById('infoOverlay');
+        const closeInfo = document.getElementById('closeInfo');
+
+        // Overlay anzeigen
         infoOverlay.classList.remove('hidden');
+
+        // Eventlistener für Close-Button
+        closeInfo.addEventListener('click', () => {
+            infoOverlay.remove();
+        });
+
+        // Klick außerhalb des Inhalts schließt Overlay
+        infoOverlay.addEventListener('click', (e) => {
+            if (e.target === infoOverlay) infoOverlay.remove();
+        });
     });
-    closeInfo.addEventListener('click', () => {
-        infoOverlay.classList.add('hidden');
-    });
-    infoOverlay.addEventListener('click', (e) => {
-        if (e.target === infoOverlay) {
-            infoOverlay.classList.add('hidden');
-        }
-    });
-}
+});
 
 /**
  * This function retrieves the `<canvas>` element from the DOM using its ID (`canvas`)
@@ -819,23 +804,25 @@ document.addEventListener('DOMContentLoaded', () => {
 // legal_overlay
 document.addEventListener("DOMContentLoaded", () => {
     const legalButton = document.getElementById("legalButton");
-    const legalOverlay = document.getElementById("legalOverlay");
-    const closeLegal = document.getElementById("closeLegal");
-    const backToGame = document.getElementById("backToGame");
-
-    // Overlay öffnen
     legalButton.addEventListener("click", () => {
+        const html = renderLegalNotice();
+        document.getElementById("fullscreen").insertAdjacentHTML("beforeend", html);
+        const legalOverlay = document.getElementById("legalOverlay");
+        const backToGame = document.getElementById("backToGame");
+        legalOverlay.classList.remove("hidden");
         legalOverlay.classList.add("show");
-    });
-
-    // Overlay schließen (× oder Back)
-    closeLegal.addEventListener("click", () => legalOverlay.classList.remove("show"));
-    backToGame.addEventListener("click", () => legalOverlay.classList.remove("show"));
-
-    // Overlay schließen, wenn man außerhalb des Inhalts klickt
-    legalOverlay.addEventListener("click", (e) => {
-        if (e.target === legalOverlay) {
+        const txtContainer = legalOverlay.querySelector('.txtContainer');
+        txtContainer.scrollTop = 0;
+        const closeOverlay = () => {
             legalOverlay.classList.remove("show");
-        }
+            legalOverlay.classList.add("hidden");
+        };
+        backToGame.addEventListener('click', (e) => {
+            closeOverlay();
+            e.stopPropagation();
+        });
+        legalOverlay.addEventListener("click", (e) => {
+            if (e.target === legalOverlay) closeOverlay();
+        });
     });
 });

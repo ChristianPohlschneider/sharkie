@@ -20,7 +20,9 @@
     <script src="./js/keyboard.class.js"></script>
     <script src="models/barrier-object.class.js"></script>
     <script src="models/soundmanager.js"></script>
-    <script src="./js/game.js"></script>
+    <script src="templates/info_overlay_template.js" defer></script>
+    <script src="templates/legal_notice_template.js" defer></script>
+    <script src="./js/game.js" defer></script>
     <script src="models/level.class.js"></script>
     <script src="models/endboss.class.js"></script>
     <script src="models/shootable-object.class.js"></script>
@@ -39,17 +41,6 @@
             <button class="infoButton" id="openBurgerMenu" onclick="openBurgerMenu()">i</button>
             <button type="button" class="audioButton" id="audioButton">🔇</button>
             <button class="fullscreenButton" id="fullscreenButton" onclick="fullscreen()">⛶</button>
-        </div>
-
-        <div id="legalOverlay" class="overlay hidden">
-            <div class="txtContainer">
-                <button id="closeLegal" class="closeButton">×</button>
-                <h1>Legal Notice</h1>
-                <!-- Restlicher Text -->
-                <div class="backButtonDiv">
-                    <button id="backToGame" class="backButton">Back</button>
-                </div>
-            </div>
         </div>
 
         <div class="burgerMenu" id="burgerMenu">
@@ -86,45 +77,6 @@
             <img id="startScreenImg" class="startScreenImg" src="./img/3. Background/Mesa de trabajo 1.png"
                 alt="Startscreen">
             <button type="button" onclick="startGame()" class="startButton" id="startButton">Start Game</button>
-        </div>
-    </div>
-
-    <div id="infoOverlay" class="infoOverlay hidden">
-        <div class="infoContent">
-            <h2>Controls</h2>
-            <ul>
-                <li><button class="arrowKeyInfo arrowLeft">
-                        <img src="img/assets/img/arrow.png" alt="arrow key">
-                    </button><b>Arrow Left: </b> &nbsp; Move left</li>
-                <li><button class="arrowKeyInfo arrowRight">
-                        <img src="img/assets/img/arrow.png" alt="arrow key">
-                    </button>
-                    <b>Arrow Right:</b> &nbsp; Move right
-                </li>
-                <li><button class="arrowKeyInfo arrowUp">
-                        <img src="img/assets/img/arrow.png" alt="arrow key">
-                    </button>
-                    <b>Arrow Up:</b> &nbsp; Swim up
-                </li>
-                <li><button class="arrowKeyInfo arrowDown">
-                        <img src="img/assets/img/arrow.png" alt="arrow key">
-                    </button>
-                    <b>Arrow Down:</b> &nbsp; Swim down
-                </li>
-                <li><button class="arrowKeyInfo">⎵</button>
-                    <b>Space:</b> &nbsp; Attack
-                </li>
-                <li><button class="arrowKeyInfo">Ctrl</button>
-                    <b>Ctrl:</b> &nbsp; Bubble attack
-                </li>
-                <li><button type="button" class="audioButton">🔇</button>
-                    <b>Audio:</b> &nbsp; Toggle sound on/off
-                </li>
-                <li><button class="fullscreenButton">⛶</button>
-                    <b>Fullscreen:</b> &nbsp; Toggle fullscreen
-                </li>
-            </ul>
-            <button id="closeInfo" class="closeInfo">Close</button>
         </div>
     </div>
 
