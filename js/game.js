@@ -26,13 +26,12 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Fügt einen Klick-Listener auf den Info-Button hinzu, um das Info-Overlay anzuzeigen.
+ * Adds a click listener to the Info button to display the info overlay.
  * 
- * Beim Klick wird das Overlay dynamisch erzeugt, in das DOM eingefügt und sichtbar gemacht.
- * Das Overlay kann durch:
- * - Klick auf den Close-Button oder
- * - Klick auf den Hintergrund des Overlays
- * wieder entfernt werden.
+ * On click, the overlay is dynamically created, inserted into the DOM, and made visible.
+ * The overlay can be removed by:
+ * - Clicking the Close button, or
+ * - Clicking on the overlay background
  *
  * @function
  * @returns {void}
@@ -810,14 +809,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Fügt einen Klick-Listener auf den "Legal Notice"-Button hinzu, 
- * um das Legal-Overlay anzuzeigen. 
+ * Adds a click listener to the "Legal Notice" button 
+ * to display the legal overlay.
  * 
- * Das Overlay wird dynamisch ins DOM eingefügt, 
- * scrollt den Textcontainer nach oben und kann durch:
- * - Klick auf den "Back to Game"-Button oder
- * - Klick auf den Hintergrund
- * wieder geschlossen werden.
+ * The overlay is dynamically inserted into the DOM, 
+ * scrolls the text container to the top, and can be closed by:
+ * - Clicking the "Back to Game" button, or
+ * - Clicking the background
  *
  * @function
  * @returns {void}

@@ -152,12 +152,29 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts all animation intervals for the character:
+     * - Movement updates
+     * - State updates (shooting, hurt, death, idle)
+     * - Action updates (shooting and slapping)
+     *
+     * @function
+     * @returns {void}
+     */
     animate() {
         this.startMovementInterval();
         this.startStateInterval();
         this.startActionInterval();
     }
 
+    /**
+     * Starts the interval that updates character movement.
+     * - Checks collisions with barriers
+     * - Handles left, right, up, and down movement
+     *
+     * @function
+     * @returns {void}
+     */
     startMovementInterval() {
         this.world.setStoppableInterval(() => {
             if (this.isDead()) return;
@@ -170,6 +187,15 @@ class Character extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Starts the interval that updates character states.
+     * - Handles shooting
+     * - Handles death and hurt states
+     * - Updates idle/movement animations
+     *
+     * @function
+     * @returns {void}
+     */
     startStateInterval() {
         this.world.setStoppableInterval(() => {
             const now = Date.now();
@@ -180,6 +206,14 @@ class Character extends MovableObject {
         }, 200);
     }
 
+    /**
+     * Starts the interval that updates character actions.
+     * - Handles shooting actions if possible
+     * - Handles slapping actions if active or available
+     *
+     * @function
+     * @returns {void}
+     */
     startActionInterval() {
         this.world.setStoppableInterval(() => {
             if (this.canShoot()) this.handleShootingAction();
@@ -791,7 +825,6 @@ class Character extends MovableObject {
         this.snoringSource = source;
         this.hasPlayedIdleSound = true;
     }
-
 
     /**
      * Resets the idle snoring sound state.
