@@ -195,21 +195,21 @@ class Character extends MovableObject {
 
             // Handle shooting normally
 
-                if (this.canShoot()) this.handleShootingAction();
+            if (this.canShoot()) this.handleShootingAction();
 
-                // Wenn gerade Slap läuft → weiter animieren
-                if (this.isSlapping) {
-                    this.handleSlapAction();
-                    return;
-                }
+            // Wenn gerade Slap läuft → weiter animieren
+            if (this.isSlapping) {
+                this.handleSlapAction();
+                return;
+            }
 
-                // Wenn Taste gedrückt und kein Slap aktiv → Slap starten
-                if (this.canSlap() && !this.isSlapping) {
-                    this.handleSlapAction();
-                    return;
-                }
-            }, 80);
-        }
+            // Wenn Taste gedrückt und kein Slap aktiv → Slap starten
+            if (this.canSlap() && !this.isSlapping) {
+                this.handleSlapAction();
+                return;
+            }
+        }, 80);
+    }
 
     /**
      * Calculates the horizontal movement limits for the character based on camera state.
@@ -227,12 +227,12 @@ class Character extends MovableObject {
      * @returns {number} return.rightLimit - The maximum allowed X-coordinate for the character.
      */
     getScreenLimits() {
-            const freezePoint = this.world.level.level_end_x - 450;
-            return {
-                leftLimit: this.cameraFrozen ? freezePoint - 130 : -50,
-                rightLimit: this.cameraFrozen ? freezePoint + 450 : this.world.level.level_end_x
-            };
-        }
+        const freezePoint = this.world.level.level_end_x - 450;
+        return {
+            leftLimit: this.cameraFrozen ? freezePoint - 130 : -50,
+            rightLimit: this.cameraFrozen ? freezePoint + 450 : this.world.level.level_end_x
+        };
+    }
 
     /**
      * Handles the character's movement to the right.
@@ -250,9 +250,9 @@ class Character extends MovableObject {
      * @param {number} rightLimit - The maximum X-coordinate the character can move to.
      */
     handleRightMovement(rightLimit) {
-            const freezePoint = this.world.level.level_end_x - 450;
-            const kb = this.world.keyboard;
-            if((kb.ArrowRight || kb.KeyD) && this.x < rightLimit && (!this.world.isCollidingBarrier || this.otherDirection)) {
+        const freezePoint = this.world.level.level_end_x - 450;
+        const kb = this.world.keyboard;
+        if ((kb.ArrowRight || kb.KeyD) && this.x < rightLimit && (!this.world.isCollidingBarrier || this.otherDirection)) {
             this.x += this.speed;
             this.updateCameraOnMove(freezePoint, false);
             this.speed = 3;
@@ -689,32 +689,25 @@ class Character extends MovableObject {
         }
     }
 
-
     // stopIdleSnoringSound() {
-    //     if (this.snoringAudio) {
-    //         this.snoringAudio.pause();
-    //         this.snoringAudio.currentTime = 0;
-    //         this.snoringAudio = null;
-    //         this.hasPlayedIdleSound = false;
+    //     if (this.snoringSource) {
+    //         try {
+    //             this.snoringSource.stop(0);
+    //             this.snoringSource.disconnect();
+    //         } catch (e) {
+    //             // source might already be stopped
+    //         }
+    //         this.snoringSource = null;
     //     }
+    //     this.hasPlayedIdleSound = false;
     // }
-    /**
-     * Stops the snoring sound when Sharkie moves or exits long idle state.
-     *
-     * @method stopIdleSnoringSound
-     * @returns {void}
-     */
     stopIdleSnoringSound() {
         if (this.snoringSource) {
-            try {
-                this.snoringSource.stop(0);
-                this.snoringSource.disconnect();
-            } catch (e) {
-                // source might already be stopped
-            }
+            this.snoringSource.stop(0);
+            this.snoringSource.disconnect();
             this.snoringSource = null;
+            this.hasPlayedIdleSound = false;
         }
-        this.hasPlayedIdleSound = false;
     }
 
     /**
@@ -775,46 +768,65 @@ class Character extends MovableObject {
             this.playAnimation(this.IMAGES_LONG_IDLE);
             this.isLongIdlePlayed = true;
 
-            // Start snoring if not already playing
-            if (!this.hasPlayedIdleSound) {
+            // Schnarch-Sound nur starten, wenn Sound global an
+            if (!this.hasPlayedIdleSound && soundManager?.enabled) {
                 this.playIdleSnoringSound();
+            } else if (!soundManager?.enabled) {
+                // globaler Sound aus → alte Quelle sofort stoppen
+                this.stopIdleSnoringSound();
             }
 
-            // Loop the long idle animation continuously
             this.idleAnimationFrame++;
             if (this.idleAnimationFrame >= this.IMAGES_LONG_IDLE.length * 4) {
                 this.idleAnimationFrame = 0;
             }
         } else {
-            this.playAnimation(this.IMAGES_IDLE);
-        }
+        // Normale Idle-Animation
+        this.playAnimation(this.IMAGES_IDLE);
+
+        // Reset Long-Idle-Flags, damit es beim nächsten Mal wieder triggern kann
+        this.isLongIdlePlayed = false;
+        this.hasPlayedIdleSound = false;
+    }
     }
 
 
     // playIdleSnoringSound() {
-    //     if (!this.snoringAudio) {
-    //         this.snoringAudio = new Audio('img/assets/audio/snoring.wav');
-    //         this.snoringAudio.loop = true;
-    //         this.snoringAudio.play();
-    //         this.hasPlayedIdleSound = true;
-    //     }
-    // }
+    // // Prüfen, ob globaler Sound erlaubt
+    // if (!soundManager?.enabled) return;
 
-    /**
-     * Plays the snoring sound while Sharkie is in long idle mode.
-     *
-     * This sound loops continuously via the SoundManager until Sharkie moves again
-     * or the long idle animation finishes. It will only start once per idle cycle.
-     *
-     * @method playIdleSnoringSound
-     * @returns {void}
-     */
+    // if (!this.snoringAudio) {
+    //     this.snoringAudio = new Audio('img/assets/audio/snoring.wav');
+    //     this.snoringAudio.loop = true;
+    //     this.snoringAudio.play();
+    //     this.hasPlayedIdleSound = true;
+    // }
     async playIdleSnoringSound() {
-        if (!this.hasPlayedIdleSound && typeof soundManager !== 'undefined') {
-            this.snoringSource = await soundManager.playEffect('img/assets/audio/snoring.wav', 0, true);
-            this.hasPlayedIdleSound = true;
+        // Prüfen, ob globaler Sound an ist
+        if (!soundManager?.enabled) return;
+
+        // Alte Quelle sofort stoppen, bevor neue erstellt wird
+        if (this.snoringSource) {
+            this.stopIdleSnoringSound();
         }
+
+        // Neue Quelle erstellen
+        const source = await soundManager.playEffect(
+            'img/assets/audio/snoring.wav',
+            0,
+            true // loop
+        );
+
+        // Prüfen, ob Sound während des await ausgeschaltet wurde
+        if (!soundManager.enabled) {
+            source.stop();
+            return;
+        }
+
+        this.snoringSource = source;
+        this.hasPlayedIdleSound = true;
     }
+
 
     /**
      * Resets the idle snoring sound state.

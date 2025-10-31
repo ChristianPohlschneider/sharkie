@@ -120,17 +120,39 @@ async function toggleGameSound() {
     handleGameSoundThemePlay(enabled);
 }
 
-/** 
- * Plays or stops the game's background theme based on the given sound state.
- * 
- * @function handleGameSoundThemePlay
- * @param {boolean} enabled - If `true`, plays the theme; if `false`, stops it.
- */
-function handleGameSoundThemePlay(enabled) {
+
+// function handleGameSoundThemePlay(enabled) {
+//     if (!soundManager) return;
+//     if (enabled) soundManager.playTheme();
+//     else {soundManager.stopTheme();
+//         this.world.character.stopIdleSnoringSound();
+//         this.world.character.finishSnoringSound();
+//     }
+// }
+function handleGameSoundThemePlay(enabled, world) {
     if (!soundManager) return;
-    if (enabled) soundManager.playTheme();
-    else soundManager.stopTheme();
+
+    const sharkie = world?.character;
+    if (enabled) {
+        soundManager.playTheme();
+
+        if (sharkie) {
+            const now = Date.now();
+            const idleDuration = now - (sharkie.lastIdleTime || now);
+
+            if (idleDuration >= 10000) {
+                sharkie.playIdleSnoringSound();
+            }
+        }
+    } else {
+        soundManager.stopTheme();
+
+        if (sharkie) {
+            sharkie.stopIdleSnoringSound();
+        }
+    }
 }
+
 
 /** 
  * Initializes the SoundManager (if needed), loads the specified audio theme,
