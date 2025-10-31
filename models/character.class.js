@@ -7,7 +7,7 @@ class Character extends MovableObject {
     interval = 1000 / 60;
     speedY = 0;
     accelerationY = 0.05;
-    energy = 100;
+    energy = 1000;
     isShooting = false;
     lastShot = 0;
     shootFrameCounter = 0;
@@ -24,7 +24,7 @@ class Character extends MovableObject {
     hasPlayedIdleSound = false;
     lastIdleTime = null;
     isLongIdlePlayed = false;
-    currentSharkyAnimation = null;   
+    currentSharkyAnimation = null;
 
     offset = {
         top: 105,
@@ -189,11 +189,27 @@ class Character extends MovableObject {
         }, 200);
 
         this.world.setStoppableInterval(() => {
-            if (this.canShoot()) this.handleShootingAction();
-            if (this.canSlap()) this.handleSlapAction();
-            else this.resetSlapState();
-        }, 80);
-    }
+            // if (this.canShoot()) this.handleShootingAction();
+            // if (this.canSlap()) this.handleSlapAction();
+            // else this.resetSlapState();
+
+            // Handle shooting normally
+
+                if (this.canShoot()) this.handleShootingAction();
+
+                // Wenn gerade Slap läuft → weiter animieren
+                if (this.isSlapping) {
+                    this.handleSlapAction();
+                    return;
+                }
+
+                // Wenn Taste gedrückt und kein Slap aktiv → Slap starten
+                if (this.canSlap() && !this.isSlapping) {
+                    this.handleSlapAction();
+                    return;
+                }
+            }, 80);
+        }
 
     /**
      * Calculates the horizontal movement limits for the character based on camera state.
@@ -211,12 +227,12 @@ class Character extends MovableObject {
      * @returns {number} return.rightLimit - The maximum allowed X-coordinate for the character.
      */
     getScreenLimits() {
-        const freezePoint = this.world.level.level_end_x - 450;
-        return {
-            leftLimit: this.cameraFrozen ? freezePoint - 130 : -50,
-            rightLimit: this.cameraFrozen ? freezePoint + 450 : this.world.level.level_end_x
-        };
-    }
+            const freezePoint = this.world.level.level_end_x - 450;
+            return {
+                leftLimit: this.cameraFrozen ? freezePoint - 130 : -50,
+                rightLimit: this.cameraFrozen ? freezePoint + 450 : this.world.level.level_end_x
+            };
+        }
 
     /**
      * Handles the character's movement to the right.
@@ -234,9 +250,9 @@ class Character extends MovableObject {
      * @param {number} rightLimit - The maximum X-coordinate the character can move to.
      */
     handleRightMovement(rightLimit) {
-        const freezePoint = this.world.level.level_end_x - 450;
-        const kb = this.world.keyboard;
-        if ((kb.ArrowRight || kb.KeyD) && this.x < rightLimit && (!this.world.isCollidingBarrier || this.otherDirection)) {
+            const freezePoint = this.world.level.level_end_x - 450;
+            const kb = this.world.keyboard;
+            if((kb.ArrowRight || kb.KeyD) && this.x < rightLimit && (!this.world.isCollidingBarrier || this.otherDirection)) {
             this.x += this.speed;
             this.updateCameraOnMove(freezePoint, false);
             this.speed = 3;
@@ -461,30 +477,40 @@ class Character extends MovableObject {
         this.hasPlayedBubbleSound = false;
     }
 
-    /**
-     * Handles the character's slap action and its animation frame by frame.
-     * 
-     * This method performs the following actions:
-     * 1. Initializes the slap state if it is not already active.
-     * 2. Plays the slap sound once if it hasn't been played yet.
-     * 3. Plays the slap animation using `IMAGES_FINSLAP`.
-     * 4. Calls `finSlap()` to apply the slap effect (e.g., damage to enemies).
-     * 5. Increments the slap animation frame counter.
-     * 6. Calls `finishSlap()` when the last animation frame has been displayed.
-     * 
-     * @method handleSlapAction
-     */
+
+    // handleSlapAction() {
+    //     if (!this.isSlapping) {
+    //         this.isSlapping = true;
+    //         this.slapAnimationFrame = 0;
+    //         this.hasPlayedSlapSound = false;
+    //     }
+    //     if (!this.hasPlayedSlapSound) this.playSlapSound();
+    //     this.playAnimation(this.IMAGES_FINSLAP);
+    //     this.finSlap();
+    //     this.slapAnimationFrame++;
+    //     if (this.slapAnimationFrame >= this.IMAGES_FINSLAP.length) this.finishSlap();
+    // }
     handleSlapAction() {
+        // Start der Animation
         if (!this.isSlapping) {
             this.isSlapping = true;
             this.slapAnimationFrame = 0;
             this.hasPlayedSlapSound = false;
         }
+
+        // Sound nur einmal pro Schlag
         if (!this.hasPlayedSlapSound) this.playSlapSound();
+
+        // Animation abspielen
         this.playAnimation(this.IMAGES_FINSLAP);
         this.finSlap();
+
         this.slapAnimationFrame++;
-        if (this.slapAnimationFrame >= this.IMAGES_FINSLAP.length) this.finishSlap();
+
+        // Ende erreicht? -> Animation abschließen
+        if (this.slapAnimationFrame >= this.IMAGES_FINSLAP.length) {
+            this.finishSlap();
+        }
     }
 
     /**
@@ -511,6 +537,12 @@ class Character extends MovableObject {
      * 
      * @method finishSlap
      */
+    // finishSlap() {
+    //     this.isSlapping = false;
+    //     this.slapAnimationFrame = 0;
+    //     this.hasPlayedSlapSound = false;
+    //     this.resetOffsets();
+    // }
     finishSlap() {
         this.isSlapping = false;
         this.slapAnimationFrame = 0;
@@ -618,29 +650,37 @@ class Character extends MovableObject {
         }
     }
 
-    /**
-     * Handles the character's movement or idle state, depending on keyboard input.
-     *
-     * This method determines whether the player is currently moving or idle and triggers
-     * the corresponding animation and sound effects:
-     *
-     * - When movement keys are pressed, Sharky starts swimming and any idle snoring sound
-     *   is stopped immediately.
-     * - When no movement input is detected for a certain duration, the idle animation
-     *   (and potentially the snoring sound) is played.
-     *
-     * @param {number} now - The current timestamp in milliseconds (usually from Date.now()).
-     *
-     * @method handleMovementOrIdle
-     * @memberof Character
-     */
+
+    // handleMovementOrIdle(now) {
+    //     const kb = this.world.keyboard;
+    //     const isMoving =
+    //         kb.ArrowRight || kb.ArrowLeft || kb.ArrowUp || kb.ArrowDown ||
+    //         kb.KeyW || kb.KeyA || kb.KeyS || kb.KeyD;
+    //     if (this.isDead() || this.isHurt() || this.isShooting) return;
+    //     if (kb.ControlLeft || kb.ControlRight) return;
+    //     if (isMoving) {
+    //         this.stopIdleSnoringSound();
+    //         this.handleMovementAnimation();
+    //     } else {
+    //         this.handleIdleAnimation(now);
+    //     }
+    // }
     handleMovementOrIdle(now) {
+        // Verhindere Idle-/Movement-Animation während des Slaps
+        if (this.isSlapping) return;
+
         const kb = this.world.keyboard;
         const isMoving =
             kb.ArrowRight || kb.ArrowLeft || kb.ArrowUp || kb.ArrowDown ||
             kb.KeyW || kb.KeyA || kb.KeyS || kb.KeyD;
-        if (this.isDead() || this.isHurt() || this.isShooting) return;
-        if (kb.ControlLeft || kb.ControlRight) return;
+
+        if (this.isDead() || this.isHurt() || this.isShooting) {
+            this.stopIdleSnoringSound();
+            this.lastIdleTime = null;
+            this.isLongIdlePlayed = false;
+            return;
+        }
+
         if (isMoving) {
             this.stopIdleSnoringSound();
             this.handleMovementAnimation();
@@ -649,24 +689,32 @@ class Character extends MovableObject {
         }
     }
 
+
+    // stopIdleSnoringSound() {
+    //     if (this.snoringAudio) {
+    //         this.snoringAudio.pause();
+    //         this.snoringAudio.currentTime = 0;
+    //         this.snoringAudio = null;
+    //         this.hasPlayedIdleSound = false;
+    //     }
+    // }
     /**
-     * Stops the idle snoring sound immediately, if it is currently playing.
-     *
-     * This method pauses and resets the snoring audio that is played when Sharky
-     * has been idle for a long time. It ensures the sound does not continue or overlap
-     * when the player resumes movement. The internal state flags are also reset so the
-     * sound can be played again during the next idle phase.
+     * Stops the snoring sound when Sharkie moves or exits long idle state.
      *
      * @method stopIdleSnoringSound
-     * @memberof Character
+     * @returns {void}
      */
     stopIdleSnoringSound() {
-        if (this.snoringAudio) {
-            this.snoringAudio.pause();
-            this.snoringAudio.currentTime = 0;
-            this.snoringAudio = null;
-            this.hasPlayedIdleSound = false;
+        if (this.snoringSource) {
+            try {
+                this.snoringSource.stop(0);
+                this.snoringSource.disconnect();
+            } catch (e) {
+                // source might already be stopped
+            }
+            this.snoringSource = null;
         }
+        this.hasPlayedIdleSound = false;
     }
 
     /**
@@ -685,54 +733,85 @@ class Character extends MovableObject {
         this.isLongIdlePlayed = false;
     }
 
+
+    // handleIdleAnimation(now) {
+    //     if (this.lastIdleTime === null) {
+    //         this.lastIdleTime = now;
+    //         this.isLongIdlePlayed = false;
+    //     }
+    //     const idleDuration = now - this.lastIdleTime;
+    //     if (idleDuration >= 10000) {
+    //         this.playAnimation(this.IMAGES_LONG_IDLE);
+    //         this.isLongIdlePlayed = true;
+    //         if (!this.hasPlayedIdleSound) this.playIdleSnoringSound();
+
+    //         this.idleAnimationFrame++;
+    //         if (this.idleAnimationFrame >= Number(this.IMAGES_LONG_IDLE.length * 4)) {
+    //             this.finishSnoringSound();
+    //         }
+    //     } else {
+    //         this.playAnimation(this.IMAGES_IDLE);
+    //     }
+    // }
     /**
-     * Handles the character's idle animation and plays a snoring sound when idle for a long duration.
-     * 
-     * This method performs the following actions:
-     * 1. Tracks how long the character has been idle.
-     * 2. If idle for more than 10 seconds, plays the long idle animation (`IMAGES_LONG_IDLE`) 
-     *    and triggers the snoring sound once.
-     * 3. Updates the idle animation frame counter to determine when to reset the snoring state.
-     * 4. If the character is not yet idle for 10 seconds, plays the regular idle animation (`IMAGES_IDLE`).
-     * 
-     * @param {number} now - The current timestamp in milliseconds, typically obtained via `Date.now()`.
+     * Handles Sharkie's idle and long idle animations.
+     *
+     * Sharkie stays in long idle mode (with snoring sound) indefinitely
+     * until he moves, gets hurt, or dies.
+     *
+     * @param {number} now - The current timestamp (from Date.now()).
+     * @returns {void}
      */
     handleIdleAnimation(now) {
         if (this.lastIdleTime === null) {
             this.lastIdleTime = now;
             this.isLongIdlePlayed = false;
         }
+
         const idleDuration = now - this.lastIdleTime;
+
+        // Long idle after 10 seconds
         if (idleDuration >= 10000) {
             this.playAnimation(this.IMAGES_LONG_IDLE);
             this.isLongIdlePlayed = true;
-            if (!this.hasPlayedIdleSound) this.playIdleSnoringSound();
 
+            // Start snoring if not already playing
+            if (!this.hasPlayedIdleSound) {
+                this.playIdleSnoringSound();
+            }
+
+            // Loop the long idle animation continuously
             this.idleAnimationFrame++;
-            if (this.idleAnimationFrame >= Number(this.IMAGES_LONG_IDLE.length * 4)) {
-                this.finishSnoringSound();
+            if (this.idleAnimationFrame >= this.IMAGES_LONG_IDLE.length * 4) {
+                this.idleAnimationFrame = 0;
             }
         } else {
             this.playAnimation(this.IMAGES_IDLE);
         }
     }
 
+
+    // playIdleSnoringSound() {
+    //     if (!this.snoringAudio) {
+    //         this.snoringAudio = new Audio('img/assets/audio/snoring.wav');
+    //         this.snoringAudio.loop = true;
+    //         this.snoringAudio.play();
+    //         this.hasPlayedIdleSound = true;
+    //     }
+    // }
+
     /**
-     * Plays the idle snoring sound in a continuous loop while Sharky is idle.
+     * Plays the snoring sound while Sharkie is in long idle mode.
      *
-     * This method creates a new `Audio` object and starts playing the snoring sound
-     * when Sharky has been idle for a certain duration. The sound is looped until it is
-     * explicitly stopped via {@link stopIdleSnoringSound}. To prevent overlapping sounds,
-     * the audio is only started if no snoring sound is currently playing.
+     * This sound loops continuously via the SoundManager until Sharkie moves again
+     * or the long idle animation finishes. It will only start once per idle cycle.
      *
      * @method playIdleSnoringSound
-     * @memberof Character
+     * @returns {void}
      */
-    playIdleSnoringSound() {
-        if (!this.snoringAudio) {
-            this.snoringAudio = new Audio('img/assets/audio/snoring.wav');
-            this.snoringAudio.loop = true;
-            this.snoringAudio.play();
+    async playIdleSnoringSound() {
+        if (!this.hasPlayedIdleSound && typeof soundManager !== 'undefined') {
+            this.snoringSource = await soundManager.playEffect('img/assets/audio/snoring.wav', 0, true);
             this.hasPlayedIdleSound = true;
         }
     }
