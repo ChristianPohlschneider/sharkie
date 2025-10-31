@@ -85,32 +85,6 @@ class SoundManager {
     }
 
     /**
-     * Plays a sound effect from a given URL, optionally with a delay.
-     * 
-     * This method fetches the audio file, decodes it into an AudioBuffer,
-     * and plays it through the AudioContext. The sound plays only if 
-     * the sound system is enabled.
-     * 
-     * @async
-     * @param {string} url - The URL of the audio file to play.
-     * @param {number} [delay=0] - Optional delay in milliseconds before the sound starts.
-     */
-    //     async playEffect(url, delay = 0) {
-    //         if (!this.enabled) return;
-    //         const response = await fetch(url);
-    //         const arrayBuffer = await response.arrayBuffer();
-    //         const buffer = await this.audioCtx.decodeAudioData(arrayBuffer);
-    //         const source = this.audioCtx.createBufferSource();
-    //         source.buffer = buffer;
-    //         source.connect(this.audioCtx.destination);
-    //         if (delay > 0) {
-    //             source.start(this.audioCtx.currentTime + delay / 1000);
-    //         } else {
-    //             source.start(0);
-    //         }
-    //     }
-
-    /**
      * Plays a sound effect from a given URL, optionally with a delay and loop option.
      *
      * @async
@@ -127,11 +101,8 @@ class SoundManager {
         source.buffer = buffer;
         source.loop = loop;
         source.connect(this.audioCtx.destination);
-        if (delay > 0) {
-            source.start(this.audioCtx.currentTime + delay / 1000);
-        } else {
-            source.start(0);
+        if (delay > 0) {source.start(this.audioCtx.currentTime + delay / 1000);
+        } else {source.start(0);
         }
-        return source; // ⬅ wichtig, um später stoppen zu können
-    }
-}
+        return source;
+    }}
