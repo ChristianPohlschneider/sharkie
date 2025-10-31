@@ -150,24 +150,21 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Plays the boss death sound effect.
+     * Plays the boss death sound effect once using the global SoundManager.
      *
-     * This method ensures the death sound for the boss is played only once.
-     * - If the audio object does not already exist, it creates a new `Audio` instance.
-     * - Plays the sound from the specified file path.
-     * - Sets a flag to indicate that the death audio has already been played.
+     * This method ensures that the boss death audio is played only a single time.
+     * It checks the `audioBossDeathPlayed` flag to prevent repeated playback.
+     * The sound is played via the `SoundManager` to maintain consistent
+     * audio control (volume, mute state, etc.) throughout the game.
      *
      * @method playDeathSound
      * @returns {void} This function does not return a value.
      */
     playDeathSound() {
-        // if (typeof soundManager !== 'undefined') {
-        //     soundManager.playEffect('img/assets/audio/bossDies.wav', 200);
-        // }
-        if (!this.bossDeathAudio) {
-            this.bossDeathAudio = new Audio('img/assets/audio/bossDies.wav');
-            // this.bossDeathAudio.loop = true;
-            this.bossDeathAudio.play();
+        if (!this.audioBossDeathPlayed) {
+            if (typeof soundManager !== 'undefined') {
+                soundManager.playEffect('img/assets/audio/bossDies.wav');
+            }
             this.audioBossDeathPlayed = true;
         }
     }
