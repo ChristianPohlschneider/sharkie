@@ -79,17 +79,14 @@ class World {
             this.level.enemies.forEach(enemy => {
                 if (!this.character.isColliding(enemy)) return;
                 if (this.character.isSlapping && enemy.damageFromFinSlap) {
-                    enemy.hit(enemy.damageFromFinSlap);
-                }
+                    enemy.hit(enemy.damageFromFinSlap);}
                 if (!this.character.isSlapping || enemy instanceof JellyFish) {
                     if (!this.character.isDead())
                         soundManager.playEffect('img/assets/audio/hurtSharky.wav', 0);
                     this.character.hit(enemy.damageDueToCollision);
-                    this.statusBar.setPercentage(this.character.energy);
-                }
+                    this.statusBar.setPercentage(this.character.energy);}
             });
-        }, 200);
-    }
+        }, 200);}
 
     /**
      * Continuously checks for collisions between shootable objects (bubbles) and level barriers.

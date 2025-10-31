@@ -624,6 +624,64 @@ canvas:fullscreen {
     z-index: 10;
 }
 
+#legalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#legalOverlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#legalOverlay .txtContainer {
+    background-color: rgb(94, 101, 169);
+    color: rgb(27, 20, 100);
+    height: 75%;
+    max-height: 80vh;
+    width: 70%;
+    overflow-y: auto;
+    padding: 10px 20px 20px 20px;
+    border: 2px solid white;
+    border-radius: 15px;
+    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
+}
+
+.txtContainer::-webkit-scrollbar {
+  display: none;
+}
+
+#legalOverlay h1 {
+    display: flex;
+    justify-content: center;
+}
+
+#legalOverlay .backButtonDiv {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+#legalOverlay .txtContainer::-webkit-scrollbar {
+    width: 8px;
+}
+
+#legalOverlay .txtContainer::-webkit-scrollbar-thumb {
+    background-color: rgba(83, 26, 130, 0.6);
+    border-radius: 4px;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -847,68 +905,4 @@ canvas:fullscreen {
     #mobileKeys {
         display: flex;
     }
-}
-
-/* Overlay-Hintergrund */
-#legalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    /* flex statt none */
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    opacity: 0;
-    /* versteckt initial */
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-
-#legalOverlay.show {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* Container für den Textinhalt im Overlay */
-#legalOverlay .txtContainer {
-    background-color: rgb(94, 101, 169);
-    color: rgb(27, 20, 100);
-    height: 75%;
-    max-height: 80vh;
-    width: 70%;
-    overflow-y: auto;
-    padding: 10px 20px 20px 20px;
-    border: 2px solid white;
-    border-radius: 15px;
-    box-shadow: 0px 0px 9px 9px rgba(239, 199, 46, 0.1);
-}
-
-.txtContainer::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
-}
-
-#legalOverlay h1 {
-    display: flex;
-    justify-content: center;
-}
-
-/* Back-Button zentrieren bleibt gleich */
-#legalOverlay .backButtonDiv {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: center;
-}
-
-/* Scrollbar optional verschönern */
-#legalOverlay .txtContainer::-webkit-scrollbar {
-    width: 8px;
-}
-
-#legalOverlay .txtContainer::-webkit-scrollbar-thumb {
-    background-color: rgba(83, 26, 130, 0.6);
-    border-radius: 4px;
 }

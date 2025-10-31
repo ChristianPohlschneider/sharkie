@@ -473,8 +473,7 @@ class Endboss extends MovableObject {
                 moved -= speed;
                 if (moved <= 0) clearInterval(interval);
             }
-        }, 50);
-    }
+        }, 50);}
 
     /**
      * Updates the boss's vertical position.

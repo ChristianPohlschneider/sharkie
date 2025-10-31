@@ -7,7 +7,7 @@ class Character extends MovableObject {
     interval = 1000 / 60;
     speedY = 0;
     accelerationY = 0.05;
-    energy = 1000;
+    energy = 100;
     isShooting = false;
     lastShot = 0;
     shootFrameCounter = 0;
@@ -152,24 +152,13 @@ class Character extends MovableObject {
         this.animate();
     }
 
-    /**
-     * Starts the animation and game logic loops for the character.
-     * 
-     * This method sets up multiple stoppable intervals within the world:
-     * 1. **Movement and collision loop (≈60 FPS)** – Checks if the character is dead,
-     *    handles collisions with barriers, and updates movement in all directions
-     *    based on screen limits.
-     * 2. **State and action loop (every 200ms)** – Handles shooting, death state,
-     *    hurt state, and switches between movement or idle animations.
-     * 3. **Action loop (every 80ms)** – Processes shooting and slap actions if possible,
-     *    and resets the slap state if the action cannot be performed.
-     * 
-     * This function keeps the character responsive to both player input and game world
-     * interactions.
-     * 
-     * @method animate
-     */
     animate() {
+        this.startMovementInterval();
+        this.startStateInterval();
+        this.startActionInterval();
+    }
+
+    startMovementInterval() {
         this.world.setStoppableInterval(() => {
             if (this.isDead()) return;
             this.world.checkCollisionWithBarrier();
@@ -179,7 +168,9 @@ class Character extends MovableObject {
             this.handleUpMovement();
             this.handleDownMovement();
         }, 1000 / 60);
+    }
 
+    startStateInterval() {
         this.world.setStoppableInterval(() => {
             const now = Date.now();
             this.handleShooting(now);
@@ -187,26 +178,13 @@ class Character extends MovableObject {
             this.handleHurtState();
             this.handleMovementOrIdle(now);
         }, 200);
+    }
 
+    startActionInterval() {
         this.world.setStoppableInterval(() => {
-            // if (this.canShoot()) this.handleShootingAction();
-            // if (this.canSlap()) this.handleSlapAction();
-            // else this.resetSlapState();
-
-            // Handle shooting normally
-
             if (this.canShoot()) this.handleShootingAction();
-
-            // Wenn gerade Slap läuft → weiter animieren
-            if (this.isSlapping) {
+            if (this.isSlapping || this.canSlap()) {
                 this.handleSlapAction();
-                return;
-            }
-
-            // Wenn Taste gedrückt und kein Slap aktiv → Slap starten
-            if (this.canSlap() && !this.isSlapping) {
-                this.handleSlapAction();
-                return;
             }
         }, 80);
     }
@@ -477,37 +455,26 @@ class Character extends MovableObject {
         this.hasPlayedBubbleSound = false;
     }
 
-
-    // handleSlapAction() {
-    //     if (!this.isSlapping) {
-    //         this.isSlapping = true;
-    //         this.slapAnimationFrame = 0;
-    //         this.hasPlayedSlapSound = false;
-    //     }
-    //     if (!this.hasPlayedSlapSound) this.playSlapSound();
-    //     this.playAnimation(this.IMAGES_FINSLAP);
-    //     this.finSlap();
-    //     this.slapAnimationFrame++;
-    //     if (this.slapAnimationFrame >= this.IMAGES_FINSLAP.length) this.finishSlap();
-    // }
+    /**
+     * Executes the Fin-Slap action:
+     * - Starts the slap animation if not already active
+     * - Plays the slap sound once
+     * - Updates the animation and calls `finSlap()`
+     * - Finishes the action when the animation is complete
+     *
+     * @function
+     * @returns {void}
+     */
     handleSlapAction() {
-        // Start der Animation
         if (!this.isSlapping) {
             this.isSlapping = true;
             this.slapAnimationFrame = 0;
             this.hasPlayedSlapSound = false;
         }
-
-        // Sound nur einmal pro Schlag
         if (!this.hasPlayedSlapSound) this.playSlapSound();
-
-        // Animation abspielen
         this.playAnimation(this.IMAGES_FINSLAP);
         this.finSlap();
-
         this.slapAnimationFrame++;
-
-        // Ende erreicht? -> Animation abschließen
         if (this.slapAnimationFrame >= this.IMAGES_FINSLAP.length) {
             this.finishSlap();
         }
@@ -537,12 +504,6 @@ class Character extends MovableObject {
      * 
      * @method finishSlap
      */
-    // finishSlap() {
-    //     this.isSlapping = false;
-    //     this.slapAnimationFrame = 0;
-    //     this.hasPlayedSlapSound = false;
-    //     this.resetOffsets();
-    // }
     finishSlap() {
         this.isSlapping = false;
         this.slapAnimationFrame = 0;
@@ -650,37 +611,49 @@ class Character extends MovableObject {
         }
     }
 
-
-    // handleMovementOrIdle(now) {
-    //     const kb = this.world.keyboard;
-    //     const isMoving =
-    //         kb.ArrowRight || kb.ArrowLeft || kb.ArrowUp || kb.ArrowDown ||
-    //         kb.KeyW || kb.KeyA || kb.KeyS || kb.KeyD;
-    //     if (this.isDead() || this.isHurt() || this.isShooting) return;
-    //     if (kb.ControlLeft || kb.ControlRight) return;
-    //     if (isMoving) {
-    //         this.stopIdleSnoringSound();
-    //         this.handleMovementAnimation();
-    //     } else {
-    //         this.handleIdleAnimation(now);
-    //     }
-    // }
+    /**
+     * Determines whether the character should switch between movement or idle animation.
+     * Skips the logic if the slap action is active.
+     *
+     * @param {number} now - Current timestamp (e.g., Date.now()).
+     * @function
+     * @returns {void}
+     */
     handleMovementOrIdle(now) {
-        // Verhindere Idle-/Movement-Animation während des Slaps
         if (this.isSlapping) return;
+        if (this.isIncapacitated()) return;
+        this.handleMovementOrIdleState(now);
+    }
 
-        const kb = this.world.keyboard;
-        const isMoving =
-            kb.ArrowRight || kb.ArrowLeft || kb.ArrowUp || kb.ArrowDown ||
-            kb.KeyW || kb.KeyA || kb.KeyS || kb.KeyD;
-
+    /**
+     * Checks if the character is incapacitated (dead, hurt, or shooting).
+     * Stops the idle snoring sound and resets idle states if necessary.
+     *
+     * @function
+     * @returns {boolean} True if the character is incapacitated.
+     */
+    isIncapacitated() {
         if (this.isDead() || this.isHurt() || this.isShooting) {
             this.stopIdleSnoringSound();
             this.lastIdleTime = null;
             this.isLongIdlePlayed = false;
-            return;
+            return true;
         }
+        return false;
+    }
 
+    /**
+     * Handles the character's animation based on movement or idle state.
+     * Plays movement animations or idle/long-idle animations accordingly.
+     *
+     * @param {number} now - Current timestamp (e.g., Date.now()).
+     * @function
+     * @returns {void}
+     */
+    handleMovementOrIdleState(now) {
+        const kb = this.world.keyboard;
+        const isMoving = kb.ArrowRight || kb.ArrowLeft || kb.ArrowUp || kb.ArrowDown ||
+            kb.KeyW || kb.KeyA || kb.KeyS || kb.KeyD;
         if (isMoving) {
             this.stopIdleSnoringSound();
             this.handleMovementAnimation();
@@ -689,18 +662,13 @@ class Character extends MovableObject {
         }
     }
 
-    // stopIdleSnoringSound() {
-    //     if (this.snoringSource) {
-    //         try {
-    //             this.snoringSource.stop(0);
-    //             this.snoringSource.disconnect();
-    //         } catch (e) {
-    //             // source might already be stopped
-    //         }
-    //         this.snoringSource = null;
-    //     }
-    //     this.hasPlayedIdleSound = false;
-    // }
+    /**
+     * Stops the character's ongoing snoring sound,
+     * disconnects the audio source, and resets the state.
+     *
+     * @function
+     * @returns {void}
+     */
     stopIdleSnoringSound() {
         if (this.snoringSource) {
             this.snoringSource.stop(0);
@@ -726,103 +694,100 @@ class Character extends MovableObject {
         this.isLongIdlePlayed = false;
     }
 
-
-    // handleIdleAnimation(now) {
-    //     if (this.lastIdleTime === null) {
-    //         this.lastIdleTime = now;
-    //         this.isLongIdlePlayed = false;
-    //     }
-    //     const idleDuration = now - this.lastIdleTime;
-    //     if (idleDuration >= 10000) {
-    //         this.playAnimation(this.IMAGES_LONG_IDLE);
-    //         this.isLongIdlePlayed = true;
-    //         if (!this.hasPlayedIdleSound) this.playIdleSnoringSound();
-
-    //         this.idleAnimationFrame++;
-    //         if (this.idleAnimationFrame >= Number(this.IMAGES_LONG_IDLE.length * 4)) {
-    //             this.finishSnoringSound();
-    //         }
-    //     } else {
-    //         this.playAnimation(this.IMAGES_IDLE);
-    //     }
-    // }
     /**
-     * Handles Sharkie's idle and long idle animations.
+     * Initializes idle state if not set.
      *
-     * Sharkie stays in long idle mode (with snoring sound) indefinitely
-     * until he moves, gets hurt, or dies.
-     *
-     * @param {number} now - The current timestamp (from Date.now()).
+     * @param {number} now - Current timestamp.
+     * @function
      * @returns {void}
      */
-    handleIdleAnimation(now) {
+    initializeIdle(now) {
         if (this.lastIdleTime === null) {
             this.lastIdleTime = now;
             this.isLongIdlePlayed = false;
         }
+    }
 
-        const idleDuration = now - this.lastIdleTime;
+    /**
+     * Returns the duration the character has been idle.
+     *
+     * @param {number} now - Current timestamp.
+     * @function
+     * @returns {number} Idle duration in milliseconds.
+     */
+    getIdleDuration(now) {
+        return now - this.lastIdleTime;
+    }
 
-        // Long idle after 10 seconds
-        if (idleDuration >= 10000) {
-            this.playAnimation(this.IMAGES_LONG_IDLE);
-            this.isLongIdlePlayed = true;
+    /**
+     * Handles the long idle state and animation.
+     *
+     * @function
+     * @returns {void}
+     */
+    handleLongIdle() {
+        this.playAnimation(this.IMAGES_LONG_IDLE);
+        this.isLongIdlePlayed = true;
+        if (!this.hasPlayedIdleSound && soundManager?.enabled) {
+            this.playIdleSnoringSound();
+        } else if (!soundManager?.enabled) {
+            this.stopIdleSnoringSound();
+        }
+        this.idleAnimationFrame++;
+        if (this.idleAnimationFrame >= this.IMAGES_LONG_IDLE.length * 4) {
+            this.idleAnimationFrame = 0;
+        }
+    }
 
-            // Schnarch-Sound nur starten, wenn Sound global an
-            if (!this.hasPlayedIdleSound && soundManager?.enabled) {
-                this.playIdleSnoringSound();
-            } else if (!soundManager?.enabled) {
-                // globaler Sound aus → alte Quelle sofort stoppen
-                this.stopIdleSnoringSound();
-            }
-
-            this.idleAnimationFrame++;
-            if (this.idleAnimationFrame >= this.IMAGES_LONG_IDLE.length * 4) {
-                this.idleAnimationFrame = 0;
-            }
-        } else {
-        // Normale Idle-Animation
+    /**
+     * Handles normal idle state and animation.
+     *
+     * @function
+     * @returns {void}
+     */
+    handleNormalIdle() {
         this.playAnimation(this.IMAGES_IDLE);
-
-        // Reset Long-Idle-Flags, damit es beim nächsten Mal wieder triggern kann
         this.isLongIdlePlayed = false;
         this.hasPlayedIdleSound = false;
     }
+
+    /**
+     * Main function to handle idle animation depending on duration.
+     *
+     * @param {number} now - Current timestamp.
+     * @function
+     * @returns {void}
+     */
+    handleIdleAnimation(now) {
+        this.initializeIdle(now);
+        const idleDuration = this.getIdleDuration(now);
+        if (idleDuration >= 10000) {
+            this.handleLongIdle();
+        } else {
+            this.handleNormalIdle();
+        }
     }
 
-
-    // playIdleSnoringSound() {
-    // // Prüfen, ob globaler Sound erlaubt
-    // if (!soundManager?.enabled) return;
-
-    // if (!this.snoringAudio) {
-    //     this.snoringAudio = new Audio('img/assets/audio/snoring.wav');
-    //     this.snoringAudio.loop = true;
-    //     this.snoringAudio.play();
-    //     this.hasPlayedIdleSound = true;
-    // }
+    /**
+     * Plays the character's snoring sound if global sound is enabled.
+     * Stops any existing snoring sound before starting a new one.
+     * The sound loops until stopped.
+     *
+     * @async
+     * @function
+     * @returns {Promise<void>}
+     */
     async playIdleSnoringSound() {
-        // Prüfen, ob globaler Sound an ist
         if (!soundManager?.enabled) return;
-
-        // Alte Quelle sofort stoppen, bevor neue erstellt wird
         if (this.snoringSource) {
             this.stopIdleSnoringSound();
         }
-
-        // Neue Quelle erstellen
         const source = await soundManager.playEffect(
-            'img/assets/audio/snoring.wav',
-            0,
-            true // loop
+            'img/assets/audio/snoring.wav', 0, true
         );
-
-        // Prüfen, ob Sound während des await ausgeschaltet wurde
         if (!soundManager.enabled) {
             source.stop();
-            return;
-        }
-
+            return;}
         this.snoringSource = source;
         this.hasPlayedIdleSound = true;
     }

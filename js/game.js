@@ -25,33 +25,32 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+/**
+ * Fügt einen Klick-Listener auf den Info-Button hinzu, um das Info-Overlay anzuzeigen.
+ * 
+ * Beim Klick wird das Overlay dynamisch erzeugt, in das DOM eingefügt und sichtbar gemacht.
+ * Das Overlay kann durch:
+ * - Klick auf den Close-Button oder
+ * - Klick auf den Hintergrund des Overlays
+ * wieder entfernt werden.
+ *
+ * @function
+ * @returns {void}
+ */
 document.addEventListener('DOMContentLoaded', () => {
     const infoButton = document.getElementById('infoButton');
-
     infoButton.addEventListener('click', () => {
-        // Template aus info_overlay_template.js abrufen
         const html = renderInfoOverlay();
-
-        // Dynamisch in #fullscreen einfügen
         document.getElementById('fullscreen').insertAdjacentHTML('beforeend', html);
-
         const infoOverlay = document.getElementById('infoOverlay');
         const closeInfo = document.getElementById('closeInfo');
-
-        // Overlay anzeigen
         infoOverlay.classList.remove('hidden');
-
-        // Eventlistener für Close-Button
         closeInfo.addEventListener('click', () => {
             infoOverlay.remove();
         });
-
-        // Klick außerhalb des Inhalts schließt Overlay
         infoOverlay.addEventListener('click', (e) => {
             if (e.target === infoOverlay) infoOverlay.remove();
-        });
-    });
-});
+        });});});
 
 /**
  * This function retrieves the `<canvas>` element from the DOM using its ID (`canvas`)
@@ -120,38 +119,29 @@ async function toggleGameSound() {
     handleGameSoundThemePlay(enabled);
 }
 
-
-// function handleGameSoundThemePlay(enabled) {
-//     if (!soundManager) return;
-//     if (enabled) soundManager.playTheme();
-//     else {soundManager.stopTheme();
-//         this.world.character.stopIdleSnoringSound();
-//         this.world.character.finishSnoringSound();
-//     }
-// }
+/**
+ * Starts or stops the game's theme and Sharkie's idle snoring sound
+ * based on the `enabled` flag.
+ *
+ * @param {boolean} enabled - If true, plays the theme and idle sound (if Sharkie is idle); 
+ *                            if false, stops all related sounds.
+ * @param {Object} world - The game world object containing the character instance.
+ * @returns {void}
+ */
 function handleGameSoundThemePlay(enabled, world) {
     if (!soundManager) return;
-
     const sharkie = world?.character;
     if (enabled) {
         soundManager.playTheme();
-
         if (sharkie) {
             const now = Date.now();
             const idleDuration = now - (sharkie.lastIdleTime || now);
-
-            if (idleDuration >= 10000) {
-                sharkie.playIdleSnoringSound();
-            }
+            if (idleDuration >= 10000) {sharkie.playIdleSnoringSound();}
         }
     } else {
         soundManager.stopTheme();
-
-        if (sharkie) {
-            sharkie.stopIdleSnoringSound();
-        }
-    }
-}
+        if (sharkie) {sharkie.stopIdleSnoringSound();}
+    }}
 
 
 /** 
@@ -350,8 +340,7 @@ function getTouchButtons() {
         KeyS: document.getElementById("arrowDown"),
         KeyA: document.getElementById("arrowLeft"),
         KeyD: document.getElementById("arrowRight")
-    };
-}
+    };}
 
 /**
  * Creates handlers for pressing and releasing keys, updating both the keyboard state and UI.
@@ -451,9 +440,7 @@ function getButtonId(code) {
         KeyS: "arrowDown",
         KeyA: "arrowLeft",
         KeyD: "arrowRight"
-    };
-    return keyMap[code];
-}
+    }; return keyMap[code]; }
 
 /**
  * Retrieves a DOM element by its button ID.
@@ -510,7 +497,6 @@ function toggleButtonActive(code, isActive) {
 function fullscreen() {
     const fsElement = document.getElementById('fullscreen');
     const button = document.getElementById('fullscreenButton');
-
     if (!document.fullscreenElement) {
         enterFullscreen(fsElement);
         button.innerHTML = '✕';
@@ -647,18 +633,18 @@ function showLoseOverlay() {
 }
 
 /**
- * Hides all overlay elements (win, lose, and info) by adding the `hidden` class.
- * 
- * This function retrieves the elements with IDs `winOverlay`, `loseOverlay`, and `infoOverlay`
- * and hides them, typically used when returning to the start screen or restarting the game.
- * 
- * @function hideOverlays
- * @throws {Error} If any of the overlay elements cannot be found in the DOM.
+ * Hides all game overlays by adding the "hidden" class.
+ * Skips any overlay that does not exist in the DOM.
+ *
+ * @returns {void}
  */
 function hideOverlays() {
-    document.getElementById('winOverlay').classList.add('hidden');
-    document.getElementById('loseOverlay').classList.add('hidden');
-    document.getElementById('infoOverlay').classList.add('hidden');
+    const winOverlay = document.getElementById('winOverlay');
+    if (winOverlay) winOverlay.classList.add('hidden');
+    const loseOverlay = document.getElementById('loseOverlay');
+    if (loseOverlay) loseOverlay.classList.add('hidden');
+    const infoOverlay = document.getElementById('infoOverlay');
+    if (infoOverlay) infoOverlay.classList.add('hidden');
 }
 
 /**
@@ -823,28 +809,28 @@ document.addEventListener('DOMContentLoaded', () => {
     closeBtn.addEventListener('click', closeBurgerMenu);
 });
 
-// legal_overlay
+/**
+ * Fügt einen Klick-Listener auf den "Legal Notice"-Button hinzu, 
+ * um das Legal-Overlay anzuzeigen. 
+ * 
+ * Das Overlay wird dynamisch ins DOM eingefügt, 
+ * scrollt den Textcontainer nach oben und kann durch:
+ * - Klick auf den "Back to Game"-Button oder
+ * - Klick auf den Hintergrund
+ * wieder geschlossen werden.
+ *
+ * @function
+ * @returns {void}
+ */
 document.addEventListener("DOMContentLoaded", () => {
-    const legalButton = document.getElementById("legalButton");
-    legalButton.addEventListener("click", () => {
-        const html = renderLegalNotice();
-        document.getElementById("fullscreen").insertAdjacentHTML("beforeend", html);
-        const legalOverlay = document.getElementById("legalOverlay");
-        const backToGame = document.getElementById("backToGame");
-        legalOverlay.classList.remove("hidden");
-        legalOverlay.classList.add("show");
-        const txtContainer = legalOverlay.querySelector('.txtContainer');
-        txtContainer.scrollTop = 0;
-        const closeOverlay = () => {
-            legalOverlay.classList.remove("show");
-            legalOverlay.classList.add("hidden");
-        };
-        backToGame.addEventListener('click', (e) => {
-            closeOverlay();
-            e.stopPropagation();
-        });
-        legalOverlay.addEventListener("click", (e) => {
-            if (e.target === legalOverlay) closeOverlay();
-        });
+    document.getElementById("legalButton")?.addEventListener("click", () => {
+        document.getElementById("fullscreen")?.insertAdjacentHTML("beforeend", renderLegalNotice());
+        const overlay = document.getElementById("legalOverlay");
+        const back = document.getElementById("backToGame");
+        overlay?.classList.replace("hidden", "show");
+        overlay?.querySelector('.txtContainer')?.scrollTo(0, 0);
+        const close = () => overlay?.classList.replace("show", "hidden");
+        back?.addEventListener("click", (e) => { close(); e.stopPropagation(); });
+        overlay?.addEventListener("click", (e) => { if (e.target === overlay) close(); });
     });
 });
