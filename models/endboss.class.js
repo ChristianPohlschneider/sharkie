@@ -95,18 +95,8 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Starts the animation and behavior loops for the boss character.
-     * 
-     * This method sets up two stoppable intervals:
-     * 1. Every 200ms:
-     *    - Checks if the boss is dead and handles death state via `handleBossDeathState()`.
-     *    - If hurt but not dead, handles hurt state via `handleBossHurtState()`.
-     *    - Otherwise, checks whether the boss should spawn using `checkBossSpawn()`.
-     * 2. Every 3000ms (3 seconds):
-     *    - If the boss is swimming, not attacking, and not dead, selects a random movement ID
-     *      and triggers `randomAttack(randomMoveID)`.
-     * 
-     * @method animate
+     * Starts the boss animation and behavior loops.
+     * Sets up intervals for checking death/hurt states and triggering random attacks.
      */
     animate() {
         this.world.setStoppableInterval(() => {
@@ -123,18 +113,8 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Handles the death state of the boss enemy.
-     *
-     * This method manages the sequence that occurs when the boss dies:
-     * - Plays the death sound once.
-     * - Displays the death animation.
-     * - Adds the boss's score to the total world score.
-     * - Checks if the current image corresponds to the "dead" sprite, and if so:
-     *   - Triggers the boss's death handler.
-     *   - Displays the win overlay with the updated total score.
-     *
-     * @method handleBossDeathState
-     * @returns {void} This function does not return a value.
+     * Handles the boss's death state.
+     * Plays death sound, shows animation, updates score, and triggers win overlay if dead.
      */
     handleBossDeathState() {
         if (!this.audioBossDeathPlayed) {
@@ -150,15 +130,8 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Plays the boss death sound effect once using the global SoundManager.
-     *
-     * This method ensures that the boss death audio is played only a single time.
-     * It checks the `audioBossDeathPlayed` flag to prevent repeated playback.
-     * The sound is played via the `SoundManager` to maintain consistent
-     * audio control (volume, mute state, etc.) throughout the game.
-     *
-     * @method playDeathSound
-     * @returns {void} This function does not return a value.
+     * Plays the boss death sound once via the SoundManager.
+     * Checks `audioBossDeathPlayed` to prevent repeated playback.
      */
     playDeathSound() {
         if (!this.audioBossDeathPlayed) {
@@ -171,11 +144,7 @@ class Endboss extends MovableObject {
 
     /**
      * Handles the boss's hurt state.
-     * 
-     * This method checks if the boss's `spawnID` is 8 or higher, and if so,
-     * plays the hurt animation (`IMAGES_HURT`).
-     * 
-     * @method handleBossHurtState
+     * Plays the hurt animation if `spawnID` is 8 or higher.
      */
     handleBossHurtState() {
         if (this.spawnID >= 8) {
@@ -184,15 +153,10 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Handles the final death sequence of the boss.
-     * 
-     * This asynchronous method performs the following:
-     * 1. Stops the current game using `world.stopGame()`.
-     * 2. After a delay of 800ms, stops the current audio theme if `soundManager` exists,
-     *    loads the win screen theme (`winScreen.mp3`), and plays it.
-     * 
+     * Handles the boss's final death sequence.
+     * Stops the game, then after 800ms switches to the win screen theme.
+     *
      * @async
-     * @method handleDeath
      */
     async handleDeath() {
         setTimeout(async () => {
@@ -206,15 +170,10 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Checks whether the boss should spawn or switch to swimming state.
-     * 
-     * This asynchronous method performs the following:
-     * 1. If `spawnID` is less than 8, it calls `handleBossSpawnSequence()` to manage the spawn animation.
-     * 2. If `spawnID` is 8 or higher and the boss is not attacking, it calls `handleBossSwimmingState()`.
-     * 3. Increments the `spawnID` counter after checking.
-     * 
+     * Checks if the boss should spawn or switch to swimming.
+     * Calls spawn or swimming handlers based on `spawnID` and increments the counter.
+     *
      * @async
-     * @method checkBossSpawn
      */
     async checkBossSpawn() {
         if (this.spawnID < 8) {
@@ -227,14 +186,9 @@ class Endboss extends MovableObject {
 
     /**
      * Handles the boss spawn animation sequence.
-     * 
-     * This asynchronous method performs the following:
-     * 1. Checks if the boss theme audio has already been played (`audioBossThemePlayed`).
-     *    If not, it asynchronously plays the boss theme via `playBossTheme()`.
-     * 2. Plays the boss spawning animation (`IMAGES_SPAWNING`).
-     * 
+     * Plays the boss theme if not already played and shows the spawning animation.
+     *
      * @async
-     * @method handleBossSpawnSequence
      */
     async handleBossSpawnSequence() {
         if (!this.audioBossThemePlayed) {
@@ -245,16 +199,9 @@ class Endboss extends MovableObject {
 
     /**
      * Plays the boss theme music.
-     * 
-     * This asynchronous method performs the following:
-     * 1. Returns immediately if `soundManager` is not defined.
-     * 2. Stops any currently playing theme.
-     * 3. Loads the boss theme audio file (`bossTheme.wav`) asynchronously.
-     * 4. Plays the loaded boss theme.
-     * 5. Marks `audioBossThemePlayed` as `true` to avoid replaying the theme.
-     * 
+     * Stops any current theme, loads and plays `bossTheme.wav`, and sets `audioBossThemePlayed`.
+     *
      * @async
-     * @method playBossTheme
      */
     async playBossTheme() {
         if (!soundManager) return;
@@ -266,12 +213,7 @@ class Endboss extends MovableObject {
 
     /**
      * Handles the boss's swimming state.
-     * 
-     * This method performs the following:
-     * 1. Plays the swimming animation (`IMAGES_SWIMMING`).
-     * 2. Sets `isSwimming` to `true` to indicate the boss is in the swimming state.
-     * 
-     * @method handleBossSwimmingState
+     * Plays the swimming animation and sets `isSwimming` to true.
      */
     handleBossSwimmingState() {
         this.playAnimation(this.IMAGES_SWIMMING);
@@ -279,17 +221,10 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Executes a randomized attack pattern based on the provided move ID.
-     * 
-     * This method maps `randomMoveID` (0–4) to specific attack behaviors using `performAttack()`:
-     * - 0: attack with `up` direction
-     * - 1: attack with `down` direction
-     * - 2: attack without swimming, `up` direction
-     * - 3: attack with swimming, no specific direction
-     * - 4: attack without swimming, `down` direction
-     * 
-     * @method randomAttack
-     * @param {number} randomMoveID - An integer (0–4) representing the random attack pattern.
+     * Executes a randomized boss attack based on `randomMoveID`.
+     * Maps IDs 0–4 to specific attack behaviors via `performAttack()`.
+     *
+     * @param {number} randomMoveID - Integer (0–4) representing the attack pattern.
      */
     randomAttack(randomMoveID) {
         if (randomMoveID === 0) {
@@ -306,16 +241,11 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Performs a boss attack with optional sound and directional movement.
-     * 
-     * This method performs the following based on the parameters:
-     * 1. If `playSound` is true, it plays the boss bite sound via `playBossBiteSound()` and triggers `attackMove()`.
-     * 2. If `direction` is `'up'`, the boss moves vertically up via `verticalMoveUp()`.
-     * 3. If `direction` is `'down'`, the boss moves vertically down via `verticalMoveDown()`.
-     * 
-     * @method performAttack
+     * Performs a boss attack with optional sound and vertical movement.
+     * Plays bite sound if `playSound` is true and moves up or down based on `direction`.
+     *
      * @param {boolean} playSound - Whether to play the attack sound.
-     * @param {('up'|'down'|null)} direction - The vertical movement direction for the attack.
+     * @param {('up'|'down'|null)} direction - Vertical movement direction for the attack.
      */
     performAttack(playSound, direction) {
         if (playSound) {
@@ -331,11 +261,7 @@ class Endboss extends MovableObject {
 
     /**
      * Plays the boss bite sound effect.
-     * 
-     * This method checks if `soundManager` is defined and, if so,
-     * plays the audio file `'img/assets/audio/bossBite.flac'` at volume 0.
-     * 
-     * @method playBossBiteSound
+     * Uses `soundManager` to play `'img/assets/audio/bossBite.flac'` at volume 0.
      */
     playBossBiteSound() {
         if (typeof soundManager !== 'undefined') {
@@ -345,15 +271,7 @@ class Endboss extends MovableObject {
 
     /**
      * Initiates the boss's attack movement sequence.
-     * 
-     * This method performs the following:
-     * 1. Sets `isAttacking` to `true` and resets `biteCounter` to 0.
-     * 2. Defines the attack distance (`-370`) and movement speed (`23`).
-     * 3. Starts a `setInterval` loop every 50ms to move the boss:
-     *    - If moving forward, calls `handleAttackForward()` and switches direction when complete.
-     *    - If moving backward, calls `handleAttackBackward()` and clears the interval when done.
-     * 
-     * @method attackMove
+     * Sets `isAttacking`, resets `biteCounter`, and moves the boss forward/backward in intervals.
      */
     attackMove() {
         this.isAttacking = true;
@@ -371,18 +289,12 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Handles the forward movement phase of the boss's attack.
-     * 
-     * This method performs the following:
-     * 1. Moves the boss left by `speed` and updates the `moved` distance.
-     * 2. Plays the attack animation (`IMAGES_ATTACK`) every 3 frames if the boss is not hurt.
-     * 3. Increments the `biteCounter`.
-     * 4. Calls the `onTurnBack` callback when the boss has moved the specified `distance`.
-     * 
-     * @method handleAttackForward
-     * @param {number} speed - The speed at which the boss moves forward.
-     * @param {number} distance - The distance the boss should move before turning back (negative value).
-     * @param {Function} onTurnBack - Callback function invoked when the boss reaches the forward distance limit.
+     * Handles the boss's forward attack movement.
+     * Moves left, updates animation and `biteCounter`, and calls `onTurnBack` when distance is reached.
+     *
+     * @param {number} speed - Forward movement speed.
+     * @param {number} distance - Distance to move before turning back (negative value).
+     * @param {Function} onTurnBack - Callback when forward distance is reached.
      */
     handleAttackForward(speed, distance, onTurnBack) {
         this.x -= speed;
@@ -397,17 +309,11 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Handles the backward movement phase of the boss's attack.
-     * 
-     * This method performs the following:
-     * 1. Moves the boss right by `speed` and updates the `moved` distance.
-     * 2. Checks if the boss has returned to the original position (`moved >= 0`):
-     *    - Clears the attack interval.
-     *    - Sets `isAttacking` to `false` to indicate the attack has finished.
-     * 
-     * @method handleAttackBackward
-     * @param {number} speed - The speed at which the boss moves backward.
-     * @param {number} interval - The interval ID controlling the attack movement, which will be cleared when done.
+     * Handles the boss's backward attack movement.
+     * Moves right and stops the attack when the original position is reached.
+     *
+     * @param {number} speed - Backward movement speed.
+     * @param {number} interval - Interval ID controlling the attack, cleared when done.
      */
     handleAttackBackward(speed, interval) {
         this.x += speed;
@@ -419,46 +325,28 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Moves the boss downward vertically during an attack.
-     * 
-     * This method delegates the movement to `handleVerticalMove()` with preset parameters:
-     * - Maximum distance: 150
-     * - Speed: 9
-     * - Direction: 'down'
-     * 
-     * @method verticalMoveDown
+     * Moves the boss downward during an attack.
+     * Calls `handleVerticalMove()` with distance 150, speed 9, direction 'down'.
      */
     verticalMoveDown() {
         this.handleVerticalMove(150, 9, 'down');
     }
 
     /**
-     * Moves the boss upward vertically during an attack.
-     * 
-     * This method delegates the movement to `handleVerticalMove()` with preset parameters:
-     * - Maximum distance: 200
-     * - Speed: 12
-     * - Direction: 'up'
-     * 
-     * @method verticalMoveUp
+     * Moves the boss upward during an attack.
+     * Calls `handleVerticalMove()` with distance 200, speed 12, direction 'up'.
      */
     verticalMoveUp() {
         this.handleVerticalMove(200, 12, 'up');
     }
 
     /**
-     * Handles vertical movement of the boss during an attack.
-     * 
-     * This method animates vertical movement in a specified `direction` over a given `distance` at a defined `speed`.
-     * The movement is performed using a `setInterval` loop:
-     * - Moves forward until the total distance is reached.
-     * - Reverses the movement back to the starting position.
-     * - Clears the interval once the movement completes.
-     * 
-     * @method handleVerticalMove
-     * @param {number} distance - The maximum distance to move vertically.
-     * @param {number} speed - The speed of each vertical step.
-     * @param {('up'|'down')} direction - The vertical direction to move the boss.
+     * Handles the boss's vertical movement during an attack.
+     * Moves up or down by `distance` at `speed` and returns to the start position.
+     *
+     * @param {number} distance - Maximum vertical distance to move.
+     * @param {number} speed - Movement speed per step.
+     * @param {('up'|'down')} direction - Vertical movement direction.
      */
     handleVerticalMove(distance, speed, direction) {
         let moved = 0;
@@ -477,16 +365,11 @@ class Endboss extends MovableObject {
 
     /**
      * Updates the boss's vertical position.
-     * 
-     * This method moves the boss along the Y-axis based on the given `speed`, `direction`, and `factor`.
-     * - If `direction` is `'down'`, the Y-coordinate increases.
-     * - If `direction` is `'up'`, the Y-coordinate decreases.
-     * - `factor` allows reversing or scaling the movement.
-     * 
-     * @method updateVerticalPosition
-     * @param {number} speed - The base movement speed.
-     * @param {('up'|'down')} direction - The vertical direction of movement.
-     * @param {number} factor - Multiplier to apply to the speed (1 or -1 for direction control).
+     * Moves along Y-axis by `speed` and `factor` in the specified `direction`.
+     *
+     * @param {number} speed - Base movement speed.
+     * @param {('up'|'down')} direction - Vertical movement direction.
+     * @param {number} factor - Multiplier for speed/direction control.
      */
     updateVerticalPosition(speed, direction, factor) {
         if (direction === 'down') {
@@ -497,12 +380,10 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Checks whether the boss is dead.
-     * 
-     * This method returns `true` if the boss's `energy` is 0, otherwise `false`.
-     * 
-     * @method isDead
-     * @returns {boolean} - `true` if the boss has no energy left, otherwise `false`.
+     * Checks if the boss is dead.
+     * Returns `true` if `energy` is 0, otherwise `false`.
+     *
+     * @returns {boolean} - `true` if boss has no energy, else `false`.
      */
     isDead() {
         return this.energy == 0;
