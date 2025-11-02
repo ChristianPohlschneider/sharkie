@@ -153,13 +153,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Starts all animation intervals for the character:
-     * - Movement updates
-     * - State updates (shooting, hurt, death, idle)
-     * - Action updates (shooting and slapping)
-     *
-     * @function
-     * @returns {void}
+     * Starts all character animation intervals (movement, state, and actions).
      */
     animate() {
         this.startMovementInterval();
@@ -168,12 +162,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Starts the interval that updates character movement.
-     * - Checks collisions with barriers
-     * - Handles left, right, up, and down movement
-     *
-     * @function
-     * @returns {void}
+     * Starts the interval that updates character movement and handles collisions.
      */
     startMovementInterval() {
         this.world.setStoppableInterval(() => {
@@ -188,13 +177,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Starts the interval that updates character states.
-     * - Handles shooting
-     * - Handles death and hurt states
-     * - Updates idle/movement animations
-     *
-     * @function
-     * @returns {void}
+     * Starts the interval that updates character states (shooting, hurt/death, idle animations).
      */
     startStateInterval() {
         this.world.setStoppableInterval(() => {
@@ -207,12 +190,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Starts the interval that updates character actions.
-     * - Handles shooting actions if possible
-     * - Handles slapping actions if active or available
-     *
-     * @function
-     * @returns {void}
+     * Starts the interval that updates character actions (shooting and slapping).
      */
     startActionInterval() {
         this.world.setStoppableInterval(() => {
@@ -224,19 +202,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Calculates the horizontal movement limits for the character based on camera state.
-     * 
-     * This method returns an object containing:
-     * - `leftLimit`: The minimum X-coordinate the character can move to.
-     * - `rightLimit`: The maximum X-coordinate the character can move to.
-     * 
-     * If the camera is frozen, the limits are adjusted relative to the freeze point
-     * near the end of the level; otherwise, they extend from -50 to the level's end X-coordinate.
-     * 
+     * Calculates horizontal movement limits for the character based on camera state.
+     *
      * @method getScreenLimits
-     * @returns {Object} An object with `leftLimit` and `rightLimit` properties.
-     * @returns {number} return.leftLimit - The minimum allowed X-coordinate for the character.
-     * @returns {number} return.rightLimit - The maximum allowed X-coordinate for the character.
+     * @returns {{leftLimit: number, rightLimit: number}} Min and max X-coordinates.
      */
     getScreenLimits() {
         const freezePoint = this.world.level.level_end_x - 450;
@@ -247,19 +216,11 @@ class Character extends MovableObject {
     }
 
     /**
-     * Handles the character's movement to the right.
-     * 
-     * This method checks for rightward input (ArrowRight or KeyD), ensures the character
-     * does not exceed the `rightLimit`, and verifies collision conditions with barriers.
-     * If movement is allowed:
-     * - The character's X-coordinate is increased by `speed`.
-     * - The camera is updated based on the current position relative to the freeze point.
-     * - The speed is reset to 3.
-     * - Any final enemies that should spawn are triggered.
-     * - The character's direction state (`otherDirection`) is set to `false`.
-     * 
+     * Moves the character right if input is active and within `rightLimit`.
+     * Updates camera, speed, enemy spawns, and direction state.
+     *
      * @method handleRightMovement
-     * @param {number} rightLimit - The maximum X-coordinate the character can move to.
+     * @param {number} rightLimit - Maximum allowed X-coordinate.
      */
     handleRightMovement(rightLimit) {
         const freezePoint = this.world.level.level_end_x - 450;
@@ -274,18 +235,11 @@ class Character extends MovableObject {
     }
 
     /**
-     * Handles the character's movement to the left.
-     * 
-     * This method checks for leftward input (ArrowLeft or KeyA), ensures the character
-     * does not go below the `leftLimit`, and verifies collision conditions with barriers.
-     * If movement is allowed:
-     * - The character's X-coordinate is decreased by `speed`.
-     * - The camera is updated based on the current position relative to the freeze point.
-     * - The speed is reset to 3.
-     * - The character's direction state (`otherDirection`) is set to `true`.
-     * 
+     * Moves the character left if input is active and above `leftLimit`.
+     * Updates camera, speed, and direction state.
+     *
      * @method handleLeftMovement
-     * @param {number} leftLimit - The minimum X-coordinate the character can move to.
+     * @param {number} leftLimit - Minimum allowed X-coordinate.
      */
     handleLeftMovement(leftLimit) {
         const freezePoint = this.world.level.level_end_x - 450;
@@ -299,17 +253,11 @@ class Character extends MovableObject {
     }
 
     /**
-     * Updates the camera position based on the character's movement.
-     * 
-     * This method adjusts `world.camera_x` depending on the character's X-coordinate
-     * and whether the camera is frozen:
-     * - If the camera is not frozen, the character has reached the freeze point,
-     *   and is moving right, the camera is frozen near the end of the level.
-     * - Otherwise, the camera follows the character with a horizontal offset of 100.
-     * 
+     * Updates camera position based on character movement and freeze state.
+     *
      * @method updateCameraOnMove
-     * @param {number} freezePoint - The X-coordinate near the end of the level where the camera should freeze.
-     * @param {boolean} movingLeft - Indicates whether the character is moving left.
+     * @param {number} freezePoint - X-coordinate where the camera freezes near level end.
+     * @param {boolean} movingLeft - True if the character is moving left.
      */
     updateCameraOnMove(freezePoint, movingLeft) {
         if (!this.cameraFrozen && this.x >= freezePoint && !movingLeft) {
@@ -321,14 +269,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Handles the character's upward movement.
-     * 
-     * This method checks for upward input (ArrowUp or KeyW) and ensures:
-     * - The character's Y-coordinate stays above -80.
-     * - There is no collision at the target position above the character.
-     * 
-     * If movement is allowed, the character's Y-coordinate is decreased by `speed`.
-     * 
+     * Moves the character up if input is active, above -80, and no collision occurs.
+     *
      * @method handleUpMovement
      */
     handleUpMovement() {
@@ -339,14 +281,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Handles the character's downward movement.
-     * 
-     * This method checks for downward input (ArrowDown or KeyS) and ensures:
-     * - The character's Y-coordinate does not exceed 300.
-     * - There is no collision at the target position below the character.
-     * 
-     * If movement is allowed, the character's Y-coordinate is increased by `speed`.
-     * 
+     * Moves the character down if input is active, below 300, and no collision occurs.
+     *
      * @method handleDownMovement
      */
     handleDownMovement() {
@@ -357,31 +293,20 @@ class Character extends MovableObject {
     }
 
     /**
-     * Checks if the character would collide with any barriers at a given position.
-     * 
-     * This method iterates through all barriers in the current level and uses
-     * `isColliding` to determine if the character would collide at the specified
-     * `x` and `y` coordinates.
-     * 
+     * Checks if the character collides with any barriers at (x, y).
+     *
      * @method collidesAt
-     * @param {number} x - The X-coordinate to check for potential collisions.
-     * @param {number} y - The Y-coordinate to check for potential collisions.
-     * @returns {boolean} `true` if the character would collide with any barrier, otherwise `false`.
+     * @param {number} x - X-coordinate to check.
+     * @param {number} y - Y-coordinate to check.
+     * @returns {boolean} True if a collision occurs, else false.
      */
     collidesAt(x, y) {
         return this.world.level.barriers.some(barrier => this.isColliding(barrier, x, y));
     }
 
     /**
-     * Triggers the final enemies when the character reaches near the end of the level.
-     * 
-     * This method checks if the character's X-coordinate is past the trigger point
-     * (level end minus 450) and ensures this trigger has not occurred before (`hadFirstContact`).
-     * If conditions are met:
-     * - The final boss is added using `setFinalEnemie()`.
-     * - Other existing enemies are removed behind the player using `deleteOtherEnemies()`.
-     * - The `hadFirstContact` flag is set to `true` to prevent retriggering.
-     * 
+     * Triggers final enemies when the character nears the level end.
+     *
      * @method triggerFinalEnemies
      */
     triggerFinalEnemies() {
@@ -394,30 +319,20 @@ class Character extends MovableObject {
     }
 
     /**
-     * Determines whether the character is currently able to shoot.
-     * 
-     * This method returns `true` if all of the following conditions are met:
-     * - The character is in a shooting state (`isShooting`).
-     * - The character is not hurt (`isHurt()` returns false).
-     * - The character is not dead (`isDead()` returns false).
-     * 
+     * Checks if the character can shoot.
+     *
      * @method canShoot
-     * @returns {boolean} `true` if the character can shoot, otherwise `false`.
+     * @returns {boolean} True if shooting is possible, else false.
      */
     canShoot() {
         return this.isShooting && !this.isHurt() && !this.isDead();
     }
 
     /**
-     * Determines whether the character is currently able to perform a slap action.
-     * 
-     * This method returns `true` if all of the following conditions are met:
-     * - The player is pressing either the left or right Control key.
-     * - The character is not hurt (`isHurt()` returns false).
-     * - The character is not dead (`isDead()` returns false).
-     * 
+     * Checks if the character can perform a slap action.
+     *
      * @method canSlap
-     * @returns {boolean} `true` if the character can perform a slap, otherwise `false`.
+     * @returns {boolean} True if slapping is possible, else false.
      */
     canSlap() {
         const kb = this.world.keyboard;
@@ -425,18 +340,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Handles the character's shooting animation and logic for each frame.
-     * 
-     * This method performs the following actions:
-     * 1. Increments the `shootFrameCounter`.
-     * 2. Plays the bubble sound once if it hasn't been played yet.
-     * 3. Chooses the correct shooting image set depending on whether the character
-     *    has poison available (`IMAGES_BUBBLE_TRAP_POISON` or `IMAGES_BUBBLE_TRAP`).
-     * 4. Plays the shooting animation using the selected images.
-     * 5. Increments the `currentShootImage` index.
-     * 6. Calls `finishShooting()` if the last image in the sequence has been displayed.
-     * 
+     * Handles the character's shooting animation and logic per frame.
+     *
      * @method handleShootingAction
+     * @returns {void}
      */
     handleShootingAction() {
         this.shootFrameCounter++;
@@ -449,17 +356,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Plays the appropriate bubble sound effect based on the character's venom state.
-     * 
-     * This method checks if the character has venom available (`venomSac > 0`) and
-     * selects the corresponding sound file:
-     * - Poison bubble sound if venom is available.
-     * - Regular bubble sound otherwise.
-     * 
-     * The sound is played via the `soundManager` with a volume of 200, and
-     * `hasPlayedBubbleSound` is set to `true` to prevent replay during the same action.
-     * 
+     * Plays the bubble sound effect depending on the character's venom state.
+     *
      * @method playBubbleSound
+     * @returns {void}
      */
     playBubbleSound() {
         const hasVenom = this.world.poisonBar.venomSac > 0;
@@ -471,15 +371,11 @@ class Character extends MovableObject {
     }
 
     /**
-     * Finalizes the shooting action for the character.
-     * 
-     * This method performs the following steps:
-     * 1. Calls `bubbleShot()` to create or launch the bubble projectile.
-     * 2. Sets `isShooting` to `false` to indicate the shooting action has ended.
-     * 3. Resets `currentShootImage` and `shootFrameCounter` to prepare for the next shot.
-     * 4. Resets `hasPlayedBubbleSound` to allow the bubble sound to play on the next shot.
-     * 
+     * Finalizes the character's shooting action.
+     * Calls `bubbleShot()`, resets shooting flags and counters.
+     *
      * @method finishShooting
+     * @returns {void}
      */
     finishShooting() {
         this.bubbleShot();
@@ -490,11 +386,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Executes the Fin-Slap action:
-     * - Starts the slap animation if not already active
-     * - Plays the slap sound once
-     * - Updates the animation and calls `finSlap()`
-     * - Finishes the action when the animation is complete
+     * Executes the Fin-Slap action: plays sound, animates, and triggers `finSlap()`.
      *
      * @function
      * @returns {void}
@@ -515,11 +407,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Plays the slap sound effect for the character.
-     * 
-     * This method triggers the slap audio via `soundManager` and sets
-     * `hasPlayedSlapSound` to `true` to prevent replay during the same slap action.
-     * 
+     * Plays the slap sound and marks it as played to avoid repetition.
+     *
      * @method playSlapSound
      */
     playSlapSound() {
@@ -528,14 +417,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Finalizes the slap action for the character.
-     * 
-     * This method performs the following steps:
-     * 1. Sets `isSlapping` to `false` to indicate the slap action has ended.
-     * 2. Resets the slap animation frame counter (`slapAnimationFrame`) to 0.
-     * 3. Resets `hasPlayedSlapSound` to allow the slap sound to play on the next action.
-     * 4. Calls `resetOffsets()` to restore any temporary position or visual offsets applied during the slap.
-     * 
+     * Ends the slap action, resets animation and sound flags, and restores offsets.
+     *
      * @method finishSlap
      */
     finishSlap() {
@@ -546,16 +429,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Resets the character's slap state to its default values.
-     * 
-     * This method ensures that the slap action is completely cleared, including:
-     * 1. Setting `isSlapping` to `false`.
-     * 2. Resetting the slap animation frame counter (`slapAnimationFrame`) to 0.
-     * 3. Resetting `hasPlayedSlapSound` to allow the slap sound to play again.
-     * 4. Calling `resetOffsets()` to restore any temporary position or visual offsets.
-     * 
-     * This method is useful for canceling a slap action or ensuring a clean state.
-     * 
+     * Resets the character's slap state, animation, sound flag, and offsets.
+     *
      * @method resetSlapState
      */
     resetSlapState() {
@@ -566,14 +441,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Resets the character's visual or positional offsets to their default values.
-     * 
-     * This method sets:
-     * - `offset.right` to 45
-     * - `offset.left` to 40
-     * 
-     * It is typically used after actions like slapping to restore the character's
-     * sprite alignment or collision offsets.
+     * Restores the character's positional offsets to default values.
      * 
      * @method resetOffsets
      */
@@ -583,16 +451,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Handles initiating the shooting action based on player input and cooldown.
-     * 
-     * This method checks if the Space key is pressed, the character is not already shooting,
-     * and the cooldown period since the last shot has passed. If all conditions are met:
-     * - Sets `isShooting` to `true`.
-     * - Resets the shooting animation frame counter (`currentShootImage`) and `shootFrameCounter`.
-     * - Updates `lastShot` to the current timestamp (`now`) to enforce the cooldown.
-     * 
+     * Initiates shooting if Space is pressed and cooldown allows.
+     *
      * @method handleShooting
-     * @param {number} now - The current timestamp used to check shooting cooldown.
+     * @param {number} now - Current timestamp to enforce cooldown.
      */
     handleShooting(now) {
         const kb = this.world.keyboard;
@@ -605,16 +467,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Handles the character's death state and triggers related effects.
-     * 
-     * This method performs the following actions when the character is dead:
-     * 1. Plays the death sound effect once (`sharkyDies.mp3`) if it hasn't been played yet.
-     * 2. Plays the death animation (`IMAGES_DEAD`).
-     * 3. Checks if the final death frame is reached (image ends with '/12.png'):
-     *    - Stops the game via `world.stopGame()`.
-     *    - Clears the animation interval.
-     *    - Shows the losing overlay using `showLoseOverlay()`.
-     * 
+     * Handles the character's death:
+     * - Plays death sound and animation.
+     * - Stops the game and shows the lose overlay when final frame is reached.
+     *
      * @method handleDeathState
      */
     handleDeathState() {
@@ -632,11 +488,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Handles the character's hurt state and plays the hurt animation.
-     * 
-     * This method checks if the character is currently hurt (`isHurt()`) and not dead.
-     * If both conditions are met, it plays the hurt animation (`IMAGES_HURT`).
-     * 
+     * Plays the hurt animation if the character is hurt and alive.
+     *
      * @method handleHurtState
      */
     handleHurtState() {
@@ -646,12 +499,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Determines whether the character should switch between movement or idle animation.
-     * Skips the logic if the slap action is active.
+     * Updates character animation between movement and idle, unless slapping.
      *
-     * @param {number} now - Current timestamp (e.g., Date.now()).
+     * @param {number} now - Current timestamp.
      * @function
-     * @returns {void}
      */
     handleMovementOrIdle(now) {
         if (this.isSlapping) return;
@@ -677,12 +528,11 @@ class Character extends MovableObject {
     }
 
     /**
-     * Handles the character's animation based on movement or idle state.
-     * Plays movement animations or idle/long-idle animations accordingly.
+     * Updates character animation based on movement or idle state.
+     * Chooses between moving, idle, or long-idle animations.
      *
-     * @param {number} now - Current timestamp (e.g., Date.now()).
+     * @param {number} now - Current timestamp.
      * @function
-     * @returns {void}
      */
     handleMovementOrIdleState(now) {
         const kb = this.world.keyboard;
@@ -697,11 +547,9 @@ class Character extends MovableObject {
     }
 
     /**
-     * Stops the character's ongoing snoring sound,
-     * disconnects the audio source, and resets the state.
+     * Stops the character's snoring sound and resets related audio state.
      *
      * @function
-     * @returns {void}
      */
     stopIdleSnoringSound() {
         if (this.snoringSource) {
@@ -713,13 +561,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Plays the character's swimming/movement animation.
-     * 
-     * This method performs the following actions:
-     * 1. Plays the swimming animation (`IMAGES_SWIMMING`).
-     * 2. Resets `lastIdleTime` to null to indicate the character is no longer idle.
-     * 3. Sets `isLongIdlePlayed` to false to allow long idle animations to trigger later.
-     * 
+     * Plays the character's swimming/movement animation and resets idle timers.
+     *
      * @method handleMovementAnimation
      */
     handleMovementAnimation() {
@@ -729,11 +572,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Initializes idle state if not set.
+     * Initializes the character's idle state if it hasn't been set.
      *
      * @param {number} now - Current timestamp.
      * @function
-     * @returns {void}
      */
     initializeIdle(now) {
         if (this.lastIdleTime === null) {
@@ -803,9 +645,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Plays the character's snoring sound if global sound is enabled.
-     * Stops any existing snoring sound before starting a new one.
-     * The sound loops until stopped.
+     * Plays the character's snoring sound if sound is enabled, stopping any previous snore.
+     * The sound loops until explicitly stopped.
      *
      * @async
      * @function
@@ -827,14 +668,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Resets the idle snoring sound state.
-     * 
-     * This method is called after the long idle animation completes
-     * or when the snoring sound should be allowed to play again.
-     * It resets the animation frame counter and marks the sound
-     * as not played, so it can be triggered the next time the character
-     * is idle for a long period.
-     * 
+     * Resets the long-idle snoring sound state and frame counter,
+     * allowing the snore to play again on the next long idle.
+     *
+     * @function
      * @returns {void}
      */
     finishSnoringSound() {
@@ -843,13 +680,11 @@ class Character extends MovableObject {
     }
 
     /**
-     * Determines whether the character is currently in a shooting state based on the last shot time.
-     * 
-     * This method calculates the time elapsed since `lastShot` in seconds and returns `true`
-     * if less than 0.4 seconds have passed, indicating the character is actively shooting.
-     * 
+     * Checks if the character is actively shooting based on cooldown timing.
+     * Returns true if less than 0.4 seconds have passed since the last shot.
+     *
      * @method isShooting
-     * @returns {boolean} `true` if the character is shooting, otherwise `false`.
+     * @returns {boolean} True if the character is currently shooting, otherwise false.
      */
     isShooting() {
         let timeShotpassed = new Date().getTime() - this.lastShot;
@@ -858,15 +693,9 @@ class Character extends MovableObject {
     }
 
     /**
-     * Creates a bubble projectile based on the character's facing direction.
-     * 
-     * This method checks the `otherDirection` flag to determine which direction
-     * the bubble should be shot:
-     * - If `otherDirection` is false, the bubble is created with an offset of 160 (right).
-     * - If `otherDirection` is true, the bubble is created with an offset of -10 (left).
-     * 
-     * The actual projectile creation is handled by `createShootableObject(offset)`.
-     * 
+     * Shoots a bubble in the character's facing direction.
+     * Calls `createShootableObject` with offset 160 (right) or -10 (left).
+     *
      * @method bubbleShot
      */
     bubbleShot() {
@@ -878,15 +707,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Applies the fin slap effect during specific animation frames.
-     * 
-     * This method checks if the current image (`img.currentSrc`) corresponds to
-     * the critical slap frames (frames 5, 6, or 7). If so:
-     * - Sets `isSlapping` to `true`.
-     * - Adjusts the character's offsets to properly align the slap hitbox:
-     *   - `offset.right = 0` if facing right (`otherDirection == false`).
-     *   - `offset.left = 0` if facing left (`otherDirection == true`).
-     * 
+     * Applies the fin slap effect on frames 5–7:
+     * - Activates `isSlapping`.
+     * - Resets offsets (`right` or `left`) based on facing direction.
+     *
      * @method finSlap
      */
     finSlap() {
@@ -901,13 +725,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Checks if the character is dead.
-     * 
-     * This method returns `true` if the character's energy is 0 or below,
-     * indicating that the character has no remaining health.
-     * 
+     * Returns whether the character is dead (energy ≤ 0).
+     *
      * @method isDead
-     * @returns {boolean} `true` if the character is dead, otherwise `false`.
+     * @returns {boolean} `true` if dead, else `false`.
      */
     isDead() {
         return this.energy <= 0;
