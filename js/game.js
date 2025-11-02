@@ -127,7 +127,6 @@ function handleGameSoundThemePlay(enabled, world) {
         if (sharkie) {sharkie.stopIdleSnoringSound();}
     }}
 
-
 /**
  * Initializes SoundManager, loads the theme, resumes AudioContext, and plays it.
  *
@@ -217,11 +216,10 @@ function initshowStartScreenCanvas() {
 }
 
 /**
- * Handles keydown events to control the game and prevent default browser actions.
- * Updates the `keyboard` state and toggles on-screen buttons as needed.
+ * Updates keyboard state and activates the corresponding on-screen button on key press.
+ * Prevents default browser behavior for game control keys.
  *
- * @listens keydown
- * @param {KeyboardEvent} event - The keydown event object.
+ * @param {KeyboardEvent} event - The pressed key event.
  */
 window.addEventListener('keydown', (event) => {
     const keysToPrevent = [
@@ -229,22 +227,24 @@ window.addEventListener('keydown', (event) => {
         "KeyW", "KeyA", "KeyS", "KeyD",
         "Space", "ControlLeft", "ControlRight"
     ];
-    if (keysToPrevent.includes(event.code)) {
-        event.preventDefault();
+    if (keysToPrevent.includes(event.code)) {event.preventDefault();}
+    const kb = world?.keyboard ?? keyboard;
+    if (kb.hasOwnProperty(event.code)) {
+        kb[event.code] = true;
     }
-    keyboard[event.code] = true;
     toggleButtonActive(event.code, true);
 });
 
 /**
- * Handles keyup events to update game input and UI.
- * Marks keys as released and deactivates corresponding on-screen buttons.
+ * Updates keyboard state and deactivates the corresponding on-screen button on key release.
  *
- * @listens keyup
- * @param {KeyboardEvent} event - The keyup event object.
+ * @param {KeyboardEvent} event - The released key event.
  */
 window.addEventListener('keyup', (event) => {
-    keyboard[event.code] = false;
+    const kb = world?.keyboard ?? keyboard;
+    if (kb.hasOwnProperty(event.code)) {
+        kb[event.code] = false;
+    }
     toggleButtonActive(event.code, false);
 });
 

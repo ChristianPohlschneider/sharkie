@@ -20,9 +20,9 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.level = level;
-        this.character = new Character(this);
-        this.draw();
+        this.character = new CharacterMovement(this);
         this.setWorld();
+        this.draw();
         this.checkCollision();
         this.checkCollisionBubbleBarrier();
         this.checkCollisionFromBubble();
