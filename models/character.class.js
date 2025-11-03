@@ -25,8 +25,6 @@ class Character extends MovableObject {
     lastIdleTime = null;
     isLongIdlePlayed = false;
     currentSharkyAnimation = null;
-    lastSlap = 0;
-    slapCooldown = 400;
     offset = {
         top: 105,
         left: 40,
@@ -180,10 +178,7 @@ class Character extends MovableObject {
      */
     canSlap() {
         const kb = this.world.keyboard;
-        const now = new Date().getTime();
-        const timeSinceLastSlap = now - this.lastSlap;
-        return (
-            (kb.ControlLeft || kb.ControlRight) && !this.isHurt() && !this.isDead() && !this.isSlapping && timeSinceLastSlap > this.slapCooldown);
+        return (kb.ControlLeft || kb.ControlRight) && !this.isHurt() && !this.isDead();
     }
 
     /**
@@ -270,7 +265,6 @@ class Character extends MovableObject {
         this.slapAnimationFrame = 0;
         this.hasPlayedSlapSound = false;
         this.resetOffsets();
-        this.lastSlap = new Date().getTime();
     }
 
     /**
@@ -377,9 +371,9 @@ class Character extends MovableObject {
         if (this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/5.png' || this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/6.png' || this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/7.png') {
             this.isSlapping = true;
             if (this.otherDirection == false) {
-                this.offset.right = -10;
+                this.offset.right = 0;
             } else if (this.otherDirection == true) {
-                this.offset.left = -10;
+                this.offset.left = 0;
             }
         }
     }
