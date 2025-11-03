@@ -32,11 +32,13 @@ class StatusBar extends MovableObject {
      * @param {number} percentage - The current energy/life percentage (0 to 100).
      */
     setPercentage(percentage) {
-        if (percentage < 100) {
+        if (percentage < 100 && percentage > 10) {
             let absoluteEnergy = Math.floor(percentage / 20);
             this.loadImage(this.IMAGES_LIFE[absoluteEnergy])
-        } else if (percentage < 20 || percentage == 0) {
-            this.loadImage(this.IMAGES_LIFE[5])
+        } else if (percentage == 10) {
+            this.loadImage(this.IMAGES_LIFE[1])
+        }else if (percentage == 0) {
+            this.loadImage(this.IMAGES_LIFE[0])
         }
     }
 }

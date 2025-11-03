@@ -60,19 +60,20 @@ class World {
      * Continuously checks for collisions between the character and enemies.
      * Applies damage, plays hurt sounds, and updates the status bar as needed.
      */
-    checkCollision() {
-        this.setStoppableInterval(() => {
-            this.level.enemies.forEach(enemy => {
-                if (!this.character.isColliding(enemy)) return;
-                if (this.character.isSlapping && enemy.damageFromFinSlap) {
-                    enemy.hit(enemy.damageFromFinSlap);}
-                if (!this.character.isSlapping || enemy instanceof JellyFish) {
-                    if (!this.character.isDead())
-                        soundManager.playEffect('img/assets/audio/hurtSharky.wav', 0);
+checkCollision() {
+    this.setStoppableInterval(() => {
+        for (let enemy of this.level.enemies) {
+            if (!this.character.isColliding(enemy)) continue;
+            if (this.character.isSlapping && enemy.damageFromFinSlap) {
+                enemy.hit(enemy.damageFromFinSlap);} 
+            else if ((!this.character.isSlapping || enemy instanceof JellyFish)) {
+                if (!this.character.isHurt() && !this.character.isDead()) {
+                    soundManager.playEffect('img/assets/audio/hurtSharky.wav', 0);
                     this.character.hit(enemy.damageDueToCollision);
-                    this.statusBar.setPercentage(this.character.energy);}
-            });
-        }, 200);}
+                    this.statusBar.setPercentage(this.character.energy);
+                    break;}
+            }}}, 200);
+}
 
     /**
      * Continuously checks for collisions between bubbles and level barriers.
