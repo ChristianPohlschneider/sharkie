@@ -25,6 +25,8 @@ class Character extends MovableObject {
     lastIdleTime = null;
     isLongIdlePlayed = false;
     currentSharkyAnimation = null;
+    lastSlap = 0;
+    slapCooldown = 400;
     offset = {
         top: 105,
         left: 40,
@@ -151,12 +153,10 @@ class Character extends MovableObject {
     }
 
     /**
-     * Checks if the character collides with any barriers at (x, y).
-     *
-     * @method collidesAt
-     * @param {number} x - X-coordinate to check.
-     * @param {number} y - Y-coordinate to check.
-     * @returns {boolean} True if a collision occurs, else false.
+     * Checks collision with barriers at the given position.
+     * @param {number} x - X position.
+     * @param {number} y - Y position.
+     * @returns {boolean} True if collision detected.
      */
     collidesAt(x, y) {
         return this.world.level.barriers.some(barrier => this.isColliding(barrier, x, y));
@@ -180,7 +180,10 @@ class Character extends MovableObject {
      */
     canSlap() {
         const kb = this.world.keyboard;
-        return (kb.ControlLeft || kb.ControlRight) && !this.isHurt() && !this.isDead();
+        const now = new Date().getTime();
+        const timeSinceLastSlap = now - this.lastSlap;
+        return (
+            (kb.ControlLeft || kb.ControlRight) && !this.isHurt() && !this.isDead() && !this.isSlapping && timeSinceLastSlap > this.slapCooldown);
     }
 
     /**
@@ -215,10 +218,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Finalizes the character's shooting action.
-     * Calls `bubbleShot()`, resets shooting flags and counters.
-     *
-     * @method finishShooting
+     * Ends shooting: triggers bubbleShot and resets state.
      * @returns {void}
      */
     finishShooting() {
@@ -270,6 +270,7 @@ class Character extends MovableObject {
         this.slapAnimationFrame = 0;
         this.hasPlayedSlapSound = false;
         this.resetOffsets();
+        this.lastSlap = new Date().getTime();
     }
 
     /**
@@ -311,11 +312,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Handles the character's death:
-     * - Plays death sound and animation.
-     * - Stops the game and shows the lose overlay when final frame is reached.
-     *
-     * @method handleDeathState
+     * Handles death: plays sound/animation and ends the game when done.
      */
     handleDeathState() {
         if (!this.isDead()) return;
@@ -380,9 +377,9 @@ class Character extends MovableObject {
         if (this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/5.png' || this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/6.png' || this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/7.png') {
             this.isSlapping = true;
             if (this.otherDirection == false) {
-                this.offset.right = 0;
+                this.offset.right = -10;
             } else if (this.otherDirection == true) {
-                this.offset.left = 0;
+                this.offset.left = -10;
             }
         }
     }

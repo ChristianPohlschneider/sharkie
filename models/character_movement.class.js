@@ -26,7 +26,10 @@ class CharacterMovement extends Character {
     startActionInterval() {
         this.world.setStoppableInterval(() => {
             if (this.canShoot()) this.handleShootingAction();
-            if (this.isSlapping || this.canSlap()) {
+            if (this.canSlap()) {
+                this.handleSlapAction();
+            }
+            else if (this.isSlapping) {
                 this.handleSlapAction();
             }
         }, 80);
