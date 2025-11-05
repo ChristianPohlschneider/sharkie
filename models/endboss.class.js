@@ -122,10 +122,10 @@ class Endboss extends MovableObject {
         }
         this.playAnimation(this.IMAGES_DIE);
         this.world.totalScore += this.score;
-        const deadImageSrc = 'http://127.0.0.1:5500/img/2.Enemy/3%20Final%20Enemy/Dead/Mesa%20de%20trabajo%202%20copia%2010.png';
-        if (this.img?.src === deadImageSrc) {
+        const src = this.img?.src || '';
+        if (src.includes('img/2.Enemy/3%20Final%20Enemy/Dead/Mesa%20de%20trabajo%202%20copia%2010.png')) {
             this.handleDeath();
-            showWinOverlay(world.totalScore);
+            showWinOverlay(this.world.totalScore);
         }
     }
 

@@ -368,11 +368,14 @@ class Character extends MovableObject {
      * @method finSlap
      */
     finSlap() {
-        if (this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/5.png' || this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/6.png' || this.img.currentSrc == 'http://127.0.0.1:5500/img/1.Sharkie/4.Attack/Fin%20slap/7.png') {
+        const src = this.img.currentSrc;
+        if (src.includes('img/1.Sharkie/4.Attack/Fin%20slap/5.png') || 
+            src.includes('img/1.Sharkie/4.Attack/Fin%20slap/6.png') || 
+            src.includes('img/1.Sharkie/4.Attack/Fin%20slap/7.png')) {
             this.isSlapping = true;
-            if (this.otherDirection == false) {
+            if (!this.otherDirection) {
                 this.offset.right = 0;
-            } else if (this.otherDirection == true) {
+            } else {
                 this.offset.left = 0;
             }
         }
