@@ -11,7 +11,7 @@ function renderInfoOverlay() {
                 <li><button class="arrowKeyInfo">⎵</button><b>Space:</b> &nbsp; Fin Slap</li>
                 <li><button class="arrowKeyInfo">Ctrl</button><b>Ctrl:</b> &nbsp; Bubble attack</li>
                 <li><button type="button" class="audioButton">🔇</button><b>Audio:</b> &nbsp; Toggle sound</li>
-                <li><button class="fullscreenButton">⛶</button><b>Fullscreen:</b> &nbsp;dddddddddddddddddddddddddddd Toggle fullscreen</li>
+                <li><button class="fullscreenButton">⛶</button><b>Fullscreen:</b> &nbsp; Toggle fullscreen</li>
             </ul>
             <button id="closeInfo" class="closeInfo">Close</button>
         </div>
